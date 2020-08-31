@@ -74,6 +74,8 @@ class DB extends React.Component {
 	  for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
 		  let year = Math.floor(expectedRent.length/11)
 		  let expectedSubTotal = person.base_rent*Math.pow(1.05,year)
+		  if(person.invoices) // count other payment expected
+		  	// invoices start from the next month (offset = +1)
 		  let waiverForMonth = person.less.find((w) => {return w.month === expectedRent.length})
 		  if( waiverForMonth )
 		  	expectedSubTotal -= waiverForMonth.amount
@@ -83,7 +85,7 @@ class DB extends React.Component {
 	  let paidRent = person.payment_history || [0]
 
 	  paidRent.forEach((p, i) => {
-		 let due_i = expectedRent - paidRent
+		 let due_i = p.housing - expectedRent[i]
 	  	 if(i == month)
 			if(returnStatusOnly) {
 
