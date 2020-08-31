@@ -33,7 +33,7 @@ class DB extends React.Component {
    }
 
    getUserData = (id) => {
-      if(id.length<1) this.getData()
+      if(!id) this.getData()
       else if(this.state.getStatus){
          let ref = Firebase.database().ref('/'+id);
          ref.on('value', snapshot => {
@@ -46,12 +46,11 @@ class DB extends React.Component {
             console.log(e);
             this.setState({ getStatus: false});
             return false
-
          })
       }
    }
    setUserData = (id,item,data) => {
-      if(id.length>0 && item.length>0 && data.length>0){
+      if(id && data){
          let success = false;
          Firebase.database().ref(id+item).update(data, (error) => {
             if (error) console.error(error);
@@ -66,8 +65,31 @@ class DB extends React.Component {
       }
    }
 
-   checkRent = (id,month,status) => {
+   checkRent = (id,month,returnStatusOnly) => {
+	  if(!id) return false
+
       var person=this.state.DB[id]
+	  let expectedRent = [], due = [], dueTotal = 0;
+
+	  for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
+		  let year = Math.floor(expectedRent.length/11)
+		  let expectedSubTotal = person.base_rent*Math.pow(1.05,year)
+		  let waiverForMonth = person.less.find((w) => {return w.month === expectedRent.length})
+		  if( waiverForMonth )
+		  	expectedSubTotal -= waiverForMonth.amount
+		  expectedRent.push(expectedSubTotal)
+	  }
+
+	  let paidRent = person.payment_history || [0]
+
+	  paidRent.forEach((p, i) => {
+		 let due_i = expectedRent - paidRent
+	  	 if(i == month)
+			if(returnStatusOnly) {
+
+			}
+	  });
+
 
       this.getWavier(id)
    }
@@ -86,6 +108,6 @@ class DB extends React.Component {
    }
 
    getDeduction = () => {
-      
+
    }
 }
