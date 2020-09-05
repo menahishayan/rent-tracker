@@ -1,3 +1,6 @@
+import Firebase from 'firebase';
+import config from './config';
+import moment from 'moment';
 import React from 'react';
 
 class DB extends React.Component {
@@ -68,7 +71,7 @@ class DB extends React.Component {
       if(!id) return false
 
       var person=this.state.DB[id]
-      let expectedRent = [], due = [], dueTotal = 0;
+      let expectedRent = [], due = []
 
       for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
          let year = Math.floor(expectedRent.length/11)
