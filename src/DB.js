@@ -13,7 +13,7 @@ class DB extends React.Component {
          this.getData()
       }
    }
-   getData = () => {
+   get = () => {
       if(!this.state.data) {
          let ref = Firebase.database().ref('/');
          ref.on('value', snapshot => {
@@ -32,7 +32,7 @@ class DB extends React.Component {
 
    }
 
-   getUserData = (id) => {
+   getUser = (id) => {
       if(!id) this.getData()
       else if(this.state.getStatus){
          let ref = Firebase.database().ref('/'+id);
@@ -49,13 +49,12 @@ class DB extends React.Component {
          })
       }
    }
-   setUserData = (id,item,data) => {
+   updateUser = (id,item,data) => {
       if(id && data){
-         let success = false;
          Firebase.database().ref(id+item).update(data, (error) => {
             if (error) console.error(error);
             else {
-               if(!this.getUserData(id)) return false
+               if(!this.getUser(id)) return false
                else return true
             }
          }).catch((e) => {
@@ -65,51 +64,108 @@ class DB extends React.Component {
       }
    }
 
-   checkRent = (id,month,returnStatusOnly) => {
-	  if(!id) return false
+   getRent = (id,month,returnStatusOnly,getAllItems) => {
+      if(!id) return false
 
       var person=this.state.DB[id]
-	  let expectedRent = [], due = [], dueTotal = 0;
+      let expectedRent = [], due = [], dueTotal = 0;
 
-	  for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
-		  let year = Math.floor(expectedRent.length/11)
-		  let expectedSubTotal = person.base_rent*Math.pow(1.05,year)
-		  if(person.invoices) // count other payment expected
-		  	// invoices start from the next month (offset = +1)
-		  let waiverForMonth = person.less.find((w) => {return w.month === expectedRent.length})
-		  if( waiverForMonth )
-		  	expectedSubTotal -= waiverForMonth.amount
-		  expectedRent.push(expectedSubTotal)
-	  }
+      for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
+         let year = Math.floor(expectedRent.length/11)
+         let expectedSubTotal = {
+            housing: person.base_rent*Math.pow(1.05,year),
+            others: 0
+         }
+         if(person.invoices)
+            person.invoices.forEach((invoice) => {
+               if(moment(invoice.date,"YYYY-MM-DD").month()===s.month())
+                  invoice.particulars.forEach(item => {
+                     expectedSubTotal.others+=item.amount
+                  });
+            });
+         let lessForMonth = person.less.find((l) => {return l.month === s.month()+1})
+         if( lessForMonth )
+        	   expectedSubTotal.housing -= lessForMonth.amount
+         expectedRent.push(expectedSubTotal)
+      }
 
-	  let paidRent = person.payment_history || [0]
+      let paidRent = person.payment_history || [0]
+      let dueTotal={ housing:0, others:0 }
 
-	  paidRent.forEach((p, i) => {
-		 let due_i = p.housing - expectedRent[i]
-	  	 if(i == month)
-			if(returnStatusOnly) {
+      paidRent.forEach((p, i) => {
+         let due_i = {
+            housing:p.housing - expectedRent[i].housing,
+            others:p.others - expectedRent[i].others
+         }
+         dueTotal.housing += due_i.housing
+         dueTotal.others += due_i.others
+         if(i === month)
+            if(returnStatusOnly) {
+               if(getAllItems)
+                  return (due_i.housing===0 && due_i.others===0) ? true : false
+               else
+                  return (due_i.housing===0) ? true : false
+            }
+            else
+               return (getAllItems) ? due_i : due_i.housing
+         else return false
+      });
 
-			}
-	  });
-
-
-      this.getWavier(id)
+      if(returnStatusOnly) {
+         if(getAllItems)
+            return (dueTotal.housing===0 && dueTotal.others===0) ? true : false
+         else
+            return (dueTotal.housing===0) ? true : false
+      }
+      else
+         return (getAllItems) ? dueTotal : dueTotal.housing
    }
 
-   getWaiver = (id,month) => {
-      var waivers, sum=0, monthVal = 0
-      waivers=this.state.DB[id]["Waiver"]
-      if (waivers)
-         waivers.forEach((item, i) => {
-            if(moment(item.Date,"YYYY-MM-DD").month()=== month)
-               monthVal = item.Amount
+   getLess = (id,month) => {
+      var less, sum=0, dueForMonth = 0
+      less=this.state.DB[id].less
+      if (less)
+         less.forEach((item, i) => {
+            if(less.month===month)
+               dueForMonth=item.amount
             sum+=item.Amount
          });
-      if(month) return monthVal
+      if(month) return dueForMonth
       return sum
    }
 
-   getDeduction = () => {
+   addUser = (id,data) => {
+      if(Object.keys(this.state.DB).find(id))
+         return false
+      else {
+         Firebase.database().ref(id).set(data, (error) => {
+            if (error) console.error(error);
+            else {
+               if(!this.getUser(id)) return false
+               else return true
+            }
+         }).catch((e) => {
+            console.log(e);
+            return false
+         });
+      }
+   }
 
+   deleteUser = (id,data) => {
+      if(!Object.keys(this.state.DB).find(id))
+         return true
+      else {
+         Firebase.database().ref(id).remove().catch((e) => {
+            console.log(e);
+            return false
+         });
+      }
+   }
+
+   addPay = (id,payment) => {
+      var person=this.state.DB[id]
+      let paidRent = person.payment_history || []
+      paidRent.push(payment)
+      return this.updateUser(id,"payment_history",paidRent)
    }
 }
