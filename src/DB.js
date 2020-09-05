@@ -1,4 +1,5 @@
-import Firebase from 'firebase';
+import Firebase from 'firebase/app';
+import 'firebase/database';
 import config from './config';
 import moment from 'moment';
 import React from 'react';
@@ -10,60 +11,71 @@ class DB extends React.Component {
          data:undefined,
          getStatus:false,
       };
-
+      var data;
       if (!Firebase.apps.length) {
          Firebase.initializeApp(config);
-         this.getData()
+         this.get()
       }
    }
+
    get = () => {
       if(!this.state.data) {
          let ref = Firebase.database().ref('/');
-         ref.on('value', snapshot => {
-            this.setState({ data: snapshot.val()});
-            this.setState({ getStatus: true});
-            return true
-         }).catch((e) => {
+		 try {
+			 ref.on('value', async(snapshot) => {
+	            this.setState({ data: snapshot.val()});
+                this.data = await snapshot.val()
+	            return new Promise((resolve, reject) => {
+                    setTimeout(()=> {
+                        if(this.data) resolve(true)
+                    },2000)
+                    reject(false)
+                })
+	         })
+		 } catch(e) {
             console.log(e);
             this.setState({ getStatus: false});
             return false
-         })
+         }
       } else {
          this.setState({ getStatus: true});
          return true
       }
-
    }
 
    getUser = (id) => {
-      if(!id) this.getData()
+      if(!id) this.get()
       else if(this.state.getStatus){
          let ref = Firebase.database().ref('/'+id);
-         ref.on('value', snapshot => {
-            let data=this.state.data
-            data[id]=snapshot.val()
-            this.setState({ data: data});
-            this.setState({ getStatus: true});
-            return true
-         }).catch((e) => {
-            console.log(e);
-            this.setState({ getStatus: false});
-            return false
-         })
+		 try {
+			ref.on('value', snapshot => {
+				let data=this.state.data
+				data[id]=snapshot.val()
+				this.setState({ data: data});
+				this.setState({ getStatus: true});
+				return true
+			})
+		} catch(e) {
+			console.log(e);
+			this.setState({ getStatus: false});
+			return false
+		}
       }
    }
    updateUser = (id,item,data) => {
       if(id && data){
-         Firebase.database().ref(id+item).update(data, (error) => {
-            if (error) console.error(error);
-            else {
-               if(!this.getUser(id)) return false
-               else return true
-            }
-         }).catch((e) => {
+		 try {
+	         Firebase.database().ref(id+item).update(data, (error) => {
+	            if (error) console.error(error);
+	            else {
+	               if(!this.getUser(id)) return false
+	               else return true
+	            }
+			})
+		 } catch(e) {
             console.log(e);
             return false
-         });
+         }
       }
    }
 
@@ -71,7 +83,7 @@ class DB extends React.Component {
       if(!id) return false
 
       var person=this.state.DB[id]
-      let expectedRent = [], due = []
+      let expectedRent = []
 
       for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
          let year = Math.floor(expectedRent.length/11)
@@ -141,16 +153,18 @@ class DB extends React.Component {
       if(Object.keys(this.state.DB).find(id))
          return false
       else {
-         Firebase.database().ref(id).set(data, (error) => {
-            if (error) console.error(error);
-            else {
-               if(!this.getUser(id)) return false
-               else return true
-            }
-         }).catch((e) => {
+         try {
+             Firebase.database().ref(id).set(data, (error) => {
+                if (error) console.error(error);
+                else {
+                   if(!this.getUser(id)) return false
+                   else return true
+                }
+            })
+         } catch(e) {
             console.log(e);
             return false
-         });
+         }
       }
    }
 
@@ -172,3 +186,5 @@ class DB extends React.Component {
       return this.updateUser(id,"payment_history",paidRent)
    }
 }
+
+export default DB;

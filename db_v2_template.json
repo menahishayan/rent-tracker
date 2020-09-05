@@ -59,6 +59,10 @@
             "item": "bbmp",
             "amount": 60
           },
+		  {
+            "item": "pump",
+            "amount": 120
+          },
           {
             "item": "other",
             "title": "Pump Repair",
