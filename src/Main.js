@@ -9,9 +9,9 @@ var db = new DB()
 function Main(){
    db.refreshCache()
 
-   	const rentColor = (person) => {
-   		db.getRent()?{color:'#07ab0a'}:{color:'#d10000'}
-   	}
+   	// const rentColor = (person) => {
+   	// 	db.getRent()?{color:'#07ab0a'}:{color:'#d10000'}
+   	// }
 
    return(
       <div>
@@ -25,7 +25,7 @@ function Main(){
                db.profiles("86").map((profile,i) => (
                   <div style={{display:'inline'}}>
                      <div className='circle-container'>
-                        <div className="circle"></div><br/>
+                        <div className="circle" style={db.getRent(i,true)?{backgroundColor:'#07ab0a'}:{backgroundColor:'#d10000'}}></div><br/>
                         <p className='name'>{profile.nickname?profile.nickname:profile.name.split(' ')[0]}</p>
                      </div>
                      <br style={i%3===2?{display:'block'}:{display:'none'}}/>
@@ -34,11 +34,11 @@ function Main(){
             }
             <hr style={{backgroundColor:"darkgrey"}}/>
             {
-                db.persons("6").map((person,i) => (
+                db.profiles("6").map((profile,i) => (
                   	<div style={{display:'inline'}}>
                     <div className='circle-container'>
-                        <div className="circle">{db.getRent(i)}</div><br/>
-                        <p className='name'>{person.profile.nickname?person.profile.nickname:person.profile.name.split(' ')[0]}</p>
+                        <div className="circle" style={db.getRent(i,true)?{backgroundColor:'#07ab0a'}:{backgroundColor:'#d10000'}}></div><br/>
+						<p className='name'>{profile.nickname?profile.nickname:profile.name.split(' ')[0]}</p>
                     </div>
                     <br style={i%3===2?{display:'block'}:{display:'none'}}/>
                   	</div>

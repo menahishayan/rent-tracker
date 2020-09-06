@@ -112,7 +112,7 @@ class DB extends React.Component {
       }
    }
 
-   getRent = (index,month,returnStatusOnly,getAllItems) => {
+   getRent = (index,returnStatusOnly,getAllItems,month) => {
       if(!index) return false
 	  var id = Object.keys(this.data)[index]
       var person=this.data[id]
@@ -131,7 +131,8 @@ class DB extends React.Component {
                      expectedSubTotal.others+=item.amount
                   });
             });
-         let lessForMonth = person.less.find((l) => {return l.month === s.month()+1})
+         let lessForMonth = 0
+		 if (person.less) lessForMonth = person.less.find((l) => {return l.month === s.month()+1})
          if( lessForMonth )
         	   expectedSubTotal.housing -= lessForMonth.amount
          expectedRent.push(expectedSubTotal)
