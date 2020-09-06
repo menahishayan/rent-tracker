@@ -19,3 +19,13 @@ export const Circle = props => (
 		{props.title ? <p className='name'>{props.title}</p> : null}
 	</div>
 )
+
+export const Timeline = props => (
+	<div className='circle-container' style={props.style} onClick={props.onClick}>
+		<div className="circle" style={{backgroundColor: props.color || 'darkgrey'}}>
+			<center><b className="fas">{props.icon}</b></center>
+		</div>
+		<br/>
+		{props.title ? <p className='name'>{props.title}</p> : null}
+	</div>
+)
