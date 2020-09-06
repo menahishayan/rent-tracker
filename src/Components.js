@@ -21,12 +21,32 @@ export const Circle = props => (
 	</div>
 )
 
-export const Timeline = props => (
-	<div className='circle-container' style={props.style} onClick={props.onClick}>
-		<div className="circle" style={{backgroundColor: props.color || 'darkgrey'}}>
-			<center><b className="fas">{props.icon}</b></center>
-		</div>
-		<br/>
-		{props.title ? <p className='name'>{props.title}</p> : null}
+export const VerticalTimeline = props => (
+	<div className="vertical-timeline">
+	  {
+		  props.content.map((item,i) => (
+			  <div key={i} className="vertical-timeline-container">
+			    <div className="content">
+			      <h5>{item.title}</h5>
+			      <p>{item.subtitle}</p>
+			    </div>
+			  </div>
+		  ))
+	  }
+	</div>
+)
+
+export const HorizontalTimeline = props => (
+	<div className="horizontal-timeline">
+	  {
+		  props.content.map((item,i) => (
+			  <div key={i} className="horizontal-timeline-container">
+			    <div className="content">
+			      <h5>{item.title}</h5>
+			      <p>{item.subtitle}</p>
+			    </div>
+			  </div>
+		  ))
+	  }
 	</div>
 )

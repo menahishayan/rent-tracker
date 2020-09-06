@@ -4,7 +4,7 @@ import React, { Fragment,useState, useEffect } from 'react';
 import './Main.css'
 import moment from 'moment';
 import { Redirect } from 'react-router';
-import { Circle, CircleCondition } from './Components'
+import { Circle, CircleCondition,VerticalTimeline,HorizontalTimeline } from './Components'
 
 var db = new DB()
 
@@ -51,7 +51,7 @@ function Main(){
 				   <Fragment>
 				   {
 					   db.persons(building).map((person,i) => (
-		                  <Fragment key={b*i} style={{display:'inline'}}>
+		                  <Fragment key={b+i}>
 						  	<CircleCondition title={db.getNickname(person.profile)} condition={db.getRent(i,true)} onClick={() => {setRedirectProps(person); setRedirect('/details');}} color={['#07ab0a','darkgrey']} icon={['\uf00c','\uf00d']} />
 		                  	<br style={i%3===2?{display:'block'}:{display:'none'}}/>
 		                  </Fragment>
@@ -116,6 +116,14 @@ function Main(){
 				</Fragment>
 			))
 		 }
+		 </div>
+		 <br/><br/>
+		 <div className="container">
+		 	<VerticalTimeline content={db.data["6_0_1"].payment_history.slice(-3).map((p,i) => {return {title:moment(i+1,"M").format("MMM YYYY"),subtitle:p.housing}})}/>
+		 </div>
+		 <br/><br/>
+		 <div className="container">
+		 	<HorizontalTimeline content={db.data["6_0_1"].payment_history.slice(-3).map((p,i) => {return {title:moment(i+1,"M").format("MMM"),subtitle:p.housing}})}/>
 		 </div>
 		 <br/><br/>
       </div>

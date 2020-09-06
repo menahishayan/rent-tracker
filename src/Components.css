@@ -35,3 +35,81 @@ hr {
    margin-right: 6%;
    display: inline-block;
 }
+
+.vertical-timeline {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* The actual vertical-timeline (the vertical ruler) */
+.vertical-timeline::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  background-color: lightgrey;
+  top: 0;
+  bottom: 0;
+  left: 70%;
+  margin-left: -3px;
+}
+
+/* Container around content */
+.vertical-timeline-container {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 60%;
+}
+
+/* The circles on the vertical-timeline */
+.vertical-timeline-container::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  right: -20%;
+  background-color: grey;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* The circles on the horizontal-timeline */
+.horizontal-timeline p:before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: grey;
+  border-radius: 50%;
+  z-index: 1;
+  top:-7px;
+}
+
+.horizontal-timeline {
+  height: 100px;
+  width: 100%;
+}
+
+.horizontal-timeline-container {
+  display: inline-flex;
+  padding: 0;
+  text-align: center;
+}
+
+.horizontal-timeline h5 {
+  margin-bottom: 15px;
+  padding-left: 33px;
+  padding-right: 33px;
+  display: table;
+  align-items: center;
+}
+
+.horizontal-timeline p {
+  display: flex;
+  justify-content: center;
+  border-top: 3px solid lightgrey;
+  position: relative;
+  padding-top: 15px;
+}
