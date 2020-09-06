@@ -63,7 +63,6 @@ class DB extends React.Component {
 			ref.on('value', async(snapshot) => {
                 this.data[id] = await snapshot.val()
                 localStorage.setItem('rent-db', JSON.stringify(this.data));
-                console.log(this.data);
 	            return new Promise((resolve, reject) => {
                     setTimeout(()=> {
                         if(this.data[id]) resolve(this.data[id])

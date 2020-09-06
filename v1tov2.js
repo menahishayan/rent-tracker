@@ -7,7 +7,6 @@ fs.readFile('db_v1.json', (err, data) => {
     var db1 = JSON.parse(data);
 	var db2 = {}
 
-
 	var ids = Object.keys(db1)
 
 	ids.forEach(id => {

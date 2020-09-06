@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 var db = new DB()
 
 function Main(){
-    console.log(db.getUser("6_1_1"));
+   console.log(db.data["6_1_1"]);
    return(
       <div>
          <Navbar bg="primary" variant="dark">
