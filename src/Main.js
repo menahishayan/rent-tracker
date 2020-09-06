@@ -118,7 +118,7 @@ function Main(){
 					<div className="floor">
 					{
 						db.getDoors("86",floor).map((door,d) =>
-							<div style={{width:`${100/db.getDoors("86",floor).length}%`, backgroundColor:`hsl(${51-(d*5)}, ${((d+2)/db.getDoors("86",floor).length)*100}%, ${((d+1)/db.getDoors("86",floor).length)*82}%)`}} className="door">
+							<div style={{width:`${100/db.getDoors("86",floor).length}%`, backgroundColor:`hsl(${48-(f+d)*2}, ${(((f+d+1)/db.getDoors("86",floor).length)*80)+15}%, ${(((f+d)/db.getDoors("86",floor).length)*13)+74}%)`}} className="door">
 								<center><b className="door-label">{door}</b></center>
 							</div>
 						)
