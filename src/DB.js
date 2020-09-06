@@ -20,6 +20,7 @@ class DB extends React.Component {
            if(id) path+=id
            if(item) path += '/' + item
        }
+	   console.log("refresh");
        let ref = Firebase.database().ref(path);
        ref.on('value', async(snapshot) => {
            if(this.data && id) {
@@ -209,12 +210,23 @@ class DB extends React.Component {
    }
 
    addPay = (index,payment) => {
-	   var id = Object.keys(this.data)[index]
+	  var id = Object.keys(this.data)[index]
       var person=this.data[id]
       let paidRent = person.payment_history || []
       paidRent.push(payment)
       return this.updateUser(id,"payment_history",paidRent)
    }
+
+   getNextRenewal=(index)=>
+	{
+		var id = Object.keys(this.data)[index]
+		var person=this.data[id]
+
+		let r=person.renewals
+
+		return moment((r!==undefined && r.length>0) ? r[r.length-1] : person.startdate,"YYYY-MM-DD", true).add(11,"M")
+		// return endDate.isBetween(moment().subtract(1,"M"),moment().add(7,"M"),"M") ? endDate.format("Do MMMM, YYYY") : null;
+	}
 }
 
 export default DB;

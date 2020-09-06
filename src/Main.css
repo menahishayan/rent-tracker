@@ -1,10 +1,16 @@
+h4 {
+	margin-bottom: 15px;
+	margin-top: 10px;
+}
 .circle{
 	height: 60px;
 	width: 60px;
 	border-radius:35px;
-	-webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
-	box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
-   display:inline-grid;
+	-webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.25);
+	box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.25);
+   color: white;
+   font-size: 30px;
+   padding-top: 10%;
 }
 
 .circle-container{
@@ -18,8 +24,8 @@
    padding-bottom: 2%;
    margin-top: 2%;
    width:90%;
-   -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
-   box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
+   -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.25);
+   box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.25);
 }
 
 @media only screen and (max-width: 600px) {
