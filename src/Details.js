@@ -18,7 +18,7 @@ function Details (props) {
 				</div>
 			</div>
 			<div className='container'>
-
+			<h3>{props.location.state.startdate}</h3>
 			</div>
 			<br/>
 			<center><h4>Vertical Example</h4></center>
