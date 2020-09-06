@@ -1,0 +1,33 @@
+.circle{
+	height: 60px;
+	width: 60px;
+	border-radius:35px;
+	-webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
+	box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
+   display:inline-grid;
+}
+
+.circle-container{
+   margin-left:6%;
+   margin-right: 6%;
+   display: inline-block;
+}
+.container{
+   padding-top:5%;
+   padding-bottom: 5%;
+   margin-top: 2%;
+   width:90%;
+   -webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
+   box-shadow: 0px 2px 7px 0px rgba(0,0,0,0.51);
+}
+
+@media only screen and (max-width: 600px) {
+   .circle{
+   	height: 60px;
+   	width: 60px;
+   }
+
+   .container{
+      margin-top: 2%;
+   }
+}
