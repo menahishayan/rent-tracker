@@ -1,5 +1,6 @@
 import React from 'react';
 import './Main.css'
+import './Components.css'
 
 export const CircleCondition = props => (
 	<div className='circle-container' style={props.style} onClick={props.onClick}>
