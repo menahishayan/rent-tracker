@@ -2,8 +2,10 @@ import Navbar from 'react-bootstrap/Navbar'
 import DB from './DB';
 import React, { useState, useEffect } from 'react';
 
-function Main(){
+var db = new DB()
 
+function Main(){
+    console.log(db.getUser("6_1_1"));
    return(
       <div>
          <Navbar bg="primary" variant="dark">

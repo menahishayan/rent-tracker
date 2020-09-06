@@ -7,10 +7,6 @@ import React from 'react';
 class DB extends React.Component {
    constructor(props) {
       super(props)
-      this.state = {
-         data:undefined,
-         getStatus:false,
-      };
       var data;
       if (!Firebase.apps.length) {
          Firebase.initializeApp(config);
@@ -18,64 +14,72 @@ class DB extends React.Component {
       }
    }
 
+   refreshCache = (id,item) => {
+       let path = '/'
+       if(this.data) {
+           if(id) path+=id
+           if(item) path += '/' + item
+       }
+       let ref = Firebase.database().ref(path);
+       ref.on('value', async(snapshot) => {
+           if(this.data && id) {
+               if(item) this.data[id][item] = await snapshot.val()
+               else this.data[id] = await snapshot.val()
+           } else this.data = await snapshot.val()
+          localStorage.setItem('rent-db', JSON.stringify(this.data));
+          return new Promise((resolve, reject) => {
+              setTimeout(()=> {
+                  if(this.data) resolve(this.data)
+              },200)
+          })
+       })
+   }
+
    get = () => {
-      if(!this.state.data) {
-         let ref = Firebase.database().ref('/');
-		 try {
+      if(!this.data) {
+         let cache = localStorage.getItem('rent-db');
+         if(cache)
+            this.data = JSON.parse(cache)
+         else {
+             let ref = Firebase.database().ref('/');
 			 ref.on('value', async(snapshot) => {
-	            this.setState({ data: snapshot.val()});
                 this.data = await snapshot.val()
+                localStorage.setItem('rent-db', JSON.stringify(this.data));
 	            return new Promise((resolve, reject) => {
                     setTimeout(()=> {
-                        if(this.data) resolve(true)
-                    },2000)
-                    reject(false)
+                        if(this.data) resolve(this.data)
+                    },200)
                 })
 	         })
-		 } catch(e) {
-            console.log(e);
-            this.setState({ getStatus: false});
-            return false
          }
-      } else {
-         this.setState({ getStatus: true});
-         return true
-      }
+     }
    }
 
    getUser = (id) => {
-      if(!id) this.get()
-      else if(this.state.getStatus){
+      if(!id) return this.get()
+      else {
+         if(!this.data) this.get()
          let ref = Firebase.database().ref('/'+id);
-		 try {
-			ref.on('value', snapshot => {
-				let data=this.state.data
-				data[id]=snapshot.val()
-				this.setState({ data: data});
-				this.setState({ getStatus: true});
-				return true
+			ref.on('value', async(snapshot) => {
+                this.data[id] = await snapshot.val()
+                localStorage.setItem('rent-db', JSON.stringify(this.data));
+                console.log(this.data);
+	            return new Promise((resolve, reject) => {
+                    setTimeout(()=> {
+                        if(this.data[id]) resolve(this.data[id])
+                    },200)
+                })
 			})
-		} catch(e) {
-			console.log(e);
-			this.setState({ getStatus: false});
-			return false
-		}
       }
    }
    updateUser = (id,item,data) => {
       if(id && data){
-		 try {
-	         Firebase.database().ref(id+item).update(data, (error) => {
-	            if (error) console.error(error);
-	            else {
-	               if(!this.getUser(id)) return false
-	               else return true
-	            }
-			})
-		 } catch(e) {
-            console.log(e);
-            return false
-         }
+         Firebase.database().ref(id+item).update(data, (error) => {
+            return new Promise((resolve, reject) => {
+                if (error) reject(error);
+                resolve(this.refreshCache(id))
+            })
+		})
       }
    }
 
@@ -153,18 +157,12 @@ class DB extends React.Component {
       if(Object.keys(this.state.DB).find(id))
          return false
       else {
-         try {
              Firebase.database().ref(id).set(data, (error) => {
-                if (error) console.error(error);
-                else {
-                   if(!this.getUser(id)) return false
-                   else return true
-                }
+                 return new Promise((resolve, reject) => {
+                     if (error) reject(error);
+                     resolve(this.refreshCache(id))
+                 })
             })
-         } catch(e) {
-            console.log(e);
-            return false
-         }
       }
    }
 
