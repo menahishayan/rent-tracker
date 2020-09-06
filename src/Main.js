@@ -1,6 +1,6 @@
 import Navbar from 'react-bootstrap/Navbar'
 import DB from './DB';
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import './Main.css'
 import moment from 'moment';
 
@@ -66,7 +66,7 @@ function Main(){
                   </Fragment>
                ))
             }
-            <hr style={{backgroundColor:"darkgrey"}}/>
+            <hr/>
             {
                 db.data && db.profiles("6").map((profile,i) => (
                   	<Fragment key={i} style={{display:'inline'}}>
@@ -92,9 +92,9 @@ function Main(){
 				<Fragment key={i}>
 					<div style={{display:'inline-flex',width:'100%', marginLeft:'2%',cursor: 'pointer'}}>
 						<div style={{display:'inline-block',width:'20%', marginRight:'8%'}}>
-							<Circle color="#006CFF" icon="user" />
+							<Circle color="#5e09b8" icon="user" />
 						</div>
-						<div style={{display:'inline-block',width:'80%', marginTop:'2%'}}>
+						<div style={{display:'inline-block',width:'80%', marginTop:'1.5%'}}>
 							<b>{person.name}</b><br/>
 							{person.date}
 						</div>
@@ -103,6 +103,32 @@ function Main(){
 				</Fragment>
 			))
 		 }
+		 </div>
+		 <br/>
+		 <center>
+		 	<h4><b><i className="fa fa-users"></i></b>&nbsp;&nbsp;Tennants</h4>
+		 </center>
+         <div className="container">
+		 {
+			db.data && db.getFloors("86").map((floor,f) => (
+				<Fragment key={f}>
+					<div className="floor-label-container">
+						<center><b className="floor-label">{floor}</b></center>
+					</div>
+					<div className="floor">
+					{
+						db.getDoors("86",floor).map((door,d) =>
+							<div style={{width:`${100/db.getDoors("86",floor).length}%`, backgroundColor:`hsl(${51-(d*5)}, ${((d+2)/db.getDoors("86",floor).length)*100}%, ${((d+1)/db.getDoors("86",floor).length)*82}%)`}} className="door">
+								<center><b className="door-label">{door}</b></center>
+							</div>
+						)
+					}
+					</div>
+					<br/>
+				</Fragment>
+			))
+		 }
+		 <hr/>
 		 </div>
 		 <br/><br/>
       </div>

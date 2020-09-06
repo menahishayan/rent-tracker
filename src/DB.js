@@ -92,14 +92,30 @@ class DB extends React.Component {
 		if(!this.data) this.get()
 		let array = []
 
-      Object.keys(this.data).forEach((id, i) => {
-         if(filter){
-            if (id.split("_")[0]===filter)
-            array.push(this.data[id].profile)
-         } else array.push(this.data[id].profile)
-      });
+		Object.keys(this.data).forEach((id, i) => {
+		 if(filter){
+		    if (id.split("_")[0]===filter)
+		    array.push(this.data[id].profile)
+		 } else array.push(this.data[id].profile)
+		});
 
 		return array
+	}
+
+	parseId = (id) => {
+		if(!this.data) this.get()
+
+		var idParts = id.split("_")
+
+		if(id) {
+			if(idParts.length)
+				return {
+					building: parseInt(idParts[0]),
+					floor: parseInt(idParts[1]),
+					door: parseInt(idParts[2])
+				}
+			else return
+		}
 	}
 
    updateUser = (id,item,data) => {
@@ -223,9 +239,27 @@ class DB extends React.Component {
 		var person=this.data[id]
 
 		let r=person.renewals
-
 		return moment((r!==undefined && r.length>0) ? r[r.length-1] : person.startdate,"YYYY-MM-DD", true).add(11,"M")
-		// return endDate.isBetween(moment().subtract(1,"M"),moment().add(7,"M"),"M") ? endDate.format("Do MMMM, YYYY") : null;
+	}
+
+	getFloors = (building) => {
+		if(!this.data) this.get()
+		let array = []
+		Object.keys(this.data).forEach((id, i) => {
+			if(this.parseId(id).building === parseInt(building))
+				array.push(this.parseId(id).floor)
+		});
+		return [...new Set(array)].reverse()
+	}
+
+	getDoors = (building,floor) => {
+		if(!this.data) this.get()
+		let array = []
+		Object.keys(this.data).forEach((id, i) => {
+			if(this.parseId(id).building === parseInt(building) && this.parseId(id).floor === parseInt(floor))
+				array.push(this.parseId(id).door)
+		});
+		return [...new Set(array)]
 	}
 }
 
