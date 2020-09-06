@@ -54,31 +54,19 @@ function Main(){
          <h4><b><i className="fa fa-check"></i></b>&nbsp;&nbsp;{moment().format("MMMM")}</h4>
          <div className="container" >
             {
-               db.data && db.profiles("86").map((profile,i) => (
-                  <Fragment key={i} style={{display:'inline'}}>
-					  <CircleCondition
-						  title={profile.nickname ? profile.nickname : profile.name.split(' ')[0]}
-						  condition={db.getRent(i,true)}
-						  color={['#07ab0a','darkgrey']}
-						  icon={['check','times']}
-					  />
-                     <br style={i%3===2?{display:'block'}:{display:'none'}}/>
-                  </Fragment>
-               ))
-            }
-            <hr/>
-            {
-                db.data && db.profiles("6").map((profile,i) => (
-                  	<Fragment key={i} style={{display:'inline'}}>
-                    	<CircleCondition
-							title={profile.nickname ? profile.nickname : profile.name.split(' ')[0]}
-							condition={db.getRent(i,true)}
-							color={['#07ab0a','darkgrey']}
-							icon={['check','times']}
-						/>
-                    <br style={i%3===2?{display:'block'}:{display:'none'}}/>
-                  	</Fragment>
-                ))
+               db.data && db.getBuildings().map((building,b) => (
+				   <Fragment>
+				   {
+					   db.profiles(building).map((profile,i) => (
+		                  <Fragment key={b*i} style={{display:'inline'}}>
+						  	<CircleCondition title={db.getNickname(profile)} condition={db.getRent(i,true)} color={['#07ab0a','darkgrey']} icon={['check','times']} />
+		                  	<br style={i%3===2?{display:'block'}:{display:'none'}}/>
+		                  </Fragment>
+		               ))
+				   }
+				   { b!==db.getBuildings().length-1 ? <hr style={{marginTop:"-1%",marginBottom:"6%"}}/> : null }
+				   </Fragment>
+			   ))
             }
          </div>
 		 </center>
@@ -110,25 +98,31 @@ function Main(){
 		 </center>
          <div className="container">
 		 {
-			db.data && db.getFloors("86").map((floor,f) => (
-				<Fragment key={f}>
-					<div className="floor-label-container">
-						<center><b className="floor-label">{floor}</b></center>
-					</div>
-					<div className="floor">
-					{
-						db.getDoors("86",floor).map((door,d) =>
-							<div style={{width:`${100/db.getDoors("86",floor).length}%`, backgroundColor:`hsl(${48-(f+d)*2}, ${(((f+d+1)/db.getDoors("86",floor).length)*80)+15}%, ${(((f+d)/db.getDoors("86",floor).length)*13)+74}%)`}} className="door">
-								<center><b className="door-label">{door}</b></center>
+			db.data && db.getBuildings().reverse().map((building,b) => (
+				<Fragment>
+				{
+					db.getFloors(building).map((floor,f) => (
+						<Fragment key={f}>
+							<div className="floor-label-container">
+								<center><b className="floor-label">{floor == 0 ? 'G' : floor}</b></center>
 							</div>
-						)
-					}
-					</div>
-					<br/>
+							<div className="floor">
+							{
+								db.getDoors(building,floor).map((door,d) =>
+									<div style={{width:`${100/db.getDoors(building,floor).length}%`, backgroundColor:`hsl(${48-(f+d)*2}, ${(((f+d+1)/db.getDoors(building,floor).length)*80)+15}%, ${(((f+d)/db.getDoors(building,floor).length)*13)+74}%)`}} className="door">
+										<center><b className="door-label">{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
+									</div>
+								)
+							}
+							</div>
+							<br/>
+						</Fragment>
+					))
+				}
+				{ b!==db.getBuildings().length-1 ? <hr/> : null }
 				</Fragment>
 			))
 		 }
-		 <hr/>
 		 </div>
 		 <br/><br/>
       </div>

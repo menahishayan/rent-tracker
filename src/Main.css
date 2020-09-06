@@ -63,13 +63,17 @@ hr {
 }
 
 .door {
-	padding:12%;
+	padding:5%;
 	display: inline-block;
 }
 
 .door-label {
 	color:#c20808;
 	font-size:24px;
+}
+
+.door-subtitle {
+	color:#c20808;
 }
 
 .floor-label {

@@ -110,7 +110,7 @@ class DB extends React.Component {
 		if(id) {
 			if(idParts.length)
 				return {
-					building: parseInt(idParts[0]),
+					building: idParts[0],
 					floor: parseInt(idParts[1]),
 					door: parseInt(idParts[2])
 				}
@@ -214,6 +214,10 @@ class DB extends React.Component {
       }
    }
 
+   getNickname = (profile) => {
+	   return profile.nickname ? profile.nickname : profile.name.split(' ')[0]
+   }
+
    deleteUser = (id,data) => {
       if(!Object.keys(this.data).find(id))
          return true
@@ -242,11 +246,20 @@ class DB extends React.Component {
 		return moment((r!==undefined && r.length>0) ? r[r.length-1] : person.startdate,"YYYY-MM-DD", true).add(11,"M")
 	}
 
+	getBuildings = () => {
+		if(!this.data) this.get()
+		let array = []
+		Object.keys(this.data).forEach((id, i) => {
+			array.push(this.parseId(id).building)
+		});
+		return [...new Set(array)]
+	}
+
 	getFloors = (building) => {
 		if(!this.data) this.get()
 		let array = []
 		Object.keys(this.data).forEach((id, i) => {
-			if(this.parseId(id).building === parseInt(building))
+			if(this.parseId(id).building === building)
 				array.push(this.parseId(id).floor)
 		});
 		return [...new Set(array)].reverse()
@@ -256,7 +269,7 @@ class DB extends React.Component {
 		if(!this.data) this.get()
 		let array = []
 		Object.keys(this.data).forEach((id, i) => {
-			if(this.parseId(id).building === parseInt(building) && this.parseId(id).floor === parseInt(floor))
+			if(this.parseId(id).building === building && this.parseId(id).floor === parseInt(floor))
 				array.push(this.parseId(id).door)
 		});
 		return [...new Set(array)]
