@@ -51,7 +51,7 @@ function Main(){
          </Navbar>
 		 <br/><br/><br/><br/>
          <center>
-         <h4><b><i className="fa fa-check"></i></b>&nbsp;&nbsp;{moment().format("MMMM")}</h4>
+         <h4><b className="fas">{"\uf662"}</b>&nbsp;&nbsp;{moment().format("MMMM")}</h4>
          <div className="container" >
             {
                db.data && db.getBuildings().map((building,b) => (
@@ -72,7 +72,7 @@ function Main(){
 		 </center>
 		 <br/>
 		 <center>
-		 	<h4><b><i className="fa fa-history"></i></b>&nbsp;&nbsp;Upcoming Renewals</h4>
+		 	<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Upcoming Renewals</h4>
 		 </center>
          <div className="container">
 		 {
@@ -94,7 +94,7 @@ function Main(){
 		 </div>
 		 <br/>
 		 <center>
-		 	<h4><b><i className="fa fa-users"></i></b>&nbsp;&nbsp;Tennants</h4>
+		 	<h4><b className="fas">{"\uf0c0"}</b>&nbsp;&nbsp;Tennants</h4>
 		 </center>
          <div className="container">
 		 {
@@ -110,7 +110,7 @@ function Main(){
 							{
 								db.getDoors(building,floor).map((door,d) =>
 									<div style={{width:`${100/db.getDoors(building,floor).length}%`, backgroundColor:`hsl(${48-(f+d)*2}, ${(((f+d+1)/db.getDoors(building,floor).length)*80)+15}%, ${(((f+d)/db.getDoors(building,floor).length)*13)+74}%)`}} className="door">
-										<center><b className="door-label"><b className="fa fa-f52b"></b>{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
+										<center><b className="door-label"><b className="fas">{"\uf52a"}</b>&nbsp;{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
 									</div>
 								)
 							}
