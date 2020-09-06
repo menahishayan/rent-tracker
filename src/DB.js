@@ -55,11 +55,11 @@ class DB extends React.Component {
      }
    }
 
-   getUser = (id) => {
-      if(!id) return this.get()
-      else {
-         if(!this.data) this.get()
-         let ref = Firebase.database().ref('/'+id);
+   	getUser = (id) => {
+      	if(!id) return this.get()
+      	else {
+         	if(!this.data) this.get()
+         	let ref = Firebase.database().ref('/'+id);
 			ref.on('value', async(snapshot) => {
                 this.data[id] = await snapshot.val()
                 localStorage.setItem('rent-db', JSON.stringify(this.data));
@@ -69,23 +69,37 @@ class DB extends React.Component {
                     },200)
                 })
 			})
-      }
-   }
+      	}
+   	}
 
-	persons = () => {
+	rentColour = () => {
+		base_rent===payment_history.housing?{color:'#07ab0a'}:{color:'#d10000'}
+	}
+
+	persons = (filter) => {
 		if(!this.data) this.get()
 		let array = []
 
-		for (id in Object.keys(this.data)) array.push(this.data[id])
+		Object.keys(this.data).forEach((id, i) => {
+         if(filter){
+            if (id.split("_")[0]===filter)
+            	array.push(this.data[id])
+         } else array.push(this.data[id])
+      });
 
 		return array
 	}
 
-	profiles = () => {
+	profiles = (filter) => {
 		if(!this.data) this.get()
 		let array = []
 
-		for (id in Object.keys(this.data)) array.push(this.data[id].profile)
+      Object.keys(this.data).forEach((id, i) => {
+         if(filter){
+            if (id.split("_")[0]===filter)
+            array.push(this.data[id].profile)
+         } else array.push(this.data[id].profile)
+      });
 
 		return array
 	}

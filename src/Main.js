@@ -2,6 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import DB from './DB';
 import React, { useState, useEffect } from 'react';
 import './Main.css'
+import moment from 'moment';
 
 var db = new DB()
 
@@ -10,20 +11,33 @@ function Main(){
    return(
       <div>
          <Navbar bg="primary" variant="dark">
-         	<Navbar.Brand className = "mx-auto"><b>Rent</b></Navbar.Brand>
+         	<Navbar.Brand className = "mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
          </Navbar>
-         <center>
+         <center><br/>
+         <h4><b>Rent - {moment().format("MMMM")}</b></h4>
          <div class="container" >
             {
-               Object.keys(db.data).map((id,i) => (
+               db.profiles("86").map((profile,i) => (
                   <div style={{display:'inline'}}>
                      <div className='circle-container'>
                         <div className="circle"></div><br/>
-                        <p className='name'>{db.data[id].profile.nickname?db.data[id].profile.nickname:db.data[id].profile.name.split(' ')[0]}</p>
+                        <p className='name'>{profile.nickname?profile.nickname:profile.name.split(' ')[0]}</p>
                      </div>
                      <br style={i%3===2?{display:'block'}:{display:'none'}}/>
                   </div>
                ))
+            }
+            <hr style={{backgroundColor:"darkgrey"}}/>
+            {
+                db.profiles("6").map((profile,i) => (
+                  	<div style={{display:'inline'}}>
+                    <div className='circle-container'>
+                        <div className="circle">{rentColour()}</div><br/>
+                        <p className='name'>{profile.nickname?profile.nickname:profile.name.split(' ')[0]}</p>
+                    </div>
+                    <br style={i%3===2?{display:'block'}:{display:'none'}}/>
+                  	</div>
+                ))
             }
          </div>
          </center>
