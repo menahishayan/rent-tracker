@@ -1,3 +1,4 @@
+import Navbar from 'react-bootstrap/Navbar'
 import React from 'react';
 import DB from './DB';
 import moment from 'moment';
@@ -8,7 +9,10 @@ var db = new DB()
 function Details (props) {
 	return(
 		<div>
-			<br/><br/>
+		<Navbar bg="primary" variant="dark" fixed="top">
+		   <Navbar.Brand className = "mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
+		</Navbar>
+		<br/><br/><br/><br/>
 			<div style={{display:'inline-flex',width:'100%', marginLeft:'2%',cursor: 'pointer'}}>
 				<div style={{display:'inline-block',width:'20%', marginRight:'8%'}}>
 					<Circle color="#5e09b8" icon={"\uf007"} style={{marginLeft:'50%'}}/>
