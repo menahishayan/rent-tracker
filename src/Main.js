@@ -1,8 +1,9 @@
 import Navbar from 'react-bootstrap/Navbar'
 import DB from './DB';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment,useState, useEffect } from 'react';
 import './Main.css'
 import moment from 'moment';
+import { Redirect } from 'react-router';
 
 var db = new DB()
 
@@ -26,6 +27,8 @@ const Circle = props => (
 )
 
 function Main(){
+	const [redirect,setRedirect]= useState();
+	const [redirectProps,setRedirectProps]= useState();
 	useEffect(() => {
 		db.refreshCache()
 	},[])
@@ -44,6 +47,14 @@ function Main(){
 		))
 		return array
 	}
+
+	if(redirect)
+   		return <Redirect push to={{
+	  		pathname: redirect,
+	  		state:redirectProps
+   		}}
+	 	/>
+
    return(
       <div>
          <Navbar bg="primary" variant="dark" fixed="top">
@@ -57,9 +68,9 @@ function Main(){
                db.data && db.getBuildings().map((building,b) => (
 				   <Fragment>
 				   {
-					   db.profiles(building).map((profile,i) => (
+					   db.persons(building).map((person,i) => (
 		                  <Fragment key={b*i} style={{display:'inline'}}>
-						  	<CircleCondition title={db.getNickname(profile)} condition={db.getRent(i,true)} color={['#07ab0a','darkgrey']} icon={['\uf00c','\uf00d']} />
+						  	<CircleCondition title={db.getNickname(person.profile)} condition={db.getRent(i,true)} onClick={() => {setRedirectProps(person); setRedirect('/details');}} color={['#07ab0a','darkgrey']} icon={['\uf00c','\uf00d']} />
 		                  	<br style={i%3===2?{display:'block'}:{display:'none'}}/>
 		                  </Fragment>
 		               ))
