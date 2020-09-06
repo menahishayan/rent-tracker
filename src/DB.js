@@ -55,9 +55,10 @@ class DB extends React.Component {
      }
    }
 
-   	getUser = (id) => {
-      	if(!id) return this.get()
+   	getUser = (index) => {
+      	if(!index) return this.get()
       	else {
+	   		var id = Object.keys(this.data)[index]
          	if(!this.data) this.get()
          	let ref = Firebase.database().ref('/'+id);
 			ref.on('value', async(snapshot) => {
@@ -111,10 +112,10 @@ class DB extends React.Component {
       }
    }
 
-   getRent = (id,month,returnStatusOnly,getAllItems) => {
-      if(!id) return false
-
-      var person=this.state.DB[id]
+   getRent = (index,month,returnStatusOnly,getAllItems) => {
+      if(!index) return false
+	  var id = Object.keys(this.data)[index]
+      var person=this.data[id]
       let expectedRent = []
 
       for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
@@ -168,9 +169,10 @@ class DB extends React.Component {
          return (getAllItems) ? dueTotal : dueTotal.housing
    }
 
-   getLess = (id,month) => {
+   getLess = (index,month) => {
       var less, sum=0, dueForMonth = 0
-      less=this.state.DB[id].less
+	  var id = Object.keys(this.data)[index]
+      less=this.data[id].less
       if (less)
          less.forEach((item, i) => {
             if(less.month===month)
@@ -182,10 +184,10 @@ class DB extends React.Component {
    }
 
    addUser = (id,data) => {
-      if(Object.keys(this.state.DB).find(id))
+      if(Object.keys(this.data).find(id))
          return false
       else {
-             Firebase.database().ref(id).set(data, (error) => {
+             Firebase.database().ref('/'+id).set(data, (error) => {
                  return new Promise((resolve, reject) => {
                      if (error) reject(error);
                      resolve(this.refreshCache(id))
@@ -195,7 +197,7 @@ class DB extends React.Component {
    }
 
    deleteUser = (id,data) => {
-      if(!Object.keys(this.state.DB).find(id))
+      if(!Object.keys(this.data).find(id))
          return true
       else {
          Firebase.database().ref(id).remove().catch((e) => {
@@ -205,8 +207,9 @@ class DB extends React.Component {
       }
    }
 
-   addPay = (id,payment) => {
-      var person=this.state.DB[id]
+   addPay = (index,payment) => {
+	   var id = Object.keys(this.data)[index]
+      var person=this.data[id]
       let paidRent = person.payment_history || []
       paidRent.push(payment)
       return this.updateUser(id,"payment_history",paidRent)
