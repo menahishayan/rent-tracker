@@ -8,6 +8,11 @@ var db = new DB()
 
 function Main(){
    db.refreshCache()
+
+   	const rentColor = (person) => {
+   		db.getRent()?{color:'#07ab0a'}:{color:'#d10000'}
+   	}
+
    return(
       <div>
          <Navbar bg="primary" variant="dark">
@@ -29,11 +34,11 @@ function Main(){
             }
             <hr style={{backgroundColor:"darkgrey"}}/>
             {
-                db.profiles("6").map((profile,i) => (
+                db.persons("6").map((person,i) => (
                   	<div style={{display:'inline'}}>
                     <div className='circle-container'>
-                        <div className="circle">{rentColour()}</div><br/>
-                        <p className='name'>{profile.nickname?profile.nickname:profile.name.split(' ')[0]}</p>
+                        <div className="circle">{db.getRent(i)}</div><br/>
+                        <p className='name'>{person.profile.nickname?person.profile.nickname:person.profile.name.split(' ')[0]}</p>
                     </div>
                     <br style={i%3===2?{display:'block'}:{display:'none'}}/>
                   	</div>

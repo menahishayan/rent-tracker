@@ -72,10 +72,6 @@ class DB extends React.Component {
       	}
    	}
 
-	rentColour = () => {
-		base_rent===payment_history.housing?{color:'#07ab0a'}:{color:'#d10000'}
-	}
-
 	persons = (filter) => {
 		if(!this.data) this.get()
 		let array = []
