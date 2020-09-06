@@ -71,6 +71,25 @@ class DB extends React.Component {
 			})
       }
    }
+
+	persons = () => {
+		if(!this.data) this.get()
+		let array = []
+
+		for (id in Object.keys(this.data)) array.push(this.data[id])
+
+		return array
+	}
+
+	profiles = () => {
+		if(!this.data) this.get()
+		let array = []
+
+		for (id in Object.keys(this.data)) array.push(this.data[id].profile)
+
+		return array
+	}
+
    updateUser = (id,item,data) => {
       if(id && data){
          Firebase.database().ref(id+item).update(data, (error) => {
