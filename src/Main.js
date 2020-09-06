@@ -9,7 +9,7 @@ var db = new DB()
 const CircleCondition = props => (
 	<div className='circle-container' style={props.style}>
 		<div className="circle" style={props.condition ? {backgroundColor: props.color[0]} : {backgroundColor: props.color[1]}}>
-			{props.condition ? <i className={`fa fa-${props.icon[0]}`}></i> : <i className={`fa fa-${props.icon[1]}`}></i>}
+			<center>{props.condition ? <i className={`fa fa-${props.icon[0]}`}></i> : <i className={`fa fa-${props.icon[1]}`}></i>}</center>
 		</div>
 		{props.title ? <p style={{marginTop:8}}>{props.title}</p> : null}
 	</div>
@@ -18,7 +18,7 @@ const CircleCondition = props => (
 const Circle = props => (
 	<div className='circle-container'>
 		<div className="circle" style={{backgroundColor: props.color || 'darkgrey'}}>
-			<i className={`fa fa-${props.icon}`}></i>
+			<center><i className={`fa fa-${props.icon}`}></i></center>
 		</div>
 		<br/>
 		{props.title ? <p className='name'>{props.title}</p> : null}
@@ -29,12 +29,28 @@ function Main(){
 	useEffect(() => {
 		db.refreshCache()
 	},[])
+
+	const generateRenewalsList = () => {
+		let array = []
+		if(db.data)
+		db.persons().map((person,i) => (
+			db.getNextRenewal(i).isBetween(moment().subtract(1,"M"),moment().add(7,"M"),"M") ?
+				array.push({
+					i: i,
+					name: person.profile.name,
+					date: db.getNextRenewal(i).format("Do MMMM, YYYY")
+				})
+			 : null
+		))
+		return array
+	}
    return(
       <div>
-         <Navbar bg="primary" variant="dark">
+         <Navbar bg="primary" variant="dark" fixed="top">
          	<Navbar.Brand className = "mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
          </Navbar>
-         <center><br/>
+		 <br/><br/><br/><br/>
+         <center>
          <h4><b><i className="fa fa-check"></i></b>&nbsp;&nbsp;{moment().format("MMMM")}</h4>
          <div className="container" >
             {
@@ -65,29 +81,30 @@ function Main(){
                 ))
             }
          </div>
+		 </center>
 		 <br/>
-		 <h4><b><i className="fa fa-history"></i></b>&nbsp;&nbsp;Upcoming Renewals</h4>
-         <div className="container" >
+		 <center>
+		 	<h4><b><i className="fa fa-history"></i></b>&nbsp;&nbsp;Upcoming Renewals</h4>
+		 </center>
+         <div className="container">
 		 {
-			db.data && db.persons().map((person,i) => (
-				db.getNextRenewal(i).isBetween(moment().subtract(1,"M"),moment().add(7,"M"),"M") ?
+			db.data && generateRenewalsList().map((person,i) => (
 				<Fragment key={i}>
-					<div style={{display:'inline-flex',width:'100%'}}>
-						<div style={{display:'inline-block',width:'20%'}}>
+					<div style={{display:'inline-flex',width:'100%', marginLeft:'2%',cursor: 'pointer'}}>
+						<div style={{display:'inline-block',width:'20%', marginRight:'8%'}}>
 							<Circle color="#006CFF" icon="user" />
 						</div>
-						<div style={{display:'inline-block',width:'80%'}}>
-							<b>{person.profile.name}</b><br/>
-							{db.getNextRenewal(i).format("Do MMMM, YYYY")}
+						<div style={{display:'inline-block',width:'80%', marginTop:'2%'}}>
+							<b>{person.name}</b><br/>
+							{person.date}
 						</div>
 					</div>
-					<hr style={{marginTop:"-3%"}}/>
-				</Fragment> : null
+					{ i!==generateRenewalsList().length-1 ? <hr style={{marginTop:"-3%"}}/> : null }
+				</Fragment>
 			))
 		 }
 		 </div>
-         </center>
-		 <br/>
+		 <br/><br/>
       </div>
    )
 }

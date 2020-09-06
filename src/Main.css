@@ -2,6 +2,11 @@ h4 {
 	margin-bottom: 15px;
 	margin-top: 10px;
 }
+
+b, h3, h4, p {
+	user-select: none;
+	cursor: default;
+}
 .circle{
 	height: 60px;
 	width: 60px;
@@ -11,6 +16,8 @@ h4 {
    color: white;
    font-size: 30px;
    padding-top: 10%;
+   user-select: none;
+   cursor: pointer;
 }
 
 .circle-container{
