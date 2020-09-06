@@ -118,14 +118,6 @@ function Main(){
 		 }
 		 </div>
 		 <br/><br/>
-		 <div className="container">
-		 	<VerticalTimeline content={db.data["6_0_1"].payment_history.slice(-3).map((p,i) => {return {title:moment(i+1,"M").format("MMM YYYY"),subtitle:p.housing}})}/>
-		 </div>
-		 <br/><br/>
-		 <div className="container">
-		 	<HorizontalTimeline content={db.data["6_0_1"].payment_history.slice(-3).map((p,i) => {return {title:moment(i+1,"M").format("MMM"),subtitle:p.housing}})}/>
-		 </div>
-		 <br/><br/>
       </div>
    )
 }
