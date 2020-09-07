@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './Main.css'
 import './Components.css'
 
@@ -72,8 +72,11 @@ export const HorizontalTimelineConditional = props => (
 )
 
 export const Overlay = props => (
+	<Fragment>
+		<div className="overlay" style={{opacity:(props.visible===true? 1 : 0), display: (props.visible===true? 'block' : 'none')}}></div>
 		<div className="overlay-container" style={{bottom:`${-60+(60*(props.visible===true? 1 : 0))}%`}}>
 			{props.children}
 		</div>
+	</Fragment>
 )
 
