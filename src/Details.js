@@ -77,7 +77,11 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
-			{ showOverlay && <Overlay/> }
+			{ showOverlay && 
+				<Overlay>
+					<h4>Hello</h4>
+				</Overlay>
+			}
 		</div>
 	);
 }
