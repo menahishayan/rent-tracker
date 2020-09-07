@@ -8,7 +8,8 @@ var db = new DB()
 
 function Details(props) {
 	const [showOverlay,setShowOverlay] = useState(false);
-
+	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
+	
 	const getNextPayment = () => {
 		let person = props.location.state
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
@@ -106,17 +107,22 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
-			<Overlay visible={showOverlay} bgClick={() => setShowOverlay(false)}>
+			<Overlay visible={showOverlay} bgClick={() => setShowOverlay(false)} height={40}>
 				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ props.location.state.payment_history!==undefined?
-
 				<center>
 					<h3><b>Rent {getNextPayment().month.format("MMMM")}</b></h3>
 					<br/><br/>
-					<h1><b className="fas" style={{ fontSize: 30 }}>{"\uf156"}</b><b>&nbsp;{getNextPayment().amount.housing}</b></h1>
-				</center>:null
-			}
+					{
+						!editNewRentAmount ? 
+							<h1 onClick={() => setEditNewRentAmount(true)}>
+								<b className="fas" style={{ fontSize: 30 }}>{"\uf156"}</b>
+								<b>&nbsp;{getNextPayment().amount.housing}</b>
+							</h1>
+						: <input type='number' value={getNextPayment().amount.housing} class="editable-label-input" width={10}/>
+					}
+					<b className="fas" style={{ color:'white',fontSize: 22, float:'right', marginTop:'-15%', marginRight:'5%' }}>{"\uf1b2"}</b>
+				</center>
 			</Overlay>
 		</div>
 	);

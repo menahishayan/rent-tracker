@@ -65,6 +65,17 @@ hr {
 	font-size: 20px;
 }
 
+.editable-label-input {
+	background-color: #006CFF;
+	color: white;
+	font-size:32px;
+	font-weight: bold;
+	text-align: center;
+	display: flex;
+	border: 0px;
+	
+}
+
 @media only screen and (max-width: 600px) {
 	.circle {
 		height: 60px;
