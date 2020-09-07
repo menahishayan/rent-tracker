@@ -129,10 +129,17 @@ class DB extends React.Component {
       }
    }
 
-   getRent = (index,returnStatusOnly,getAllItems,month) => {
-      if(!index) return false
-	  var id = Object.keys(this.data)[index]
-      var person=this.data[id]
+   getRent = (identifier,returnStatusOnly,getAllItems,month) => {
+      if(!identifier) return false
+
+      var person, id
+      if(identifier.index)
+            id = Object.keys(this.data)[identifier.index]
+      else if(identifier.id)
+            id = identifier.id
+     else return false
+
+      person=this.data[id]
       let expectedRent = []
 
       for( let s = moment(person.startdate, "YYYY-MM-DD"); s.isSameOrBefore(moment()); s.add(1,"M")) {
