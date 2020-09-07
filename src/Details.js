@@ -12,12 +12,13 @@ function Details(props) {
 	const getNextPayment = () => {
 		let person = props.location.state
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
-		if(person.payment_history!==undefined)
-{		return {
-			month: moment().subtract(month - person.payment_history.length-1, "M"),
-			amount: db.getRent({id:person.id},false,true,month-1)
-		}}
-		else return false
+		if(person.payment_history!==undefined) {
+			return {
+				month: moment().subtract(month - person.payment_history.length-1, "M"),
+				amount: db.getExpectedRent({id:person.id},month)
+			}
+		}
+		else return moment(person.startdate)
 	}
 
 	useEffect(()=> {
