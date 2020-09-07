@@ -23,10 +23,10 @@ function Details (props) {
 			</div>
 			<div className='container'>
 				<div style={{display:'inline-flex',width:'100%'}}>
-					<b className="fas"  style={{display:'inline-block',width:'10%',marginLeft:'2%'}}>{"\uf073"}</b>
+					<b className="fas"  style={{display:'inline-block',width:'10%',marginLeft:'2%',fontSize:'25px',marginTop:'-3%'}}>{"\uf073"}</b>
 					<h5 style={{display:'inline-block',width:'50%'}}>From</h5>
 				</div>
-				<h4 ><b>{moment(props.location.state.startdate).format("Do MMMM, YYYY")}</b></h4>
+				<h4 style={{marginTop:'1%'}}><b>{moment(props.location.state.startdate).format("Do MMMM, YYYY")}</b></h4>
 			</div>
 			<br/>
 
@@ -37,6 +37,14 @@ function Details (props) {
    		 	<VerticalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(props.location.state.startdate).add(props.location.state.payment_history.length+(i-2),"M").format("MMM YYYY"),subtitle:p.housing}})}/>
 	   		 </div>
 	   		 <br/>
+
+			 <center>
+    		 		<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Due</h4>
+    		 	</center>
+ 			<div className="container">
+ 	   		 </div>
+ 	   		 <br/>
+
 			 { props.location.state.renewals &&
 			<Fragment>
 			 <center>
