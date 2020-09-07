@@ -232,7 +232,8 @@
     "advance" : 50000,
     "base_rent" : 8000,
     "id" : "6_2_1",
-    "less" : [ {
+    "less" : [ 
+    {
       "amount" : 1400,
       "month" : 1,
       "reason" : "Rent - January 2019"
@@ -309,7 +310,8 @@
       "month" : 7,
       "reason" : "Rent - July 2020"
     } ],
-    "payment_history" : [ {
+    "payment_history" : [
+       {
       "housing" : 8000,
       "others" : 0
     }, {

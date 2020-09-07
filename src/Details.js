@@ -52,16 +52,21 @@ function Details(props) {
 			<br />
 
 			<center>
-				<h4><b className="fas">{"\uf071"}</b>&nbsp;&nbsp;Returnable Advance</h4>
+				<h4><b className="fas">{"\uf3d1"}</b>&nbsp;&nbsp;Returnable Advance</h4>
 			</center>
 			<div className="container">
 				<center>
 					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{props.location.state.advance-db.getLess({ id: props.location.state.id })}</b></h2>
 				</center>
-				{db.getRent({ id: props.location.state.id }, false, false, 0)!=='0'}
-				<div style={{ color: 'darkgrey', fontSize: 14 }}>
-					<b className="fas">{"\uf06a"}</b><br />
-				</div>
+				{
+				db.getLess({ id: props.location.state.id })!==0?
+					<div style={{ color: 'darkgrey', fontSize: 14 }}>
+					<b className="fas">{"\uf06a"} {
+						props.location.state.less.map((item, i) => (
+							<div>{item.reason}</div>
+						))}</b>
+					</div>:null
+				}
 			</div>
 			<br />
 
