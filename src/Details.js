@@ -1,5 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { Circle, HorizontalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
@@ -8,6 +8,21 @@ var db = new DB()
 
 function Details(props) {
 	const [showOverlay,setShowOverlay] = useState(false);
+
+	const getNextPayment = () => {
+		let person = props.location.state
+		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
+		return {
+			month: moment().subtract(month - person.payment_history.length-1, "M"),
+			amount: db.getRent({id:person.id},false,true,month-1)
+		}
+	}
+
+	useEffect(()=> {
+		getNextPayment()
+		db.refreshCache()
+	},[])
+
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
@@ -77,11 +92,15 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
-			{ showOverlay && 
-				<Overlay>
-					<h4>Hello</h4>
-				</Overlay>
-			}
+			<Overlay visible={showOverlay}>
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
+				<br/>
+				<center>
+					<h3><b>Rent {getNextPayment().month.format("MMMM")}</b></h3>
+					<br/><br/>
+					<h1><b className="fas" style={{ fontSize: 30 }}>{"\uf156"}</b><b>&nbsp;{getNextPayment().amount.housing}</b></h1>
+				</center>
+			</Overlay>
 		</div>
 	);
 }

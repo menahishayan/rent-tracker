@@ -449,43 +449,43 @@
     } ],
     "payment_history" : [ {
       "housing" : 12000,
-      "others" : "856"
+      "others" : 856
     }, {
       "housing" : 12000,
-      "others" : "610"
+      "others" : 610
     }, {
       "housing" : 12000,
-      "others" : "655"
+      "others" : 655
     }, {
       "housing" : 12000,
-      "others" : "646"
+      "others" : 646
     }, {
       "housing" : 12000,
-      "others" : "645"
+      "others" : 645
     }, {
       "housing" : 12000,
-      "others" : "645"
+      "others" : 645
     }, {
       "housing" : 10500,
-      "others" : "1345"
+      "others" : 1345
     }, {
       "housing" : 10500,
-      "others" : "645"
+      "others" : 645
     }, {
       "housing" : 10500,
-      "others" : "660"
+      "others" : 660
     }, {
       "housing" : 10500,
-      "others" : "660"
+      "others" : 660
     }, {
       "housing" : 10500,
-      "others" : "660"
+      "others" : 660
     }, {
       "housing" : 10500,
-      "others" : "660"
+      "others" : 660
     }, {
       "housing" : 10500,
-      "others" : "660"
+      "others" : 660
     } ],
     "profile" : {
       "acc_id" : "6092970175",
@@ -792,6 +792,6 @@
       "rr_no" : "S10H 78399"
     },
     "renewals" : [ "2019-09-30" ],
-    "startdate" : "2019-08-10"
+    "startdate" : "2018-08-10"
   }
 }

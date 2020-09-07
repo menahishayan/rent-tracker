@@ -75,10 +75,18 @@ export const HorizontalTimelineConditional = props => (
 	</div>
 )
 
-export const Overlay = props => (
-	<div className="overlay">
-		<div className="overlay-container">
+export const Overlay2 = props => (
+	<div className="overlay" onClick={props.bgOnClick} style={props.visible ? {display:'block', opacity:1}:{ opacity:0}}>
+		<div className="overlay-container" style={{bottom:`${-60+(60*(props.visible===true? 1 : 0))}%`}}>
 			{props.children}
 		</div>
 	</div>
 )
+
+
+export const Overlay = props => (
+		<div className="overlay-container" style={{bottom:`${-60+(60*(props.visible===true? 1 : 0))}%`}}>
+			{props.children}
+		</div>
+)
+
