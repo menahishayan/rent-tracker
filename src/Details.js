@@ -106,8 +106,8 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
-			<Overlay visible={showOverlay}>
-				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
+			<Overlay visible={showOverlay} bgClick={() => setShowOverlay(false)}>
+				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ props.location.state.payment_history!==undefined?
 
