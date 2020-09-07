@@ -59,7 +59,12 @@ function Details(props) {
 							}
 						})
 					} 
-					condition={{subtitle:3000}} 
+					conditionArray={
+						props.location.state.payment_history.slice(-3).map((p, i) => { 
+							console.log(db.getRent({id:props.location.state.id},false,false,props.location.state.payment_history.length + (i - 3)));
+							return db.getRent({id:props.location.state.id},true,false,props.location.state.payment_history.length + (i - 3))
+						})
+					} 
 					color={['#07ab0a', 'darkgrey']} 
 					icon={['\uf00c', '\uf00d']}
 				/>
