@@ -39,8 +39,8 @@ function Details (props) {
 	   		 <br/>
 
 			 <center>
-    		 		<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Due</h4>
-    		 	</center>
+    		 		<h4><b className="fas">{"\uf06a"}</b>&nbsp;&nbsp;Due</h4>
+    		 </center>
  			<div className="container">
  	   		 </div>
  	   		 <br/>
