@@ -2,7 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import React,{Fragment} from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Circle ,VerticalTimeline, HorizontalTimeline } from './Components'
+import { Circle , HorizontalTimeline } from './Components'
 
 var db = new DB()
 
@@ -45,6 +45,9 @@ function Details (props) {
 				<center>
     		 		<h2><b className="fas" style={{fontSize:26}}>{"\uf156"}</b><b>&nbsp;{db.getRent({id:props.location.state.id},false,false,0)}</b></h2>
     			</center>
+				<div style={{color:'grey'}}>
+   		 		<h4 style={{fontSize:16}}><b className="fas">{"\uf12a"}</b>&nbsp;payment</h4>
+   		 		</div>
  	   		</div>
  	   		 <br/>
 
