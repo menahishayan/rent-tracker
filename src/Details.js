@@ -8,8 +8,8 @@ var db = new DB()
 
 function Details(props) {
 	const [showOverlay,setShowOverlay] = useState(false);
-	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
-	
+	const [showOverlay2,setShowOverlay2] = useState(false);
+
 	const getNextPayment = () => {
 		let person = props.location.state
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
@@ -53,7 +53,7 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
-			<div className="container" onClick={() => setShowOverlay(true)}>
+			<div className="container" onClick={() => setShowOverlay2(true)}>
 			{ props.location.state.payment_history!==undefined?
 				<HorizontalTimelineConditional
 					content={
@@ -73,8 +73,8 @@ function Details(props) {
 					icon={['\uf00c', '\uf00d']}
 				/>:null
 			}
-			<Overlay visible={showOverlay}>
-				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
+			<Overlay visible={showOverlay2}>
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay2(showOverlay2 ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ props.location.state.payment_history!==undefined?
 				<VerticalTimelineConditional
@@ -137,7 +137,7 @@ function Details(props) {
 					<h3><b>Rent {getNextPayment().month.format("MMMM")}</b></h3>
 					<br/><br/>
 					{
-						!editNewRentAmount ? 
+						!editNewRentAmount ?
 							<h1 onClick={() => setEditNewRentAmount(true)}>
 								<b className="fas" style={{ fontSize: 30 }}>{"\uf156"}</b>
 								<b>&nbsp;{getNextPayment().amount.housing}</b>
