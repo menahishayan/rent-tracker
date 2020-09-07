@@ -34,7 +34,7 @@ function Details (props) {
    		 		<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
    		 	</center>
 			<div className="container">
-   		 	<VerticalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(props.location.state.startdate).add(props.location.state.payment_history.length+(i-2),"M").format("MMM YYYY"),subtitle:p.housing}})}/>
+   		 	<VerticalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(props.location.state.startdate).add(props.location.state.payment_history.length+(i-3),"M").format("MMM YYYY"),subtitle:p.housing}})}/>
 	   		 </div>
 	   		 <br/>
 
@@ -42,6 +42,8 @@ function Details (props) {
     		 		<h4><b className="fas">{"\uf06a"}</b>&nbsp;&nbsp;Due</h4>
     		 </center>
  			<div className="container">
+				{console.log(props.location.state.id)}
+				{db.getRent(props.location.state.id,false,false,0)}
  	   		 </div>
  	   		 <br/>
 
