@@ -23,10 +23,7 @@ function Details(props) {
 		else return moment(person.startdate)
 	}
 
-	useEffect(()=> {
-		getNextPayment()
-		db.refreshCache()
-	},[])
+	var nextPayment = getNextPayment()
 
 	return (
 		<div>
@@ -132,19 +129,19 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowAddPayOverlay(true)}/>
-			<Overlay visible={showAddPayOverlay} bgClick={() => setShowAddPayOverlay(false)} height={editNewRentAmount ? 70 : 40}>
-				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => setShowAddPayOverlay(showAddPayOverlay ? false : true)}>{"\uf00d"}</b>
+			<Overlay visible={showAddPayOverlay} bgClick={() => setShowAddPayOverlay(false)} height={40}>
+				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => {setShowAddPayOverlay(showAddPayOverlay ? false : true);setEditNewRentAmount(false)}}>{"\uf00d"}</b>
 				<br/>
 				<center>
-					<h3><b>Rent {getNextPayment().month.format("MMMM")}</b></h3>
+					<h3><b>Rent {nextPayment.month.format("MMMM")}</b></h3>
 					<br/><br/>
 					{
 						!editNewRentAmount ?
 							<h1 onClick={() => setEditNewRentAmount(true)}>
 								<b className="fas" style={{ fontSize: 30 }}>{"\uf156"}</b>
-								<b>&nbsp;{getNextPayment().amount.housing}</b>
+								<b>&nbsp;{nextPayment.amount.housing}</b>
 							</h1>
-						: <input type='number' value={getNextPayment().amount.housing} class="editable-label-input" width={10}/>
+						: <input type='number' pattern="[0-9]*" placeholder={nextPayment.amount.housing} class="editable-label-input"/>
 					}
 					<b className="fas" style={{ color:'white',fontSize: 22, float:'right', marginTop:'-15%', marginRight:'5%' }}>{"\uf1b2"}</b>
 				</center>
