@@ -16,7 +16,7 @@ export const Circle = props => (
 		<div className={props.small ? "circle-sm" :"circle"} style={{ backgroundColor: props.color || 'darkgrey' }}>
 			<center><b className="fas">{props.icon}</b></center>
 		</div>
-		<br />
+		<br/>
 		{props.title ? <p className='name'>{props.title}</p> : null}
 	</div>
 )
@@ -37,7 +37,7 @@ export const VerticalTimeline = props => (
 )
 
 export const HorizontalTimeline = props => (
-	<div className="horizontal-timeline" content='A'>
+	<div className="horizontal-timeline" >
 		{
 			props.content.map((item, i) => (
 				<div key={i} className="horizontal-timeline-container">
@@ -81,7 +81,7 @@ export const VerticalTimelineConditional = props => (
 						<CircleCondition small
 							color={props.color}
 							icon={props.icon}
-							style={{position: 'relative', top:-70, zIndex:1}}
+							style={{position: 'absolute', top:-76, zIndex:1,marginLeft:'90%'}}
 							condition={props.conditionArray[i]} />
 					</div>
 				</div>

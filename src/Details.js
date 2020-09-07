@@ -1,4 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
+import button from 'react-bootstrap'
 import React, { Fragment, useState, useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
@@ -8,7 +9,8 @@ var db = new DB()
 
 function Details(props) {
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
-	const [showOverlay2,setShowOverlay2] = useState(false);
+	const [historyOverlay,sethistoryOverlay] = useState(false);
+	const [advanceOverlay,setadvanceOverlay] = useState(false);
 	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 
@@ -58,7 +60,7 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
-			<div className="container" onClick={() => setShowOverlay2(true)}>
+			<div className="container" onClick={() => sethistoryOverlay(true)}>
 			{ props.location.state.payment_history!==undefined?
 				<HorizontalTimelineConditional
 					content={
@@ -80,8 +82,8 @@ function Details(props) {
 			}
 			</div>
 
-			<Overlay visible={showOverlay2} height={90} bgClick={() =>setShowOverlay2(false)}>
-				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay2(showOverlay2 ? false : true)}>{"\uf00d"}</b>
+			<Overlay visible={historyOverlay} height={90} bgClick={() =>sethistoryOverlay(false)} >
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => sethistoryOverlay(historyOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ props.location.state.payment_history!==undefined?
 				<VerticalTimelineConditional
@@ -115,14 +117,42 @@ function Details(props) {
 				{
 				db.getLess({ id: props.location.state.id })!==0?
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
-					<b className="fas">{"\uf06a"} {
+					<b className="fas">{"\uf06a"}</b>{
 						props.location.state.less.map((item, i) => (
 							<div>{item.reason}</div>
-						))}</b>
+						)).slice(-2)}
+						<button type="button" class="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}} onClick={() => setadvanceOverlay(true)}>More..</button>
 					</div>:null
 				}
 			</div>
 			<br />
+
+			<Overlay visible={advanceOverlay} height={90} bgClick={() =>setadvanceOverlay(false)} >
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setadvanceOverlay(advanceOverlay ? false : true)}>{"\uf00d"}</b>
+				<br/>
+			{ props.location.state.payment_history!==undefined?
+				<VerticalTimelineConditional
+					content={
+						// not complete
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return {
+								title:props.location.state.less.reason ,
+								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
+							}
+						})
+					}
+					conditionArray={
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return db.getRent({id:props.location.state.id},true,false,i+1)
+						})
+					}
+					color={['#07ab0a', 'darkgrey']}
+					icon={['\uf00c', '\uf00d']}
+				/>:null
+			}
+			</Overlay>
+			<br />
+
 
 			{props.location.state.renewals &&
 				<Fragment>
