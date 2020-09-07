@@ -1,5 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
-import React from 'react';
+import React,{Fragment} from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { Circle ,VerticalTimeline, HorizontalTimeline } from './Components'
@@ -34,15 +34,19 @@ function Details (props) {
    		 		<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
    		 	</center>
 			<div className="container">
-   		 	<VerticalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(i+1,"M").format("MMM YYYY"),subtitle:p.housing}})}/>
+   		 	<VerticalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(props.location.state.startdate).add(props.location.state.payment_history.length+(i-2),"M").format("MMM YYYY"),subtitle:p.housing}})}/>
 	   		 </div>
 	   		 <br/>
+			 { props.location.state.renewals &&
+			<Fragment>
 			 <center>
     		 		<h4><b className="fas">{"\uf70e"}</b>&nbsp;&nbsp;Renewals</h4>
-    		 	</center>
+    		 </center>
 	   		 <div className="container">
-	   		 	<HorizontalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(i+1,"M").format("MMM"),subtitle:p.housing}})}/>
+	   		  <HorizontalTimeline content={props.location.state.renewals.map((r) => {return {title:moment(r).format("MMM"),subtitle:moment(r).format("YYYY")}})}/>
 	   		 </div>
+			 </Fragment>
+		 	}
 	   		 <br/><br/>
 			</div>
 	);
