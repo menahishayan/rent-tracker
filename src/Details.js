@@ -1,18 +1,18 @@
 import Navbar from 'react-bootstrap/Navbar'
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Circle, HorizontalTimeline, HorizontalTimelineConditional } from './Components'
+import { Circle, HorizontalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
 
 var db = new DB()
 
 function Details(props) {
+	const [showOverlay,setShowOverlay] = useState(false);
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
 				<Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
 			</Navbar>
-			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} />
 			<br /><br /><br /><br />
 			<div style={{ display: 'inline-flex', width: '100%', marginLeft: '2%', cursor: 'pointer' }}>
 				<div style={{ display: 'inline-block', width: '20%', marginRight: '8%' }}>
@@ -44,7 +44,7 @@ function Details(props) {
 							}
 						})
 					} 
-					condition={{subtitle:0}} 
+					condition={{subtitle:3000}} 
 					color={['#07ab0a', 'darkgrey']} 
 					icon={['\uf00c', '\uf00d']}
 				/>
@@ -76,6 +76,8 @@ function Details(props) {
 				</Fragment>
 			}
 			<br /><br />
+			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
+			{ showOverlay && <Overlay/> }
 		</div>
 	);
 }

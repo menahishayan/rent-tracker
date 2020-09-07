@@ -74,3 +74,11 @@ export const HorizontalTimelineConditional = props => (
 		}
 	</div>
 )
+
+export const Overlay = props => (
+	<div className="overlay">
+		<div className="overlay-container">
+			<h4>Hello</h4>
+		</div>
+	</div>
+)
