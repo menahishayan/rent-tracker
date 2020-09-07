@@ -10,6 +10,7 @@ function Details(props) {
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
 	const [showOverlay2,setShowOverlay2] = useState(false);
 	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
+	const [editOtherAmount,setEditOtherAmount] = useState(false);
 
 	const getNextPayment = () => {
 		let person = props.location.state
@@ -21,6 +22,12 @@ function Details(props) {
 			}
 		}
 		else return moment(person.startdate)
+	}
+
+	const resetAddPayOverlay = () => {
+		setShowAddPayOverlay(false)
+		setEditNewRentAmount(false)
+		setEditOtherAmount(false)
 	}
 
 	var nextPayment = getNextPayment()
@@ -49,7 +56,7 @@ function Details(props) {
 			<br />
 
 			<center>
-				<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
+				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
 			<div className="container" onClick={() => setShowOverlay2(true)}>
 			{ props.location.state.payment_history!==undefined?
@@ -120,7 +127,7 @@ function Details(props) {
 			{props.location.state.renewals &&
 				<Fragment>
 					<center>
-						<h4><b className="fas">{"\uf70e"}</b>&nbsp;&nbsp;Renewals</h4>
+						<h4><b className="fas">{"\uf251"}</b>&nbsp;&nbsp;Renewals</h4>
 					</center>
 					<div className="container">
 						<HorizontalTimeline content={props.location.state.renewals.map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
@@ -129,26 +136,37 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowAddPayOverlay(true)}/>
-			<Overlay visible={showAddPayOverlay} bgClick={() => {setShowAddPayOverlay(false);setEditNewRentAmount(false)}} height={48}>
-				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => {setShowAddPayOverlay(showAddPayOverlay ? false : true);setEditNewRentAmount(false)}}>{"\uf00d"}</b>
+			<Overlay visible={showAddPayOverlay} bgClick={() => resetAddPayOverlay()} height={48}>
+				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => resetAddPayOverlay()}>{"\uf00d"}</b>
 				<br/>
 				<center>
 					<h3><b>Rent {nextPayment.month.format("MMMM")}</b></h3>
 					<br/><br/>
-					<div style={{display:'inline-block'}}>
+					<div style={{display:'inline-block', transition:'0.2s ease', marginLeft: !editOtherAmount ? '-10%': '-110%', width:'200%'}}>
 						<b className="fas" style={{ fontSize: 30,display:'inline-block', color:'white' }}>{"\uf156"}</b>
+						<div style={{display:'inline-block'}}>
+							{
+								!editNewRentAmount ?
+									<h1 onClick={() => setEditNewRentAmount(true)}>
+										<b>&nbsp;{nextPayment.amount.housing}</b>
+									</h1>
+								: <input style={{display: editOtherAmount ? 'none' : 'inline-flex', width:'40%'}} type='number' pattern="[0-9]*" placeholder={nextPayment.amount.housing} class="editable-label-input"/>
+							}
+						</div>
+						<div style={{display:'inline-block', marginLeft:'35%'}}>
 						{
 							!editNewRentAmount ?
 								<h1 onClick={() => setEditNewRentAmount(true)} style={{display:'inline-block'}}>
-									<b>&nbsp;{nextPayment.amount.housing}</b>
+									<b>&nbsp;{nextPayment.amount.others}</b>
 								</h1>
-							: <input style={{display:'inline-block'}} type='number' pattern="[0-9]*" placeholder={nextPayment.amount.housing} class="editable-label-input"/>
+							: <input style={{display: !editOtherAmount ? 'none' : 'inline-flex', width:'40%'}} type='number' pattern="[0-9]*" placeholder={nextPayment.amount.others} class="editable-label-input"/>
 						}
+						</div>
 					</div>
 				</center>
-				<b className="fas" style={{ color:'white',fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%'}}>{"\uf1b2"}</b>
+				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ color:'white',fontSize: 22, float:'right', marginRight:'5%'}}>{"\uf1b2"}</b>
 				<br/><br/>
-				<center><button className="overlay-button">Save</button></center>
+				<center><button className="overlay-button" onClick={() => console.log()}>Save</button></center>
 			</Overlay>
 		</div>
 	);
