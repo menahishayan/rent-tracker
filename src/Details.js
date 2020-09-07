@@ -2,7 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState, useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Circle, HorizontalTimeline,VerticalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
+import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
 
 var db = new DB()
 
@@ -76,7 +76,7 @@ function Details(props) {
 				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ props.location.state.payment_history!==undefined?
-				<VerticalTimeline
+				<VerticalTimelineConditional
 					content={
 						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
 							return {
@@ -85,6 +85,13 @@ function Details(props) {
 							}
 						})
 					}
+					conditionArray={
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return db.getRent({id:props.location.state.id},true,false,i+1)
+						})
+					}
+					color={['#07ab0a', 'darkgrey']}
+					icon={['\uf00c', '\uf00d']}
 				/>:null
 			}
 			</Overlay>

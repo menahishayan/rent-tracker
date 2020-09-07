@@ -60,9 +60,28 @@ export const HorizontalTimelineConditional = props => (
 						<h5>{item.title}</h5>
 						<p>{item.subtitle}</p>
 						<CircleCondition small
-							color={props.color} 
-							icon={props.icon} 
-							style={{position: 'relative', top:-70, zIndex:1}} 
+							color={props.color}
+							icon={props.icon}
+							style={{position: 'relative', top:-70, zIndex:1}}
+							condition={props.conditionArray[i]} />
+					</div>
+				</div>
+			))
+		}
+	</div>
+)
+export const VerticalTimelineConditional = props => (
+	<div className="vertical-timeline" content={'\uf067'}>
+		{
+			props.content.map((item, i) => (
+				<div key={i} className="vertical-timeline-container">
+					<div className="content">
+						<h5>{item.title}</h5>
+						<p>{item.subtitle}</p>
+						<CircleCondition small
+							color={props.color}
+							icon={props.icon}
+							style={{position: 'relative', top:-70, zIndex:1}}
 							condition={props.conditionArray[i]} />
 					</div>
 				</div>
@@ -79,4 +98,3 @@ export const Overlay = props => (
 		</div>
 	</Fragment>
 )
-
