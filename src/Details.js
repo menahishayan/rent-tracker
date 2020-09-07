@@ -130,7 +130,7 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
-			<Overlay visible={showOverlay} bgClick={() => setShowOverlay(false)} height={40}>
+			<Overlay visible={showOverlay} bgClick={() => setShowOverlay(false)} height={editNewRentAmount ? 70 : 40}>
 				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 				<center>
