@@ -43,7 +43,7 @@ function Details (props) {
     		 </center>
  			<div className="container">
 				{console.log(props.location.state.id)}
-				{db.getRent(props.location.state.id,false,false,0)}
+				{db.getRent({id:props.location.state.id},false,false,0)}
  	   		 </div>
  	   		 <br/>
 
