@@ -48,7 +48,7 @@ function Main() {
 				<div className="container" >
 					{
 						db.data && db.getBuildings().map((building, b) => (
-							<Fragment>
+							<Fragment key={b}>
 								{
 									db.persons(building).map((person, i) => (
 										<Fragment key={b + i}>
@@ -92,7 +92,7 @@ function Main() {
 			<div className="container">
 				{
 					db.data && db.getBuildings().reverse().map((building, b) => (
-						<Fragment>
+						<Fragment key={b}>
 							{
 								db.getFloors(building).map((floor, f) => (
 									<Fragment key={f}>
@@ -102,7 +102,7 @@ function Main() {
 										<div className="floor">
 											{
 												db.getDoors(building, floor).map((door, d) =>
-													<div style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
+													<div key={d} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
 														<center><b className="door-label"><b className="fas">{"\uf52a"}</b>&nbsp;{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
 													</div>
 												)
