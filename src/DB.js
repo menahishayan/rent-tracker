@@ -138,7 +138,7 @@ class DB extends React.Component {
       else if (identifier.id)
          id = identifier.id
       else return false
-
+      if (!this.data) this.get()
       person = this.data[id]
       let expectedRent = []
 
