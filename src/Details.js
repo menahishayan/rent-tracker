@@ -39,14 +39,15 @@ function Details (props) {
 	   		 <br/>
 
 			 <center>
-    		 		<h4><b className="fas">{"\uf06a"}</b>&nbsp;&nbsp;Due</h4>
+    		 		<h4><b className="fas">{"\uf071"}</b>&nbsp;&nbsp;Due</h4>
     		 </center>
  			<div className="container">
 				<center>
     		 		<h2><b className="fas" style={{fontSize:26}}>{"\uf156"}</b><b>&nbsp;{db.getRent({id:props.location.state.id},false,false,0)}</b></h2>
     			</center>
-				<div style={{color:'grey'}}>
-   		 		<h4 style={{fontSize:16}}><b className="fas">{"\uf12a"}</b>&nbsp;payment</h4>
+				<div style={{color:'darkgrey',fontSize:14}}>
+				<b className="fas">{"\uf06a"} Aug payment</b><br/>
+				<b className="fas">{"\uf06a"} Feb payment</b>
    		 		</div>
  	   		</div>
  	   		 <br/>
