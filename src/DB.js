@@ -195,15 +195,23 @@ class DB extends React.Component {
          return (getAllItems) ? dueTotal : dueTotal.housing
    }
 
-   getLess = (index, month) => {
-      var less, sum = 0, dueForMonth = 0
-      var id = Object.keys(this.data)[index]
-      less = this.data[id].less
-      if (less)
-         less.forEach((item, i) => {
-            if (less.month === month)
+   getLess = (identifier, month) => {
+      if (!identifier) return false
+      var person, id
+      if (identifier.index)
+         id = Object.keys(this.data)[identifier.index]
+      else if (identifier.id)
+         id = identifier.id
+      else return false
+      if (!this.data) this.get()
+      person = this.data[id]
+
+      var sum = 0, dueForMonth = 0
+      if (person.less)
+         person.less.forEach((item, i) => {
+            if (person.less.month === month)
                dueForMonth = item.amount
-            sum += item.Amount
+            sum += item.amount
          });
       if (month) return dueForMonth
       return sum
