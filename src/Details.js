@@ -74,7 +74,9 @@ function Details(props) {
 					icon={['\uf00c', '\uf00d']}
 				/>:null
 			}
-			<Overlay visible={showOverlay2}>
+			</div>
+
+			<Overlay visible={showOverlay2} height={90} bgClick={() =>setShowOverlay2(false)}>
 				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay2(showOverlay2 ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ props.location.state.payment_history!==undefined?
@@ -97,7 +99,6 @@ function Details(props) {
 				/>:null
 			}
 			</Overlay>
-			</div>
 			<br />
 
 			<center>
