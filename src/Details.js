@@ -2,7 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState, useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Circle, HorizontalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
+import { Circle, HorizontalTimeline,VerticalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
 
 var db = new DB()
 
@@ -52,26 +52,42 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
-			<div className="container">
+			<div className="container" onClick={() => setShowOverlay(true)}>
 			{ props.location.state.payment_history!==undefined?
-				<HorizontalTimelineConditional 
+				<HorizontalTimelineConditional
 					content={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => { 
-							return { 
-								title: moment(props.location.state.startdate).add(i, "M").format("MMM"), 
-								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0 
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return {
+								title: moment(props.location.state.startdate).add(i, "M").format("MMM"),
+								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
 							}
 						}).slice(-3)
-					} 
+					}
 					conditionArray={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => { 
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
 							return db.getRent({id:props.location.state.id},true,false,i+1)
 						}).slice(-3)
-					} 
-					color={['#07ab0a', 'darkgrey']} 
+					}
+					color={['#07ab0a', 'darkgrey']}
 					icon={['\uf00c', '\uf00d']}
 				/>:null
 			}
+			<Overlay visible={showOverlay}>
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
+				<br/>
+			{ props.location.state.payment_history!==undefined?
+				<VerticalTimeline
+					content={
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return {
+								title: moment(props.location.state.startdate).add(i, "M").format("MMM"),
+								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
+							}
+						})
+					}
+				/>:null
+			}
+			</Overlay>
 			</div>
 			<br />
 
