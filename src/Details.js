@@ -55,18 +55,17 @@ function Details(props) {
 			{ props.location.state.payment_history!==undefined?
 				<HorizontalTimelineConditional 
 					content={
-						props.location.state.payment_history.slice(-3).map((p, i) => { 
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => { 
 							return { 
-								title: moment(props.location.state.startdate).add(props.location.state.payment_history.length + (i - 3), "M").format("MMM"), 
-								subtitle: p.housing 
+								title: moment(props.location.state.startdate).add(i, "M").format("MMM"), 
+								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0 
 							}
-						})
+						}).slice(-3)
 					} 
 					conditionArray={
-						props.location.state.payment_history.slice(-3).map((p, i) => { 
-							console.log(db.getRent({id:props.location.state.id},false,false,props.location.state.payment_history.length + (i - 3)));
-							return db.getRent({id:props.location.state.id},true,false,props.location.state.payment_history.length + (i - 3))
-						})
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => { 
+							return db.getRent({id:props.location.state.id},true,false,i+1)
+						}).slice(-3)
 					} 
 					color={['#07ab0a', 'darkgrey']} 
 					icon={['\uf00c', '\uf00d']}

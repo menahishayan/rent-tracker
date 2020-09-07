@@ -75,6 +75,18 @@ class DB extends React.Component {
       }
    }
 
+   getPersonFromIdentifier = (identifier) => {
+      if (!identifier) return false
+      var id
+      if (identifier.index)
+         id = Object.keys(this.data)[identifier.index]
+      else if (identifier.id)
+         id = identifier.id
+      else return false
+      if (!this.data) this.get()
+      return this.data[id]
+   }
+
    persons = (filter) => {
       if (!this.data) this.get()
       let array = []
@@ -131,16 +143,7 @@ class DB extends React.Component {
    }
 
    getRent = (identifier, returnStatusOnly, getAllItems, month) => {
-      if (!identifier) return false
-
-      var person, id
-      if (identifier.index)
-         id = Object.keys(this.data)[identifier.index]
-      else if (identifier.id)
-         id = identifier.id
-      else return false
-      if (!this.data) this.get()
-      person = this.data[id]
+      var person = this.getPersonFromIdentifier(identifier)
       let expectedRent = []
 
       for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1,"M")); s.add(1, "M").startOf('month')) {
@@ -169,7 +172,7 @@ class DB extends React.Component {
          paidRent = [...person.payment_history]
       let dueTotal = { housing: 0, others: 0 }
 
-      console.log([person.profile.name,person.payment_history,expectedRent.length]);
+      // console.log([person.profile.name,person.payment_history,expectedRent.length]);
 
       while(paidRent.length !== expectedRent.length)
          paidRent.push({housing:0,others:0})
@@ -184,7 +187,7 @@ class DB extends React.Component {
          dueTotal.others += due_i.others
          
          if (i === month) {
-            console.log([i,due_i.housing]);
+            // console.log([i,due_i.housing]);
             if (returnStatusOnly) {
                if (getAllItems)
                   returnValue = (due_i.housing === 0 && due_i.others === 0) ? true : false
@@ -208,17 +211,36 @@ class DB extends React.Component {
       } else return returnValue 
    }
 
-   getLess = (identifier, month) => {
-      if (!identifier) return false
-      var person, id
-      if (identifier.index)
-         id = Object.keys(this.data)[identifier.index]
-      else if (identifier.id)
-         id = identifier.id
-      else return false
-      if (!this.data) this.get()
-      person = this.data[id]
+   getExpectedRent = (identifier, month) => {
+      var person = this.getPersonFromIdentifier(identifier);
+      let expectedRent = []
 
+      for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1,"M")); s.add(1, "M").startOf('month')) {
+         if(s.isAfter(moment())) break;
+         let year = Math.floor(expectedRent.length / 11)
+         let expectedSubTotal = {
+            housing: person.base_rent * Math.pow(1.05, year),
+            others: 0
+         }
+         if (person.invoices)
+            person.invoices.forEach((invoice) => {
+               if (moment(invoice.date, "YYYY-MM-DD").month() === s.month())
+                  invoice.particulars.forEach(item => {
+                     expectedSubTotal.others += item.amount
+                  });
+            });
+         let lessForMonth = 0
+         // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
+         if (lessForMonth)
+            expectedSubTotal.housing -= lessForMonth.amount
+         if(expectedRent.length+1 === month) return expectedSubTotal
+         expectedRent.push(expectedSubTotal)
+      }
+      return expectedRent
+   }
+
+   getLess = (identifier, month) => {
+      var person = this.getPersonFromIdentifier(identifier);
       var sum = 0, dueForMonth = 0
       if (person.less)
          person.less.forEach((item, i) => {
