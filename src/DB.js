@@ -182,9 +182,7 @@ class DB extends React.Component {
          }
          dueTotal.housing += due_i.housing
          dueTotal.others += due_i.others
-         // if(i > 23 ){
-         // console.log(expectedRent[i].housing);
-         // console.log(due_i.housing);}
+         
          if (i === month) {
             console.log([i,due_i.housing]);
             if (returnStatusOnly) {
