@@ -7,8 +7,9 @@ import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline
 var db = new DB()
 
 function Details(props) {
-	const [showOverlay,setShowOverlay] = useState(false);
+	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
 	const [showOverlay2,setShowOverlay2] = useState(false);
+	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
 
 	const getNextPayment = () => {
 		let person = props.location.state
@@ -129,9 +130,9 @@ function Details(props) {
 				</Fragment>
 			}
 			<br /><br />
-			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowOverlay(true)}/>
-			<Overlay visible={showOverlay} bgClick={() => setShowOverlay(false)} height={editNewRentAmount ? 70 : 40}>
-				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
+			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowAddPayOverlay(true)}/>
+			<Overlay visible={showAddPayOverlay} bgClick={() => setShowAddPayOverlay(false)} height={editNewRentAmount ? 70 : 40}>
+				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => setShowAddPayOverlay(showAddPayOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 				<center>
 					<h3><b>Rent {getNextPayment().month.format("MMMM")}</b></h3>
