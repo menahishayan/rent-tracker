@@ -4,7 +4,7 @@ import './Components.css'
 
 export const CircleCondition = props => (
 	<div className='circle-container' style={props.style} onClick={props.onClick}>
-		<div className="circle" style={props.condition ? { backgroundColor: props.color[0] } : { backgroundColor: props.color[1] }}>
+		<div className={props.small ? "circle-sm" :"circle"} style={props.condition ? { backgroundColor: props.color[0] } : { backgroundColor: props.color[1] }}>
 			<center><b className="fas">{props.condition ? props.icon[0] : props.icon[1]}</b></center>
 		</div>
 		{props.title ? <p style={{ marginTop: 8 }}>{props.title}</p> : null}
@@ -59,7 +59,15 @@ export const HorizontalTimelineConditional = props => (
 					<div className="content">
 						<h5>{item.title}</h5>
 						<p>{item.subtitle}</p>
-						<CircleCondition small color={props.color} icon={props.icon} style={{position: 'relative', top:-66, zIndex:1}} />
+						<CircleCondition small
+							color={props.color} 
+							icon={props.icon} 
+							style={{position: 'relative', top:-70, zIndex:1}} 
+							condition={() => {
+								if(props.condition)
+									return(props.condition.subtitle === item.subtitle) ? true : false
+								else return false
+							}} />
 					</div>
 				</div>
 			))

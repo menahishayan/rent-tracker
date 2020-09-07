@@ -2,7 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment } from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Circle, HorizontalTimeline } from './Components'
+import { Circle, HorizontalTimeline, HorizontalTimelineConditional } from './Components'
 
 var db = new DB()
 
@@ -35,7 +35,19 @@ function Details(props) {
 				<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
 			<div className="container">
-				<HorizontalTimeline content={props.location.state.payment_history.slice(-3).map((p, i) => { return { title: moment(props.location.state.startdate).add(props.location.state.payment_history.length + (i - 3), "M").format("MMM"), subtitle: p.housing } })} />
+				<HorizontalTimelineConditional 
+					content={
+						props.location.state.payment_history.slice(-3).map((p, i) => { 
+							return { 
+								title: moment(props.location.state.startdate).add(props.location.state.payment_history.length + (i - 3), "M").format("MMM"), 
+								subtitle: p.housing 
+							}
+						})
+					} 
+					condition={{subtitle:0}} 
+					color={['#07ab0a', 'darkgrey']} 
+					icon={['\uf00c', '\uf00d']}
+				/>
 			</div>
 			<br />
 
