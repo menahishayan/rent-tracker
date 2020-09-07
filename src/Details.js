@@ -1,4 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
+import button from 'react-bootstrap'
 import React, { Fragment, useState, useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
@@ -112,6 +113,7 @@ function Details(props) {
 						props.location.state.less.map((item, i) => (
 							<div>{item.reason}</div>
 						)).slice(-2)}</b>
+						<button type="button" class="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}}>More..</button>
 					</div>:null
 				}
 			</div>
