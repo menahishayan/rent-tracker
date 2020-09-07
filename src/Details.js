@@ -8,7 +8,7 @@ var db = new DB()
 
 function Details(props) {
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
-	const [showOverlay2,setShowOverlay2] = useState(false);
+	const [historyOverlay,sethistoryOverlay] = useState(false);
 	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
 
 	const getNextPayment = () => {
@@ -54,7 +54,7 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
-			<div className="container" onClick={() => setShowOverlay2(true)}>
+			<div className="container" onClick={() => sethistoryOverlay(true)}>
 			{ props.location.state.payment_history!==undefined?
 				<HorizontalTimelineConditional
 					content={
@@ -76,8 +76,8 @@ function Details(props) {
 			}
 			</div>
 
-			<Overlay visible={showOverlay2} height={90} bgClick={() =>setShowOverlay2(false)}>
-				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay2(showOverlay2 ? false : true)}>{"\uf00d"}</b>
+			<Overlay visible={historyOverlay} height={90} bgClick={() =>sethistoryOverlay(false)} >
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => sethistoryOverlay(historyOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ props.location.state.payment_history!==undefined?
 				<VerticalTimelineConditional
@@ -114,7 +114,7 @@ function Details(props) {
 					<b className="fas">{"\uf06a"} {
 						props.location.state.less.map((item, i) => (
 							<div>{item.reason}</div>
-						))}</b>
+						)).slice(-2)}</b>
 					</div>:null
 				}
 			</div>
