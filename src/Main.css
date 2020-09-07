@@ -75,11 +75,16 @@ hr {
 	border: 0;
 	width: 50%;
 	padding: 0;
-	margin: -1% -2% 0 0;
+	margin: -1% -1% 0 0;
 }
 
 textarea:focus, input:focus{
     outline: none;
+}
+
+.overlay-button {
+	background-color: white;
+	border-radius: 15px;
 }
 
 @media only screen and (max-width: 600px) {
