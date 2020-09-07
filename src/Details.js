@@ -10,6 +10,7 @@ var db = new DB()
 function Details(props) {
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
 	const [historyOverlay,sethistoryOverlay] = useState(false);
+	const [advanceOverlay,setadvanceOverlay] = useState(false);
 	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
 
 	const getNextPayment = () => {
@@ -109,15 +110,42 @@ function Details(props) {
 				{
 				db.getLess({ id: props.location.state.id })!==0?
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
-					<b className="fas">{"\uf06a"} {
+					<b className="fas">{"\uf06a"}</b>{
 						props.location.state.less.map((item, i) => (
 							<div>{item.reason}</div>
-						)).slice(-2)}</b>
-						<button type="button" class="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}}>More..</button>
+						)).slice(-2)}
+						<button type="button" class="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}} onClick={() => setadvanceOverlay(true)}>More..</button>
 					</div>:null
 				}
 			</div>
 			<br />
+
+			<Overlay visible={advanceOverlay} height={90} bgClick={() =>setadvanceOverlay(false)} >
+				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setadvanceOverlay(advanceOverlay ? false : true)}>{"\uf00d"}</b>
+				<br/>
+			{ props.location.state.payment_history!==undefined?
+				<VerticalTimelineConditional
+					content={
+						// not complete
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return {
+								title:props.location.state.less.reason ,
+								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
+							}
+						})
+					}
+					conditionArray={
+						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+							return db.getRent({id:props.location.state.id},true,false,i+1)
+						})
+					}
+					color={['#07ab0a', 'darkgrey']}
+					icon={['\uf00c', '\uf00d']}
+				/>:null
+			}
+			</Overlay>
+			<br />
+
 
 			{props.location.state.renewals &&
 				<Fragment>
