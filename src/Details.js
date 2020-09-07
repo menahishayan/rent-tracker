@@ -42,9 +42,9 @@ function Details(props) {
 			</div>
 			<div className='container'>
 				<div style={{ display: 'inline-flex', width: '100%' }}>
-					<b className="fas" style={{ display: 'inline-block', width: '10%', marginLeft: '2%', fontSize: '38px', marginTop: '-3%' }}>{"\uf073"}</b>
-					<div style={{marginLeft:'5%'}}><h5 style={{ display: 'inline-block', width: '40%' ,marginTop:'-2%' }}>From</h5>
-				<h4 style={{marginTop:'5%'}}><b>{moment(props.location.state.startdate).format("Do MMMM, YYYY")}</b></h4></div>
+					<b className="fas" style={{ display: 'inline-block', width: '10%', marginLeft: '2%', fontSize: '40px', marginTop: '1%' }}>{"\uf073"}</b>
+					<div style={{marginLeft:'5%'}}><h6 style={{ display: 'inline-block', width: '40%' }}>From</h6>
+				<h4 style={{marginTop:'-1%'}}><b>{moment(props.location.state.startdate).format("Do MMMM, YYYY")}</b></h4></div>
 				</div>
 			</div>
 			<br />
