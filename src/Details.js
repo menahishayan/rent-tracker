@@ -12,10 +12,12 @@ function Details(props) {
 	const getNextPayment = () => {
 		let person = props.location.state
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
-		return {
+		if(person.payment_history!==undefined)
+{		return {
 			month: moment().subtract(month - person.payment_history.length-1, "M"),
 			amount: db.getRent({id:person.id},false,true,month-1)
-		}
+		}}
+		else return false
 	}
 
 	useEffect(()=> {
@@ -50,6 +52,7 @@ function Details(props) {
 				<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
 			<div className="container">
+			{ props.location.state.payment_history!==undefined?
 				<HorizontalTimelineConditional 
 					content={
 						props.location.state.payment_history.slice(-3).map((p, i) => { 
@@ -62,7 +65,8 @@ function Details(props) {
 					condition={{subtitle:3000}} 
 					color={['#07ab0a', 'darkgrey']} 
 					icon={['\uf00c', '\uf00d']}
-				/>
+				/>:null
+			}
 			</div>
 			<br />
 
@@ -100,11 +104,14 @@ function Details(props) {
 			<Overlay visible={showOverlay}>
 				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowOverlay(showOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
+			{ props.location.state.payment_history!==undefined?
+
 				<center>
 					<h3><b>Rent {getNextPayment().month.format("MMMM")}</b></h3>
 					<br/><br/>
 					<h1><b className="fas" style={{ fontSize: 30 }}>{"\uf156"}</b><b>&nbsp;{getNextPayment().amount.housing}</b></h1>
-				</center>
+				</center>:null
+			}
 			</Overlay>
 		</div>
 	);
