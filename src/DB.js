@@ -7,6 +7,7 @@ import React from 'react';
 class DB extends React.Component {
    constructor(props) {
       super(props)
+      // eslint-disable-next-line no-unused-vars
       var data;
       if (!Firebase.apps.length) {
          Firebase.initializeApp(config);

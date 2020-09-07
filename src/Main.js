@@ -4,7 +4,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import './Main.css'
 import moment from 'moment';
 import { Redirect } from 'react-router';
-import { Circle, CircleCondition, VerticalTimeline, HorizontalTimeline } from './Components'
+import { Circle, CircleCondition } from './Components'
 
 var db = new DB()
 
@@ -97,7 +97,7 @@ function Main() {
 								db.getFloors(building).map((floor, f) => (
 									<Fragment key={f}>
 										<div className="floor-label-container">
-											<center><b className="floor-label">{floor == 0 ? 'G' : floor}</b></center>
+											<center><b className="floor-label">{floor === 0 ? 'G' : floor}</b></center>
 										</div>
 										<div className="floor">
 											{

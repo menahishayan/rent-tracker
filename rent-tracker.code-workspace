@@ -3,5 +3,9 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"workbench.iconTheme": "vscode-icons",
+		"editor.tabCompletion": "on"
+	}
 }
