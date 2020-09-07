@@ -68,12 +68,32 @@ hr {
 .editable-label-input {
 	background-color: #006CFF;
 	color: white;
-	font-size:32px;
+	font-size:40px;
 	font-weight: bold;
 	text-align: center;
 	display: flex;
-	border: 0px;
-	
+	border: 0;
+	width: 50%;
+	padding: 0;
+	margin: -1% -1% 0 0;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.overlay-button {
+	background-color: white;
+	border-radius: 10px;
+	border: none;
+	color: #006CFF;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 18px;
+	font-weight: bold;
+	width: 100%;
 }
 
 @media only screen and (max-width: 600px) {
