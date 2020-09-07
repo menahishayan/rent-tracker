@@ -129,7 +129,7 @@ function Details(props) {
 			}
 			<br /><br />
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowAddPayOverlay(true)}/>
-			<Overlay visible={showAddPayOverlay} bgClick={() => {setShowAddPayOverlay(false);setEditNewRentAmount(false)}} height={40}>
+			<Overlay visible={showAddPayOverlay} bgClick={() => {setShowAddPayOverlay(false);setEditNewRentAmount(false)}} height={48}>
 				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => {setShowAddPayOverlay(showAddPayOverlay ? false : true);setEditNewRentAmount(false)}}>{"\uf00d"}</b>
 				<br/>
 				<center>
@@ -147,7 +147,8 @@ function Details(props) {
 					</div>
 				</center>
 				<b className="fas" style={{ color:'white',fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%'}}>{"\uf1b2"}</b>
-				<center><button className="overlay-button">Add Payment</button></center>
+				<br/><br/>
+				<center><button className="overlay-button">Save</button></center>
 			</Overlay>
 		</div>
 	);
