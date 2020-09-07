@@ -12,6 +12,7 @@ function Details (props) {
 		<Navbar bg="primary" variant="dark" fixed="top">
 		   <Navbar.Brand className = "mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
 		</Navbar>
+		<Circle color="#006CFF" icon={"\uf067"} style={{position:'fixed',bottom:'1%', right:'2%'}}/>
 		<br/><br/><br/><br/>
 			<div style={{display:'inline-flex',width:'100%', marginLeft:'2%',cursor: 'pointer'}}>
 				<div style={{display:'inline-block',width:'20%', marginRight:'8%'}}>
