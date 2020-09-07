@@ -34,7 +34,7 @@ function Details (props) {
    		 		<h4><b className="fas">{"\uf015"}</b>&nbsp;&nbsp;Rent History</h4>
    		 	</center>
 			<div className="container">
-   		 	<VerticalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(props.location.state.startdate).add(props.location.state.payment_history.length+(i-3),"M").format("MMM YYYY"),subtitle:p.housing}})}/>
+   		 	<HorizontalTimeline content={props.location.state.payment_history.slice(-3).map((p,i) => {return {title:moment(props.location.state.startdate).add(props.location.state.payment_history.length+(i-3),"M").format("MMM"),subtitle:p.housing}})}/>
 	   		 </div>
 	   		 <br/>
 
@@ -42,9 +42,10 @@ function Details (props) {
     		 		<h4><b className="fas">{"\uf06a"}</b>&nbsp;&nbsp;Due</h4>
     		 </center>
  			<div className="container">
-				{console.log(props.location.state.id)}
-				{db.getRent({id:props.location.state.id},false,false,0)}
- 	   		 </div>
+				<center>
+    		 		<h2><b className="fas" style={{fontSize:26}}>{"\uf156"}</b><b>&nbsp;{db.getRent({id:props.location.state.id},false,false,0)}</b></h2>
+    			</center>
+ 	   		</div>
  	   		 <br/>
 
 			 { props.location.state.renewals &&
