@@ -75,7 +75,7 @@ export const VerticalTimelineConditional = props => (
 		{
 			props.content.map((item, i) => (
 				<div key={i} className="vertical-timeline-container">
-					<div className="content">
+					<div className="content" style={{color:'white'}}>
 						<h5>{item.title}</h5>
 						<p>{item.subtitle}</p>
 						<CircleCondition small

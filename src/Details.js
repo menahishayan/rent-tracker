@@ -90,7 +90,7 @@ function Details(props) {
 					content={
 						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
 							return {
-								title: moment(props.location.state.startdate).add(i, "M").format("MMM"),
+								title: moment(props.location.state.startdate).add(i, "M").format("MMM YYYY"),
 								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
 							}
 						})
@@ -119,7 +119,7 @@ function Details(props) {
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
 					<b className="fas">{"\uf06a"}</b>{
 						props.location.state.less.map((item, i) => (
-							<div>{item.reason}</div>
+							<div style={{marginLeft:'6%'}}>{item.reason}</div>
 						)).slice(-2)}
 						<button type="button" class="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}} onClick={() => setadvanceOverlay(true)}>More..</button>
 					</div>:null
@@ -130,17 +130,14 @@ function Details(props) {
 			<Overlay visible={advanceOverlay} height={90} bgClick={() =>setadvanceOverlay(false)} >
 				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setadvanceOverlay(advanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ props.location.state.payment_history!==undefined?
+			{ props.location.state.payment_history!==undefined && db.getLess({ id: props.location.state.id })!==0?
 				<VerticalTimelineConditional
 					content={
-						// not complete
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
-							return {
-								title:props.location.state.less.reason ,
-								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
+								props.location.state.less.map((item) => {
+									return {title:item.reason.slice(' '),
+											subtitle:item.amount}
+								})
 							}
-						})
-					}
 					conditionArray={
 						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
 							return db.getRent({id:props.location.state.id},true,false,i+1)
