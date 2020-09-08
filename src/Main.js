@@ -6,8 +6,6 @@ import moment from 'moment';
 import { Redirect } from 'react-router';
 import { Circle, CircleCondition } from './Components'
 import Popover from 'react-bootstrap/Popover'
-import PopoverContent from 'react-bootstrap/PopoverContent'
-import PopoverTitle from 'react-bootstrap/PopoverTitle'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Button from 'react-bootstrap/Button'
 var db = new DB()
@@ -18,10 +16,6 @@ function Main() {
 	useEffect(() => {
 		db.refreshCache()
 	}, [])
-
-
-
-
 
 	const generateRenewalsList = () => {
 		let array = []
