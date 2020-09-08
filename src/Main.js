@@ -114,8 +114,9 @@ function Main() {
 													overlay={
 														<Popover id={`popover-positioned-top`}>
 															<Popover.Title as="h3"><center><b>{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</b></center></Popover.Title>
-												  			<Popover.Content>
-																{`${building}_${floor}_${door}`}<br/>
+												  			<Popover.Content style={{fontSize:18}}>
+																{'Door : ' + `${building}_${floor}_${door}` }
+																<br/>
 																<Button variant="danger">Vacate</Button>{' '}
 																<Button variant="info">Replace</Button>
 															</Popover.Content>
