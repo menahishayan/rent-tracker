@@ -79,67 +79,67 @@
     "less" : [ {
       "amount" : 1000,
       "month" : 4,
-      "reason" : "Rent - April 2019"
+      "reason" : "Rent - Apr 19"
     }, {
       "amount" : 1000,
       "month" : 5,
-      "reason" : "Rent - May 2019"
+      "reason" : "Rent - May 19"
     }, {
       "amount" : 1000,
       "month" : 6,
-      "reason" : "Rent - June 2019"
+      "reason" : "Rent - June 19"
     }, {
       "amount" : 1400,
       "month" : 7,
-      "reason" : "Rent - July 2019"
+      "reason" : "Rent - July 19"
     }, {
       "amount" : 1400,
       "month" : 8,
-      "reason" : "Rent - August 2019"
+      "reason" : "Rent - Aug 19"
     }, {
       "amount" : 1400,
       "month" : 9,
-      "reason" : "Rent - September 2019"
+      "reason" : "Rent - Sep 19"
     }, {
       "amount" : 1400,
       "month" : 10,
-      "reason" : "Rent - October 2019"
+      "reason" : "Rent - Oct 19"
     }, {
       "amount" : 1400,
       "month" : 11,
-      "reason" : "Rent - November 2019"
+      "reason" : "Rent - Nov 19"
     }, {
       "amount" : 1400,
       "month" : 12,
-      "reason" : "Rent - December 2019"
+      "reason" : "Rent - Dec 19"
     }, {
       "amount" : 1400,
       "month" : 1,
-      "reason" : "Rent - January 2020"
+      "reason" : "Rent - Jan 20"
     }, {
       "amount" : 1400,
       "month" : 2,
-      "reason" : "Rent - February 2020"
+      "reason" : "Rent - Feb 20"
     }, {
       "amount" : 1400,
       "month" : 3,
-      "reason" : "Rent - March 2020"
+      "reason" : "Rent -  Mar 20"
     }, {
       "amount" : 1400,
       "month" : 4,
-      "reason" : "Rent - April 2020"
+      "reason" : "Rent - Apr 20"
     }, {
       "amount" : 1400,
       "month" : 5,
-      "reason" : "Rent - May 2020"
+      "reason" : "Rent - May 20"
     }, {
       "amount" : 1820,
       "month" : 6,
-      "reason" : "Rent - June 2020"
+      "reason" : "Rent - June 20"
     }, {
       "amount" : 1820,
       "month" : 7,
-      "reason" : "Rent - July 2020"
+      "reason" : "Rent - July 20"
     } ],
     "payment_history" : [ {
       "housing" : 8000,
@@ -232,83 +232,83 @@
     "advance" : 50000,
     "base_rent" : 8000,
     "id" : "6_2_1",
-    "less" : [ 
+    "less" : [
     {
       "amount" : 1400,
       "month" : 1,
-      "reason" : "Rent - January 2019"
+      "reason" : "Rent - Jan 19"
     }, {
       "amount" : 1400,
       "month" : 2,
-      "reason" : "Rent - February 2019"
+      "reason" : "Rent - Feb 19"
     }, {
       "amount" : 1400,
       "month" : 3,
-      "reason" : "Rent - March 2019"
+      "reason" : "Rent -  Mar 19"
     }, {
       "amount" : 1400,
       "month" : 4,
-      "reason" : "Rent - April 2019"
+      "reason" : "Rent - Apr 19"
     }, {
       "amount" : 1400,
       "month" : 5,
-      "reason" : "Rent - May 2019"
+      "reason" : "Rent - May 19"
     }, {
       "amount" : 1400,
       "month" : 6,
-      "reason" : "Rent - June 2019"
+      "reason" : "Rent - June 19"
     }, {
       "amount" : 1400,
       "month" : 7,
-      "reason" : "Rent - July 2019"
+      "reason" : "Rent - July 19"
     }, {
       "amount" : 1400,
       "month" : 8,
-      "reason" : "Rent - August 2019"
+      "reason" : "Rent - Aug 19"
     }, {
       "amount" : 1400,
       "month" : 9,
-      "reason" : "Rent - September 2019"
+      "reason" : "Rent - Sep 19"
     }, {
       "amount" : 1400,
       "month" : 10,
-      "reason" : "Rent - October 2019"
+      "reason" : "Rent - Oct 19"
     }, {
       "amount" : 1400,
       "month" : 11,
-      "reason" : "Rent - November 2019"
+      "reason" : "Rent - Nov 19"
     }, {
       "amount" : 1820,
       "month" : 12,
-      "reason" : "Rent - December 2019"
+      "reason" : "Rent - Dec 19"
     }, {
       "amount" : 1820,
       "month" : 1,
-      "reason" : "Rent - January 2020"
+      "reason" : "Rent - Jan 20"
     }, {
       "amount" : 1820,
       "month" : 2,
-      "reason" : "Rent - February 2020"
+      "reason" : "Rent - Feb 20"
     }, {
       "amount" : 1820,
       "month" : 3,
-      "reason" : "Rent - March 2020"
+      "reason" : "Rent -  Mar 20"
     }, {
       "amount" : 1820,
       "month" : 4,
-      "reason" : "Rent - April 2020"
+      "reason" : "Rent - Apr 20"
     }, {
       "amount" : 1820,
       "month" : 5,
-      "reason" : "Rent - May 2020"
+      "reason" : "Rent - May 20"
     }, {
       "amount" : 1820,
       "month" : 6,
-      "reason" : "Rent - June 2020"
+      "reason" : "Rent - June 20"
     }, {
       "amount" : 1820,
       "month" : 7,
-      "reason" : "Rent - July 2020"
+      "reason" : "Rent - July 20"
     } ],
     "payment_history" : [
        {
@@ -423,31 +423,31 @@
     "less" : [ {
       "amount" : 1500,
       "month" : 2,
-      "reason" : "Rent - February 2020"
+      "reason" : "Rent - Feb 20"
     }, {
       "amount" : 1500,
       "month" : 3,
-      "reason" : "Rent - March 2020"
+      "reason" : "Rent -  Mar 20"
     }, {
       "amount" : 1500,
       "month" : 4,
-      "reason" : "Rent - April 2020"
+      "reason" : "Rent - Apr 20"
     }, {
       "amount" : 1500,
       "month" : 5,
-      "reason" : "Rent - May 2020"
+      "reason" : "Rent - May 20"
     }, {
       "amount" : 1500,
       "month" : 6,
-      "reason" : "Rent - June 2020"
+      "reason" : "Rent - June 20"
     }, {
       "amount" : 1500,
       "month" : 7,
-      "reason" : "Rent - July 2020"
+      "reason" : "Rent - July 20"
     }, {
       "amount" : 1500,
       "month" : 8,
-      "reason" : "Rent - August 2020"
+      "reason" : "Rent - Aug 20"
     } ],
     "payment_history" : [ {
       "housing" : 12000,
@@ -577,31 +577,31 @@
     "less" : [ {
       "amount" : 2000,
       "month" : 2,
-      "reason" : "Rent - February 2020"
+      "reason" : "Rent - Feb 20"
     }, {
       "amount" : 2000,
       "month" : 3,
-      "reason" : "Rent - March 2020"
+      "reason" : "Rent -  Mar 20"
     }, {
       "amount" : 2000,
       "month" : 4,
-      "reason" : "Rent - April 2020"
+      "reason" : "Rent - Apr 20"
     }, {
       "amount" : 2000,
       "month" : 5,
-      "reason" : "Rent - May 2020"
+      "reason" : "Rent - May 20"
     }, {
       "amount" : 2000,
       "month" : 6,
-      "reason" : "Rent - June 2020"
+      "reason" : "Rent - June 20"
     }, {
       "amount" : 2000,
       "month" : 7,
-      "reason" : "Rent - July 2020"
+      "reason" : "Rent - July 20"
     }, {
       "amount" : 2000,
       "month" : 8,
-      "reason" : "Rent - August 2020"
+      "reason" : "Rent - Aug 20"
     } ],
     "payment_history" : [ {
       "housing" : 12000,
@@ -650,71 +650,71 @@
     "less" : [ {
       "amount" : 2000,
       "month" : 4,
-      "reason" : "Rent - April 2019"
+      "reason" : "Rent - Apr 19"
     }, {
       "amount" : 2000,
       "month" : 5,
-      "reason" : "Rent - May 2019"
+      "reason" : "Rent - May 19"
     }, {
       "amount" : 2000,
       "month" : 6,
-      "reason" : "Rent - June 2019"
+      "reason" : "Rent - June 19"
     }, {
       "amount" : 2000,
       "month" : 7,
-      "reason" : "Rent - July 2019"
+      "reason" : "Rent - July 19"
     }, {
       "amount" : 2000,
       "month" : 8,
-      "reason" : "Rent - August 2019"
+      "reason" : "Rent - Aug 19"
     }, {
       "amount" : 2000,
       "month" : 9,
-      "reason" : "Rent - September 2019"
+      "reason" : "Rent - Sep 19"
     }, {
       "amount" : 2450,
       "month" : 10,
-      "reason" : "Rent - October 2019"
+      "reason" : "Rent - Oct 19"
     }, {
       "amount" : 2450,
       "month" : 11,
-      "reason" : "Rent - November 2019"
+      "reason" : "Rent - Nov 19"
     }, {
       "amount" : 2450,
       "month" : 12,
-      "reason" : "Rent - December 2019"
+      "reason" : "Rent - Dec 19"
     }, {
       "amount" : 2450,
       "month" : 1,
-      "reason" : "Rent - January 2020"
+      "reason" : "Rent - Jan 20"
     }, {
       "amount" : 2450,
       "month" : 2,
-      "reason" : "Rent - February 2020"
+      "reason" : "Rent - Feb 2020"
     }, {
       "amount" : 2450,
       "month" : 3,
-      "reason" : "Rent - March 2020"
+      "reason" : "Rent -  Mar 20"
     }, {
       "amount" : 2450,
       "month" : 4,
-      "reason" : "Rent - April 2020"
+      "reason" : "Rent - Apr 20"
     }, {
       "amount" : 450,
       "month" : 5,
-      "reason" : "Rent - May 2020"
+      "reason" : "Rent - May 20"
     }, {
       "amount" : 450,
       "month" : 6,
-      "reason" : "Rent - June 2020"
+      "reason" : "Rent - June 20"
     }, {
       "amount" : 450,
       "month" : 7,
-      "reason" : "Rent - July 2020"
+      "reason" : "Rent - July 20"
     }, {
       "amount" : 450,
       "month" : 8,
-      "reason" : "Rent - August 2020"
+      "reason" : "Rent - Aug 20"
     } ],
     "payment_history" : [ {
       "housing" : 9000,

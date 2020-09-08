@@ -134,7 +134,7 @@ function Details(props) {
 				<VerticalTimelineConditional
 					content={
 								props.location.state.less.map((item) => {
-									return {title:item.reason.slice(' '),
+									return {title:item.reason,
 											subtitle:item.amount}
 								})
 							}

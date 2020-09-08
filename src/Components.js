@@ -52,11 +52,11 @@ export const HorizontalTimeline = props => (
 )
 
 export const HorizontalTimelineConditional = props => (
-	<div className="horizontal-timeline" content={'\uf067'}>
+	<div className="horizontal-timeline" content={'\uf067'} >
 		{
 			props.content.map((item, i) => (
 				<div key={i} className="horizontal-timeline-container">
-					<div className="content">
+					<div className="content" >
 						<h5>{item.title}</h5>
 						<p>{item.subtitle}</p>
 						<CircleCondition small
@@ -71,17 +71,17 @@ export const HorizontalTimelineConditional = props => (
 	</div>
 )
 export const VerticalTimelineConditional = props => (
-	<div className="vertical-timeline" content={'\uf067'}>
+	<div className="vertical-timeline" content={'\uf067'} style={{overflow:"scroll",height:'100%'}}>
 		{
 			props.content.map((item, i) => (
 				<div key={i} className="vertical-timeline-container">
-					<div className="content" style={{color:'white'}}>
+					<div className="content" style={{color:'white',width:'130%'}}>
 						<h5>{item.title}</h5>
 						<p>{item.subtitle}</p>
 						<CircleCondition small
 							color={props.color}
 							icon={props.icon}
-							style={{position: 'absolute', top:-76, zIndex:1,marginLeft:'90%'}}
+							style={{position: 'absolute', top:-78, zIndex:1,marginLeft:'88%'}}
 							condition={props.conditionArray[i]} />
 					</div>
 				</div>
