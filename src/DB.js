@@ -280,12 +280,13 @@ class DB extends React.Component {
       }
    }
 
-   addPay = (index, payment) => {
-      var id = Object.keys(this.data)[index]
-      var person = this.data[id]
+   addPay = (identifier, month, payment) => {
+      var person = this.getPersonFromIdentifier(identifier);
       let paidRent = person.payment_history || []
-      paidRent.push(payment)
-      return this.updateUser(id, "payment_history", paidRent)
+      if(month > paidRent.length)
+         paidRent.push(payment)
+      else paidRent[month-1] = payment
+      return this.updateUser(person.id, "payment_history", paidRent)
    }
 
    getNextRenewal = (index) => {

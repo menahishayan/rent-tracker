@@ -4,7 +4,6 @@ import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
-import Button from 'react-bootstrap/Button'
 
 var db = new DB()
 
@@ -15,7 +14,7 @@ function Details(props) {
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
-	const { register, handleSubmit, setValue } = useForm();
+	const { register, getValues, setValue } = useForm();
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
@@ -23,9 +22,15 @@ function Details(props) {
 	const getNextPayment = () => {
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
 		if(person.payment_history!==undefined) {
+			// return {
+			// 	i: month-1,
+			// 	month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
+			// 	amount: db.getExpectedRent({id:person.id},month)
+			// }
 			return {
-				month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
-				amount: db.getExpectedRent({id:person.id},month)
+				i: person.payment_history.length-1,
+				month: moment(person.startdate).add(person.payment_history.length-1,"M").startOf('month'),
+				amount: db.getExpectedRent({id:person.id},person.payment_history.length-1)
 			}
 		}
 		else return moment(person.startdate)
@@ -208,7 +213,7 @@ function Details(props) {
 				</center>
 				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%', position:'relative', zIndex:15}}>{"\uf1b2"}</b>
 				<br/><br/>
-				<center><button className="overlay-button" onClick={() => console.log()} style={{color:'#006CFF'}}>Save</button></center>
+				<center><button className="overlay-button" onClick={() => console.log(selectedMonth.i,getValues(["housing-payment", "other-payment"]))} style={{color:'#006CFF'}}>Save</button></center>
 			</SlidingOverlay>
 			{
 				// Date Picker Bootstrap Overlay
@@ -221,7 +226,7 @@ function Details(props) {
 							{ moment(person.startdate).add(ai,"M").startOf('month').isSame(selectedMonth.month,'month') ? 
 								<button className="overlay-button-mx" key={ai} style={{margin:'2% 1%'}}
 									onClick={() => {
-										setSelectedMonth({month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
+										setSelectedMonth({i: ai,month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
 										setValue("housing-payment", selectedMonth.amount.housing); 
 										setValue("other-payment", selectedMonth.amount.others);
 										setShowMonthPicker(false); 
@@ -231,7 +236,7 @@ function Details(props) {
 								: 
 								<span className="overlay-button-mx-light" key={ai}
 									onClick={() => {
-										setSelectedMonth({month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
+										setSelectedMonth({i: ai,month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
 										setValue("housing-payment", selectedMonth.amount.housing); 
 										setValue("other-payment", selectedMonth.amount.others);
 										setShowMonthPicker(false); 
