@@ -113,11 +113,14 @@ function Main() {
 												<OverlayTrigger  trigger="click" key={d}
 													overlay={
 														<Popover id={`popover-positioned-top`}>
-															<Popover.Title as="h3"><center><b>{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</b></center></Popover.Title>
+															<Popover.Title as="h3"><center><b>{db.data[`${building}_${floor}_${door}`].profile.name}</b></center></Popover.Title>
 												  			<Popover.Content style={{fontSize:18}}>
-																{'Start Date : ' + (db.data[`${building}_${floor}_${door}`].startdate) }<br/>
-																{'Door : ' + `${building} ${floor} ${door}` }
-																<br/>
+																<center>
+																	<small>
+																		{`${floor === 0 ? 'G' : floor}0${door}, #${building}`}<br/>
+																		{'Since ' + moment(db.data[`${building}_${floor}_${door}`].startdate).format("Do MMM, YYYY") }<br/>
+																	</small>
+																</center>
 																<Button variant="danger" style={{marginTop:'2%'}}>Vacate</Button>{' '}
 																<Button variant="info" style={{marginTop:'2%'}}>Replace</Button>
 															</Popover.Content>

@@ -51,8 +51,8 @@ function Details(props) {
 			</div>
 			<div className='container'>
 				<div style={{ display: 'inline-flex', width: '100%' }}>
-					<b className="fas" style={{ display: 'inline-block', width: '10%', marginLeft: '2%', fontSize: '40px', marginTop: '1%' }}>{"\uf073"}</b>
-					<div style={{marginLeft:'5%'}}><h6 style={{ display: 'inline-block', width: '40%' }}>From</h6>
+					<b className="fas" style={{ display: 'inline-block', width: '10%', margin: '-1% 1% 2% 3%', fontSize: '40px', color:'#f03050' }}>{"\uf073"}</b>
+					<div style={{marginLeft:'5%'}}><small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>Since</small>
 				<h4 style={{marginTop:'-1%'}}><b>{moment(props.location.state.startdate).format("Do MMMM, YYYY")}</b></h4></div>
 				</div>
 			</div>
@@ -112,16 +112,21 @@ function Details(props) {
 				<h4><b className="fas">{"\uf3d1"}</b>&nbsp;&nbsp;Returnable Advance</h4>
 			</center>
 			<div className="container">
+				<br/>
 				<center>
 					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{props.location.state.advance-db.getLess({ id: props.location.state.id })}</b></h2>
 				</center>
+				<br/>
 				{
 				db.getLess({ id: props.location.state.id })!==0?
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
-					<b className="fas">{"\uf06a"}</b>{
-						props.location.state.less.map((item, i) => (
-							<div style={{marginLeft:'6%'}}>{item.reason}</div>
-						)).slice(-2)}
+						{
+							props.location.state.less.map((item, i) => (
+								<Fragment>
+									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
+								</Fragment>
+							)).slice(-2)
+						}
 						<button type="button" class="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}} onClick={() => setadvanceOverlay(true)}>More..</button>
 					</div>:null
 				}
@@ -150,8 +155,6 @@ function Details(props) {
 			}
 			</Overlay>
 			<br />
-
-
 			{props.location.state.renewals &&
 				<Fragment>
 					<center>
