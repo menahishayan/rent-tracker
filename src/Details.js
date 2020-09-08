@@ -15,8 +15,10 @@ function Details(props) {
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 	const { register, handleSubmit } = useForm();
 
+	const person = props.location.state
+	const idParts = db.parseId(person.id)
+
 	const getNextPayment = () => {
-		let person = props.location.state
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
 		if(person.payment_history!==undefined) {
 			return {
@@ -46,14 +48,15 @@ function Details(props) {
 					<Circle color="#5e09b8" icon={"\uf007"} style={{ marginLeft: '50%' }} />
 				</div>
 				<div style={{ display: 'inline-block', width: '80%', marginTop: '3%', marginLeft: '5%' }}>
-					<h3>{props.location.state.profile.name}</h3>
+					<h3>{person.profile.name}</h3>
+					{`${idParts.floor === 0 ? 'G' : idParts.floor}0${idParts.door}, #${idParts.building}`}<br/>
 				</div>
 			</div>
 			<div className='container'>
 				<div style={{ display: 'inline-flex', width: '100%' }}>
 					<b className="fas" style={{ display: 'inline-block', width: '10%', margin: '-1% 1% 2% 3%', fontSize: '40px', color:'#f03050' }}>{"\uf073"}</b>
 					<div style={{marginLeft:'5%'}}><small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>Since</small>
-				<h4 style={{marginTop:'-1%'}}><b>{moment(props.location.state.startdate).format("Do MMMM, YYYY")}</b></h4></div>
+				<h4 style={{marginTop:'-1%'}}><b>{moment(person.startdate).format("Do MMMM, YYYY")}</b></h4></div>
 				</div>
 			</div>
 			<br />
@@ -62,19 +65,19 @@ function Details(props) {
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
 			<div className="container" onClick={() => sethistoryOverlay(true)}>
-			{ props.location.state.payment_history!==undefined?
+			{ person.payment_history!==undefined?
 				<HorizontalTimelineConditional
 					content={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+						db.getExpectedRent({id:person.id}).map((e, i) => {
 							return {
-								title: moment(props.location.state.startdate).add(i, "M").format("MMM"),
-								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
+								title: moment(person.startdate).add(i, "M").format("MMM"),
+								subtitle: (db.getRent({id:person.id},true,false,i+1)) ? e.housing : 0
 							}
 						}).slice(-3)
 					}
 					conditionArray={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
-							return db.getRent({id:props.location.state.id},true,false,i+1)
+						db.getExpectedRent({id:person.id}).map((e, i) => {
+							return db.getRent({id:person.id},true,false,i+1)
 						}).slice(-3)
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -86,19 +89,19 @@ function Details(props) {
 			<Overlay visible={historyOverlay} height={90} bgClick={() =>sethistoryOverlay(false)} >
 				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => sethistoryOverlay(historyOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ props.location.state.payment_history!==undefined?
+			{ person.payment_history!==undefined?
 				<VerticalTimelineConditional
 					content={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
+						db.getExpectedRent({id:person.id}).map((e, i) => {
 							return {
-								title: moment(props.location.state.startdate).add(i, "M").format("MMM YYYY"),
-								subtitle: (db.getRent({id:props.location.state.id},true,false,i+1)) ? e.housing : 0
+								title: moment(person.startdate).add(i, "M").format("MMM YYYY"),
+								subtitle: (db.getRent({id:person.id},true,false,i+1)) ? e.housing : 0
 							}
 						})
 					}
 					conditionArray={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
-							return db.getRent({id:props.location.state.id},true,false,i+1)
+						db.getExpectedRent({id:person.id}).map((e, i) => {
+							return db.getRent({id:person.id},true,false,i+1)
 						})
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -114,14 +117,14 @@ function Details(props) {
 			<div className="container">
 				<br/>
 				<center>
-					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{props.location.state.advance-db.getLess({ id: props.location.state.id })}</b></h2>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-db.getLess({ id: person.id })}</b></h2>
 				</center>
 				<br/>
 				{
-				db.getLess({ id: props.location.state.id })!==0?
+				db.getLess({ id: person.id })!==0?
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
 						{
-							props.location.state.less.map((item, i) => (
+							person.less.map((item, i) => (
 								<Fragment>
 									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
 								</Fragment>
@@ -136,17 +139,17 @@ function Details(props) {
 			<Overlay visible={advanceOverlay} height={90} bgClick={() =>setadvanceOverlay(false)} >
 				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setadvanceOverlay(advanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ props.location.state.payment_history!==undefined && db.getLess({ id: props.location.state.id })!==0?
+			{ person.payment_history!==undefined && db.getLess({ id: person.id })!==0?
 				<VerticalTimelineConditional
 					content={
-								props.location.state.less.map((item) => {
+								person.less.map((item) => {
 									return {title:item.reason,
 											subtitle:item.amount}
 								})
 							}
 					conditionArray={
-						db.getExpectedRent({id:props.location.state.id}).map((e, i) => {
-							return db.getRent({id:props.location.state.id},true,false,i+1)
+						db.getExpectedRent({id:person.id}).map((e, i) => {
+							return db.getRent({id:person.id},true,false,i+1)
 						})
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -155,13 +158,13 @@ function Details(props) {
 			}
 			</Overlay>
 			<br />
-			{props.location.state.renewals &&
+			{person.renewals &&
 				<Fragment>
 					<center>
 						<h4><b className="fas">{"\uf251"}</b>&nbsp;&nbsp;Renewals</h4>
 					</center>
 					<div className="container">
-						<HorizontalTimeline content={props.location.state.renewals.map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
+						<HorizontalTimeline content={person.renewals.map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
 					</div>
 				</Fragment>
 			}

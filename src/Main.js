@@ -55,7 +55,7 @@ function Main() {
 				<h4><b className="fas">{"\uf662"}</b>&nbsp;&nbsp;{moment().format("MMMM")}</h4>
 				<div className="container" >
 					{
-						db.data && db.getBuildings().map((building, b) => (
+						db.data && db.getBuildings().reverse().map((building, b) => (
 							<Fragment key={b}>
 								{
 									db.persons(building).map((person, i) => (
@@ -121,7 +121,7 @@ function Main() {
 																		{'Since ' + moment(db.data[`${building}_${floor}_${door}`].startdate).format("Do MMM, YYYY") }<br/>
 																	</small>
 																</center>
-																<Button variant="danger" style={{marginTop:'2%'}}>Vacate</Button>{' '}
+																<Button variant="danger" style={{marginTop:'2%'}}>Vacate</Button>&nbsp;&nbsp;
 																<Button variant="info" style={{marginTop:'2%'}}>Replace</Button>
 															</Popover.Content>
 														</Popover>
