@@ -5,7 +5,11 @@ import './Main.css'
 import moment from 'moment';
 import { Redirect } from 'react-router';
 import { Circle, CircleCondition } from './Components'
-
+import Popover from 'react-bootstrap/Popover'
+import PopoverContent from 'react-bootstrap/PopoverContent'
+import PopoverTitle from 'react-bootstrap/PopoverTitle'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Button from 'react-bootstrap/Button'
 var db = new DB()
 
 function Main() {
@@ -14,6 +18,10 @@ function Main() {
 	useEffect(() => {
 		db.refreshCache()
 	}, [])
+
+
+
+
 
 	const generateRenewalsList = () => {
 		let array = []
@@ -102,9 +110,22 @@ function Main() {
 										<div className="floor">
 											{
 												db.getDoors(building, floor).map((door, d) =>
-													<div key={d} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
+												<OverlayTrigger  trigger="click" key={d}
+													overlay={
+														<Popover id={`popover-positioned-top`}>
+															<Popover.Title as="h3"><center><b>{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</b></center></Popover.Title>
+												  			<Popover.Content>
+																{`${building}_${floor}_${door}`}<br/>
+																<Button variant="danger">Vacate</Button>{' '}
+																<Button variant="info">Replace</Button>
+															</Popover.Content>
+														</Popover>
+													}
+												>
+													<div  style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
 														<center><b className="door-label"><b className="fas">{"\uf52a"}</b>&nbsp;{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
 													</div>
+												</OverlayTrigger>
 												)
 											}
 										</div>
@@ -119,7 +140,7 @@ function Main() {
 			</div>
 			<br /><br />
 			<center>
-				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Upcoming Renewals</h4>
+				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Invoice</h4>
 			</center>
 			<div className="container">
 			</div>
