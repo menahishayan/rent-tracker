@@ -118,6 +118,11 @@ function Main() {
 				}
 			</div>
 			<br /><br />
+			<center>
+				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Upcoming Renewals</h4>
+			</center>
+			<div className="container">
+			</div>
 		</div>
 	)
 }
