@@ -1,5 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
-import React, { Fragment, useState,useRef } from 'react';
+import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
@@ -20,7 +20,7 @@ function Details(props) {
 	const idParts = db.parseId(person.id)
 
 	const getNextPayment = () => {
-		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
+		// let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
 		if(person.payment_history!==undefined) {
 			// return {
 			// 	i: month-1,
