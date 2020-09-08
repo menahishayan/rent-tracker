@@ -115,10 +115,11 @@ function Main() {
 														<Popover id={`popover-positioned-top`}>
 															<Popover.Title as="h3"><center><b>{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</b></center></Popover.Title>
 												  			<Popover.Content style={{fontSize:18}}>
-																{'Door : ' + `${building}_${floor}_${door}` }
+																{'Start Date : ' + (db.data[`${building}_${floor}_${door}`].startdate) }<br/>
+																{'Door : ' + `${building} ${floor} ${door}` }
 																<br/>
-																<Button variant="danger">Vacate</Button>{' '}
-																<Button variant="info">Replace</Button>
+																<Button variant="danger" style={{marginTop:'2%'}}>Vacate</Button>{' '}
+																<Button variant="info" style={{marginTop:'2%'}}>Replace</Button>
 															</Popover.Content>
 														</Popover>
 													}
