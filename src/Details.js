@@ -1,8 +1,8 @@
 import Navbar from 'react-bootstrap/Navbar'
-import button from 'react-bootstrap'
 import React, { Fragment, useState, useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
+import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,Overlay } from './Components'
 
 var db = new DB()
@@ -13,6 +13,7 @@ function Details(props) {
 	const [advanceOverlay,setadvanceOverlay] = useState(false);
 	const [editNewRentAmount,setEditNewRentAmount] = useState(false);
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
+	const { register, handleSubmit } = useForm();
 
 	const getNextPayment = () => {
 		let person = props.location.state
@@ -167,31 +168,20 @@ function Details(props) {
 				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => resetAddPayOverlay()}>{"\uf00d"}</b>
 				<br/>
 				<center>
-					<h3><b>Rent {nextPayment.month.format("MMMM")}</b></h3>
+					<h3 style={{marginLeft:'5%'}}><b>{!editOtherAmount ? `Rent ${nextPayment.month.format("MMMM")}` : "Utilities"} </b></h3>
 					<br/><br/>
-					<div style={{display:'inline-block', transition:'0.2s ease', marginLeft: !editOtherAmount ? '-10%': '-110%', width:'200%'}}>
-						<b className="fas" style={{ fontSize: 30,display:'inline-block', color:'white' }}>{"\uf156"}</b>
-						<div style={{display:'inline-block'}}>
-							{
-								!editNewRentAmount ?
-									<h1 onClick={() => setEditNewRentAmount(true)}>
-										<b>&nbsp;{nextPayment.amount.housing}</b>
-									</h1>
-								: <input style={{display: editOtherAmount ? 'none' : 'inline-flex', width:'40%'}} type='number' pattern="[0-9]*" placeholder={nextPayment.amount.housing} class="editable-label-input"/>
-							}
+					<div style={{display:'inline-block', width:'200%', transition:'.2s ease', marginLeft: !editOtherAmount ? '8%' : '-110%', position:'relative', zIndex:10}}>
+						<div style={{display:'inline-block', width:'40%'}}>
+							<b className="fas" style={{ fontSize: 30,display:'inline-block', color:'white' }}>{"\uf156"}</b>
+							<input style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={nextPayment.amount.housing} ref={register} class="editable-label-input"/>
 						</div>
-						<div style={{display:'inline-block', marginLeft:'35%'}}>
-						{
-							!editNewRentAmount ?
-								<h1 onClick={() => setEditNewRentAmount(true)} style={{display:'inline-block'}}>
-									<b>&nbsp;{nextPayment.amount.others}</b>
-								</h1>
-							: <input style={{display: !editOtherAmount ? 'none' : 'inline-flex', width:'40%'}} type='number' pattern="[0-9]*" placeholder={nextPayment.amount.others} class="editable-label-input"/>
-						}
+						<div style={{display:'inline-block', marginLeft:'15%', width:'40%'}}>
+							<b className="fas" style={{ fontSize: 30,display:'inline-block', color:'white' }}>{"\uf156"}</b>
+							<input style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={nextPayment.amount.others} ref={register} class="editable-label-input"/>
 						</div>
 					</div>
 				</center>
-				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ color:'white',fontSize: 22, float:'right', marginRight:'5%'}}>{"\uf1b2"}</b>
+				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ color:'white',fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%', position:'relative', zIndex:15}}>{"\uf1b2"}</b>
 				<br/><br/>
 				<center><button className="overlay-button" onClick={() => console.log()}>Save</button></center>
 			</Overlay>
