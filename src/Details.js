@@ -3,10 +3,7 @@ import React, { Fragment, useState,useRef } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
-import { Circle, HorizontalTimeline,VerticalTimelineConditional, HorizontalTimelineConditional,SlidingOverlay } from './Components'
-import Overlay from 'react-bootstrap/Overlay'
-import Popover from 'react-bootstrap/Popover'
-import Tooltip from 'react-bootstrap/Tooltip'
+import { Circle, HorizontalTimeline,VerticalTimelineConditional, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
 import Button from 'react-bootstrap/Button'
 
 var db = new DB()
@@ -19,7 +16,6 @@ function Details(props) {
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
 	const { register, handleSubmit } = useForm();
-	const target = useRef(null);
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
@@ -198,7 +194,7 @@ function Details(props) {
 					<h3 style={{marginLeft:'5%'}}>
 						<b>
 							{!editOtherAmount ? 
-								<span onClick={() => getAvailableMonths()} ref={target}>{`Rent ${selectedMonth.format("MMMM")}`}</span> 
+								<span onClick={() => getAvailableMonths()}>{`Rent ${selectedMonth.format("MMMM")}`}</span> 
 								: "Utilities"
 							}
 						</b>
@@ -222,22 +218,17 @@ function Details(props) {
 			{
 				// Date Picker Bootstrap Overlay
 			}
-			<Overlay target={target.current} show={showMonthPicker} placement="top">
-				{(props) => (
-				<Popover style={{backgroundColor:'white', width: '100%', padding:'5%'}} {...props}>
-					<div style={{display:'inline-block'}}>
-					{
-						availableMonths.map((a,ai) => (
-							<Fragment>
-								<Button variant="primary" key={ai} style={{margin:'1% 3%'}}>{moment(person.startdate).add(a,"M").format("MMM YY")}</Button>
-								{ ai%3===2 ? <br/> : null }
-							</Fragment>
-						))
-					}
-					</div>
-					
-				</Popover>
-				)}
+			<Overlay visible={showMonthPicker} bgClick={() => setShowMonthPicker(!showMonthPicker)}>
+				<div style={{display:'inline-block', width: '100%'}}>
+				{
+					availableMonths.map((a,ai) => (
+						<Fragment>
+							<Button variant="primary" key={ai} style={{margin:'1% 1%'}}>{moment(person.startdate).add(a,"M").format("MMM YY")}</Button>
+							{ ai%3===2 ? <br/> : null }
+						</Fragment>
+					))
+				}
+				</div>
 			</Overlay>
 		</div>
 	);

@@ -144,7 +144,7 @@ hr {
   opacity: 0;
 }
 
-.overlay-container {
+.sliding-overlay-container {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -158,6 +158,16 @@ hr {
   border-radius: 20px 20px 0px 0px;
 }
 
-.overlay-container h1, .overlay-container h2, .overlay-container h3, .overlay-container h4 {
+.overlay-container {
+  background-color:white;
+  overflow: hidden;
+  width: 80%;
+  height: 50%;
+  z-index: 5;
+  padding: 5% 8%;
+  border-radius: 15px;
+}
+
+.overlay-container * {
   color: white;
 }

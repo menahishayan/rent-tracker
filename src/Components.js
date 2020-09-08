@@ -93,8 +93,19 @@ export const VerticalTimelineConditional = props => (
 export const SlidingOverlay = props => (
 	<Fragment>
 		<div className="overlay" onClick={props.bgClick} style={{opacity:(props.visible===true? 1 : 0), display: (props.visible===true? 'block' : 'none')}}></div>
-		<div className="overlay-container" style={{bottom:`${-props.height+(props.height*(props.visible===true? 1 : 0))}%`, height:`${props.height}%`}}>
+		<div className="sliding-overlay-container" style={{bottom:`${-props.height+(props.height*(props.visible===true? 1 : 0))}%`, height:`${props.height}%`}}>
 			{props.children}
 		</div>
+	</Fragment>
+)
+
+export const Overlay = props => (
+	<Fragment>
+		<div className="overlay" onClick={props.bgClick} style={{opacity:(props.visible===true? 1 : 0), display: (props.visible===true? 'block' : 'none')}}></div>
+		<center>
+			<div className="overlay-container">
+				{props.children}
+			</div>
+		</center>
 	</Fragment>
 )
