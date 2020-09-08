@@ -163,12 +163,13 @@ hr {
   left:10%;
   top:20%;
   background-color:white;
-  overflow: hidden;
+  overflow-x: hidden;
   width: 80%;
   height: 50%;
   z-index: 5;
   padding: 5% 8%;
   border-radius: 15px;
+  overflow-y: scroll;
 }
 
 .sliding-overlay-container * {

@@ -15,7 +15,7 @@ function Details(props) {
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit, setValue } = useForm();
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
@@ -37,16 +37,11 @@ function Details(props) {
 	}
 
 	var nextPayment = getNextPayment()
-	const [selectedMonth,setSelectedMonth] = useState(nextPayment.month);
+	const [selectedMonth,setSelectedMonth] = useState(nextPayment);
 
 
 	const getAvailableMonths = () => {
-		let expected = db.getExpectedRent({id:person.id})
-		let availableMonthsArray = []
-		expected.forEach((e,i) => {
-			availableMonthsArray.push(i)
-		})
-		setAvailableMonths(availableMonthsArray)
+		setAvailableMonths(db.getExpectedRent({id:person.id}))
 		setShowMonthPicker(!showMonthPicker)
 	}
 
@@ -194,7 +189,7 @@ function Details(props) {
 					<h3 style={{marginLeft:'5%'}}>
 						<b>
 							{!editOtherAmount ? 
-								<span onClick={() => getAvailableMonths()}>{`Rent ${selectedMonth.format("MMMM")}`}</span> 
+								<span onClick={() => getAvailableMonths()}>{`Rent ${selectedMonth.month.format("MMMM")}`}</span> 
 								: "Utilities"
 							}
 						</b>
@@ -203,11 +198,11 @@ function Details(props) {
 					<div style={{display:'inline-block', width:'200%', transition:'.2s ease', marginLeft: !editOtherAmount ? '8%' : '-110%', position:'relative', zIndex:10}}>
 						<div style={{display:'inline-block', width:'40%'}}>
 							<b className="fas" style={{ fontSize: 30,display:'inline-block' }}>{"\uf156"}</b>
-							<input name="housing-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={nextPayment.amount.housing} ref={register} className="editable-label-input"/>
+							<input name="housing-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={selectedMonth.amount.housing} ref={register} className="editable-label-input"/>
 						</div>
 						<div style={{display:'inline-block', marginLeft:'15%', width:'40%'}}>
 							<b className="fas" style={{ fontSize: 30,display:'inline-block' }}>{"\uf156"}</b>
-							<input name="other-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={nextPayment.amount.others} ref={register} className="editable-label-input"/>
+							<input name="other-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={selectedMonth.amount.others} ref={register} className="editable-label-input"/>
 						</div>
 					</div>
 				</center>
@@ -219,13 +214,30 @@ function Details(props) {
 				// Date Picker Bootstrap Overlay
 			}
 			<Overlay visible={showMonthPicker} bgClick={() => setShowMonthPicker(!showMonthPicker)} height={40}>
-				<div style={{display:'inline-block', width: '100%'}}>
-				{
+				<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>
+				{	availableMonths.length > 0 &&
 					availableMonths.map((a,ai) => (
-						<Fragment>
-							{ moment(person.startdate).add(ai,"M").startOf('month').isSame(selectedMonth,'month') ? 
-								<button className="overlay-button-mx" key={ai} style={{margin:'2% 1%'}} onClick={() => setShowMonthPicker(false)}>{moment(person.startdate).add(a,"M").format("MMM YY")}</button>
-								: <span className="overlay-button-mx-light" onClick={() => {setSelectedMonth(moment(person.startdate).add(ai,"M").startOf('month')); setShowMonthPicker(false)}}>{moment(person.startdate).add(a,"M").format("MMM YY")}</span>
+						<Fragment key={ai}>
+							{ moment(person.startdate).add(ai,"M").startOf('month').isSame(selectedMonth.month,'month') ? 
+								<button className="overlay-button-mx" key={ai} style={{margin:'2% 1%'}}
+									onClick={() => {
+										setSelectedMonth({month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
+										setValue("housing-payment", selectedMonth.amount.housing); 
+										setValue("other-payment", selectedMonth.amount.others);
+										setShowMonthPicker(false); 
+									}}>
+									{moment(person.startdate).add(ai,"M").format("MMM YY")}
+								</button>
+								: 
+								<span className="overlay-button-mx-light" key={ai}
+									onClick={() => {
+										setSelectedMonth({month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
+										setValue("housing-payment", selectedMonth.amount.housing); 
+										setValue("other-payment", selectedMonth.amount.others);
+										setShowMonthPicker(false); 
+									}}>
+										{moment(person.startdate).add(ai,"M").format("MMM YY")}
+								</span>
 							}
 							{ ai%3===2 ? <br/> : null }
 						</Fragment>
