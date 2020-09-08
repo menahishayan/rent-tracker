@@ -24,7 +24,7 @@ function Details(props) {
 		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
 		if(person.payment_history!==undefined) {
 			return {
-				month: moment().subtract(month - person.payment_history.length-1, "M"),
+				month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
 				amount: db.getExpectedRent({id:person.id},month)
 			}
 		}
@@ -100,7 +100,7 @@ function Details(props) {
 			</div>
 
 			<SlidingOverlay visible={showHistoryOverlay} height={90} bgClick={() =>setShowHistoryOverlay(false)} >
-				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowHistoryOverlay(showHistoryOverlay ? false : true)}>{"\uf00d"}</b>
+				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowHistoryOverlay(showHistoryOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ person.payment_history!==undefined?
 				<VerticalTimelineConditional
@@ -152,7 +152,7 @@ function Details(props) {
 				// Less Advance Overlay 
 			}
 			<SlidingOverlay visible={showAdvanceOverlay} height={90} bgClick={() =>setShowAdvanceOverlay(false)} >
-				<b className="fas" style={{color:'white', fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
+				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ person.payment_history!==undefined && db.getLess({ id: person.id })!==0?
 				<VerticalTimelineConditional
@@ -188,7 +188,7 @@ function Details(props) {
 				// Add Pay Overlay 
 			}
 			<SlidingOverlay visible={showAddPayOverlay} bgClick={() => resetAddPayOverlay()} height={48}>
-				<b className="fas" style={{color:'white', fontSize: 22,float:'right'}} onClick={() => resetAddPayOverlay()}>{"\uf00d"}</b>
+				<b className="fas" style={{ fontSize: 22,float:'right'}} onClick={() => resetAddPayOverlay()}>{"\uf00d"}</b>
 				<br/>
 				<center>
 					<h3 style={{marginLeft:'5%'}}>
@@ -202,28 +202,31 @@ function Details(props) {
 					<br/><br/>
 					<div style={{display:'inline-block', width:'200%', transition:'.2s ease', marginLeft: !editOtherAmount ? '8%' : '-110%', position:'relative', zIndex:10}}>
 						<div style={{display:'inline-block', width:'40%'}}>
-							<b className="fas" style={{ fontSize: 30,display:'inline-block', color:'white' }}>{"\uf156"}</b>
+							<b className="fas" style={{ fontSize: 30,display:'inline-block' }}>{"\uf156"}</b>
 							<input name="housing-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={nextPayment.amount.housing} ref={register} className="editable-label-input"/>
 						</div>
 						<div style={{display:'inline-block', marginLeft:'15%', width:'40%'}}>
-							<b className="fas" style={{ fontSize: 30,display:'inline-block', color:'white' }}>{"\uf156"}</b>
+							<b className="fas" style={{ fontSize: 30,display:'inline-block' }}>{"\uf156"}</b>
 							<input name="other-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={nextPayment.amount.others} ref={register} className="editable-label-input"/>
 						</div>
 					</div>
 				</center>
-				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ color:'white',fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%', position:'relative', zIndex:15}}>{"\uf1b2"}</b>
+				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%', position:'relative', zIndex:15}}>{"\uf1b2"}</b>
 				<br/><br/>
-				<center><button className="overlay-button" onClick={() => console.log()}>Save</button></center>
+				<center><button className="overlay-button" onClick={() => console.log()} style={{color:'#006CFF'}}>Save</button></center>
 			</SlidingOverlay>
 			{
 				// Date Picker Bootstrap Overlay
 			}
-			<Overlay visible={showMonthPicker} bgClick={() => setShowMonthPicker(!showMonthPicker)}>
+			<Overlay visible={showMonthPicker} bgClick={() => setShowMonthPicker(!showMonthPicker)} height={40}>
 				<div style={{display:'inline-block', width: '100%'}}>
 				{
 					availableMonths.map((a,ai) => (
 						<Fragment>
-							<Button variant="primary" key={ai} style={{margin:'1% 1%'}}>{moment(person.startdate).add(a,"M").format("MMM YY")}</Button>
+							{ moment(person.startdate).add(ai,"M").startOf('month').isSame(selectedMonth,'month') ? 
+								<button className="overlay-button-mx" key={ai} style={{margin:'2% 1%'}} onClick={() => setShowMonthPicker(false)}>{moment(person.startdate).add(a,"M").format("MMM YY")}</button>
+								: <span className="overlay-button-mx-light" onClick={() => {setSelectedMonth(moment(person.startdate).add(ai,"M").startOf('month')); setShowMonthPicker(false)}}>{moment(person.startdate).add(a,"M").format("MMM YY")}</span>
+							}
 							{ ai%3===2 ? <br/> : null }
 						</Fragment>
 					))

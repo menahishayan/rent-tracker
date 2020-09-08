@@ -159,6 +159,9 @@ hr {
 }
 
 .overlay-container {
+  position: fixed;
+  left:10%;
+  top:20%;
   background-color:white;
   overflow: hidden;
   width: 80%;
@@ -168,6 +171,6 @@ hr {
   border-radius: 15px;
 }
 
-.overlay-container * {
+.sliding-overlay-container * {
   color: white;
 }

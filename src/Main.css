@@ -96,6 +96,31 @@ textarea:focus, input:focus{
 	width: 100%;
 }
 
+.overlay-button-mx {
+	background-color: #006CFF;
+	border-radius: 7px;
+	border: none;
+	color: white;
+	padding: 10px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.overlay-button-mx-light {
+	background-color: white;
+	border-radius: 7px;
+	border: none;
+	color: #006CFF;
+	padding: 16px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	cursor: pointer;
+}
+
 @media only screen and (max-width: 600px) {
 	.circle {
 		height: 60px;
