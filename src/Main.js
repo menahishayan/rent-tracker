@@ -16,7 +16,7 @@ function Main() {
 	const [tennantOverlay, setTennantOverlay] = useState(false);
 	const [selectedTennant, setSelectedTennant] = useState();
 	const [ebOverlay, setEBOverlay] = useState(false);
-	const { register, getValues, setValue } = useForm();
+	const { register, getValues } = useForm();
 
 	useEffect(() => {
 		db.refreshCache()
@@ -173,8 +173,8 @@ function Main() {
 					<h3><b>{db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name}</b></h3>
 						{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br/>
 						{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY") }<br/>
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#ED0034'}}>Vacate</button>&nbsp;&nbsp;
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Replace</button>
+					<button className="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#ED0034'}}>Vacate</button>&nbsp;&nbsp;
+					<button className="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Replace</button>
 				</Overlay>
 			}
 			
@@ -184,17 +184,17 @@ function Main() {
 			<div className="container">
 				<center>
 					<h3>Generate</h3>
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#006CFF'}} onClick={() => setEBOverlay(true)}>{moment().format("MMMM")}</button>&nbsp;&nbsp;
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Quarterly</button>
+					<button className="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#006CFF'}} onClick={() => setEBOverlay(true)}>{moment().format("MMMM")}</button>&nbsp;&nbsp;
+					<button className="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Quarterly</button>
 					<br/><br/>
 				</center>
 			</div>
 			<Overlay visible={ebOverlay} bgClick={() => setEBOverlay(!ebOverlay)} height={38}>
 				<h3><b>Electricity</b></h3>
 				<p style={{ marginTop:'-2%' }}>Stairs & Pump</p>
-				<input name="housing-payment" style={{display:'inline-block', color:'black', backgroundColor:'white'}} type='number' pattern="[0-9]*" defaultValue={510} ref={register} class="editable-label-input"/>
+				<input name="eb" style={{display:'inline-block', color:'black', backgroundColor:'white'}} type='number' pattern="[0-9]*" defaultValue={510} ref={register} className="editable-label-input"/>
 				<br/><br/>
-				<button class="overlay-button" style={{marginTop:'5%',backgroundColor:'#006CFF', color:'white'}}>Next</button>
+				<button className="overlay-button" style={{marginTop:'5%',backgroundColor:'#006CFF', color:'white'}} onClick={() => { setRedirectProps(getValues("eb")); setRedirect('/generate-invoice'); }}>Next</button>
 			</Overlay>
 			<br /><br />
 		</div>

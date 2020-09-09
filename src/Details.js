@@ -141,7 +141,7 @@ function Details(props) {
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
 						{
 							less.filter(l => l.amount!==0).map((item, i) => (
-								<Fragment>
+								<Fragment key={i}>
 									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
 								</Fragment>
 							)).slice(-2).reverse()
