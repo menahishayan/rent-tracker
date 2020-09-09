@@ -34,6 +34,28 @@ function Main() {
 		return array
 	}
 
+	const getProgressBar = () => {
+		var sumRent=0 ,sumExpectedRent=0,month
+		db.persons().forEach((person) => {
+			month=getNextPayment(person)
+			sumRent+=db.getPaidRent(person,month)
+			sumExpectedRent+=db.getExpectedRent(person,month)
+		});
+		 return (sumRent/sumExpectedRent*100)
+	}
+
+	const getNextPayment = (person) => {
+		let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
+		if(person.payment_history!==undefined) {
+			return {
+				i: month-1,
+				month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
+				amount: db.getExpectedRent({id:person.id},month)
+			}
+		}
+		else return moment(person.startdate)
+	}
+
 	if (redirect)
 		return <Redirect push to={{
 			pathname: redirect,
@@ -135,7 +157,8 @@ function Main() {
 				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
 			</center>
 			<div className="container">
-				<ProgressBar animated now={45} />
+				<ProgressBar animated now={getProgressBar()} />
+
 			</div>
 
 			<center>
