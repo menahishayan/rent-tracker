@@ -276,10 +276,7 @@ class DB extends React.Component {
       return this.updateUser(person.id, "payment_history", paidRent)
    }
 
-   getNextRenewal = (index) => {
-      var id = Object.keys(this.data)[index]
-      var person = this.data[id]
-
+   getNextRenewal = (person) => {
       let r = person.renewals
       return moment((r !== undefined && r.length > 0) ? r[r.length - 1] : person.startdate, "YYYY-MM-DD", true).add(11, "M")
    }

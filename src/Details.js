@@ -140,7 +140,7 @@ function Details(props) {
 								</Fragment>
 							)).slice(-2).reverse()
 						}
-						<button type="button" className="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}} onClick={() => setShowAdvanceOverlay(true)}>More..</button>
+						<button className="btn btn-link" style={{margin:'-2% 0 0 -4%'}} onClick={() => setShowAdvanceOverlay(true)}><small>{less.filter(l => l.amount!==0).length} more..</small></button>
 					</div>
 			</div>
 			<br />
@@ -158,16 +158,14 @@ function Details(props) {
 			{
 				// Renewals Container
 			}
-			{person.renewals &&
 				<Fragment>
 					<center>
 						<h4><b className="fas">{"\uf251"}</b>&nbsp;&nbsp;Renewals</h4>
 					</center>
 					<div className="container">
-						<HorizontalTimeline content={person.renewals.map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
+						<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
 					</div>
 				</Fragment>
-			}
 			<br /><br />
 			{
 				// Add Pay Floating Button

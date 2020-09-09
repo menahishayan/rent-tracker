@@ -26,11 +26,11 @@ function Main() {
 		let array = []
 		if (db.data)
 			db.persons().map((person, i) => (
-				db.getNextRenewal(i).isBetween(moment().subtract(1, "M"), moment().add(7, "M"), "M") ?
+				db.getNextRenewal(person).isBetween(moment().subtract(1, "M"), moment().add(7, "M"), "M") ?
 					array.push({
 						i: i,
 						name: person.profile.name,
-						date: db.getNextRenewal(i).format("Do MMMM, YYYY")
+						date: db.getNextRenewal(person).format("Do MMMM, YYYY")
 					})
 					: null
 			))
@@ -41,10 +41,11 @@ function Main() {
 		var sumRent=0 ,sumExpectedRent=0,month
 		db.persons().forEach((person) => {
 			month=getNextPayment(person)
-			sumRent+=db.getPaidRent(person,month)
-			sumExpectedRent+=db.getExpectedRent(person,month)
+			sumRent+=db.getPaidRent(person,month.i).housing||0
+			sumExpectedRent+=db.getExpectedRent(person,month.i+1).housing
+			console.log(db.getPaidRent(person,month.i).housing);
 		});
-		 return (sumRent/sumExpectedRent*100)
+		return {current:sumRent,total:sumExpectedRent,percent:(sumRent/sumExpectedRent)*100}
 	}
 
 	const getNextPayment = (person) => {
@@ -165,8 +166,9 @@ function Main() {
 				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
 			</center>
 			<div className="container">
-				<ProgressBar animated now={getProgressBar()} />
-
+			<center><h3>{getProgressBar().current}</h3>
+				<ProgressBar animated now={getProgressBar().percent} />
+			</center>
 			</div>
 			<br /><br />
 			<center>
