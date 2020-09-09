@@ -147,7 +147,7 @@ function Details(props) {
 			{
 				// Less Advance Overlay
 			}
-			<SlidingOverlay visible={showAdvanceOverlay} height={90} bgClick={() =>setShowAdvanceOverlay(false)} >
+			<SlidingOverlay visible={showAdvanceOverlay} height={85} bgClick={() =>setShowAdvanceOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 				<VerticalTimeline
