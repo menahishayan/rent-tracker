@@ -61,9 +61,9 @@ function Details(props) {
 				<div style={{ display: 'inline-block', width: '20%', marginRight: '8%' }}>
 					<Circle color="#5e09b8" icon={"\uf007"} style={{ marginLeft: '50%' }} />
 				</div>
-				<div style={{ display: 'inline-block', width: '80%', marginTop: '3%', marginLeft: '5%' }}>
-					<h3>{person.profile.name}</h3>
-					{`${idParts.floor === 0 ? 'G' : idParts.floor}0${idParts.door}, #${idParts.building}`}<br/>
+				<div style={{ display: 'inline-block', width: '80%', marginTop: '1%', marginLeft: '5%' }}>
+					<h3 style={{marginBottom:'-2%'}}>{person.profile.name}</h3>
+					<small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>{`${idParts.floor === 0 ? 'G' : idParts.floor}0${idParts.door}, #${idParts.building}`}</small><br/>
 				</div>
 			</div>
 			<div className='container'>
