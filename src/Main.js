@@ -192,7 +192,7 @@ function Main() {
 			<Overlay visible={ebOverlay} bgClick={() => setEBOverlay(!ebOverlay)} height={38}>
 				<h3><b>Electricity</b></h3>
 				<p style={{ marginTop:'-2%' }}>Stairs & Pump</p>
-				<input name="eb" style={{display:'inline-block', color:'black', backgroundColor:'white'}} type='number' pattern="[0-9]*" defaultValue={510} ref={register} className="editable-label-input"/>
+				<input name="eb" style={{display:'inline-block', color:'black', backgroundColor:'white'}} type='number' pattern="[0-9]*" defaultValue={850} ref={register} className="editable-label-input"/>
 				<br/><br/>
 				<button className="overlay-button" style={{marginTop:'5%',backgroundColor:'#006CFF', color:'white'}} onClick={() => { setRedirectProps(parseInt(getValues("eb"))); setRedirect('/generate-invoice'); }}>Next</button>
 			</Overlay>

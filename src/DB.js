@@ -21,7 +21,6 @@ class DB extends React.Component {
          if (id) path += id
          if (item) path += '/' + item
       }
-      console.log("refresh");
       let ref = firebase.database().ref(path);
       ref.on('value', async (snapshot) => {
          if (this.data && id) {
@@ -220,7 +219,6 @@ class DB extends React.Component {
       if(person.payment_history) paidRent = [...person.payment_history]
 
       while(paidRent.length !== expectedRent.length) paidRent.push({housing:0,others:0})
-      // console.log([person.profile.name,person.payment_history,expectedRent.length]);
 
       return month ? paidRent[month]||{housing: 0,others:0} : paidRent
    }
