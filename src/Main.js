@@ -166,7 +166,7 @@ function Main() {
 			</div>
 			<br /><br />
 			{	selectedTennant && 
-				<Overlay visible={tennantOverlay} bgClick={() => setTennantOverlay(!tennantOverlay)} height={30}>
+				<Overlay visible={tennantOverlay} bgClick={() => setTennantOverlay(!tennantOverlay)} height={25}>
 					<h3><b>{db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name}</b></h3>
 						{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br/>
 						{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY") }<br/>
