@@ -215,16 +215,18 @@ class DB extends React.Component {
       return month ? paidRent[month]||{housing: 0,others:0} : paidRent
    }
 
-   getLess = (person, month) => {
-      var sum = 0, dueForMonth = 0
-      if (person.less)
-         person.less.forEach((item, i) => {
-            if (person.less.month === month)
-               dueForMonth = item.amount
-            sum += item.amount
-         });
-      if (month) return dueForMonth
-      return sum
+   getLess = (person,getSum) => {
+      var sum = 0, less = []
+		this.getExpectedRent(person).forEach((e,i) => {
+         let dueForMonth = this.getDues(person,false,false,i+1)
+         less.push({
+            month:i+1,
+            amount: dueForMonth,
+            reason: `Rent - ${moment(person.startdate).add(i+1,"M").format("MMM YY")}`
+         })
+         sum+=dueForMonth
+      })
+      return getSum ? sum : less
    }
 
    addUser = (id, data) => {

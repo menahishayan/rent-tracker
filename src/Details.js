@@ -55,6 +55,8 @@ function Details(props) {
 
 	const paidRent = db.getPaidRent(person)
 
+	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
+
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
@@ -133,22 +135,19 @@ function Details(props) {
 			<div className="container">
 				<br/>
 				<center>
-					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-db.getLess(person)}</b></h2>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-lessTotal}</b></h2>
 				</center>
 				<br/>
-				{
-				db.getLess(person)!==0?
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
 						{
-							person.less.map((item, i) => (
+							less.filter(l => l.amount!==0).map((item, i) => (
 								<Fragment>
 									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
 								</Fragment>
-							)).slice(-2)
+							)).slice(-2).reverse()
 						}
 						<button type="button" className="btn btn-link" style={{marginLeft:'80%',marginTop:'-8%'}} onClick={() => setShowAdvanceOverlay(true)}>More..</button>
-					</div>:null
-				}
+					</div>
 			</div>
 			<br />
 			{
@@ -157,11 +156,9 @@ function Details(props) {
 			<SlidingOverlay visible={showAdvanceOverlay} height={90} bgClick={() =>setShowAdvanceOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ person.payment_history!==undefined && db.getLess(person)!==0?
 				<VerticalTimeline
-					content={ person.less.map((item) => { return {title:item.reason, subtitle:item.amount}}) }
-				/>:null
-			}
+					content={ less.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
+				/>
 			</SlidingOverlay>
 			<br />
 			{
