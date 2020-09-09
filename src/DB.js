@@ -177,7 +177,7 @@ class DB extends React.Component {
       while(paidRent.length !== expectedRent.length)
          paidRent.push({housing:0,others:0})
 
-      let returnValue
+      let returnValue = {housing: 0,others:0}
       paidRent.forEach((p, i) => {
          let due_i = {
             housing: expectedRent[i].housing - p.housing,
@@ -199,16 +199,15 @@ class DB extends React.Component {
          }
       });
 
-      if(!month) {
-         if (returnStatusOnly) {
-            if (getAllItems)
-               return (dueTotal.housing === 0 && dueTotal.others === 0) ? true : false
-            else
-               return (dueTotal.housing === 0) ? true : false
-         }
+      if(month) dueTotal = returnValue 
+      if (returnStatusOnly) {
+         if (getAllItems)
+            return (dueTotal.housing === 0 && dueTotal.others === 0) ? true : false
          else
-            return (getAllItems) ? dueTotal : dueTotal.housing
-      } else return returnValue 
+            return (dueTotal.housing === 0) ? true : false
+      }
+      else
+         return (getAllItems) ? dueTotal : dueTotal.housing
    }
 
    getExpectedRent = (identifier, month) => {
