@@ -159,7 +159,7 @@ class DB extends React.Component {
          if(s.isAfter(moment())) break;
          let year = Math.floor(expectedRent.length / 11)
          let expectedSubTotal = {
-            housing: person.base_rent * Math.pow(1.05, year),
+            housing: Math.floor(person.base_rent * Math.pow(1.05, year)),
             others: 0
          }
          if (person.invoices)
@@ -173,10 +173,10 @@ class DB extends React.Component {
          // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
          if (lessForMonth)
             expectedSubTotal.housing -= lessForMonth.amount
-         if(expectedRent.length+1 === month) return Math.floor(expectedSubTotal)
+         if(expectedRent.length+1 === month) return expectedSubTotal
          expectedRent.push(expectedSubTotal)
       }
-      return Math.floor(expectedRent)
+      return expectedRent
    }
 
    getDues = (person, returnStatusOnly, getAllItems, month) => {

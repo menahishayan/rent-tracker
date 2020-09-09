@@ -62,7 +62,7 @@ function Main() {
 		return {current:sumRent,total:sumExpectedRent,percent:(sumRent/sumExpectedRent)*100}
 	}
 
-	const totalCollection = getTotalCollection()
+	var totalCollection = getTotalCollection()
 
 	if (redirect)
 		return <Redirect push to={{
