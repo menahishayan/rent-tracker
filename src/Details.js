@@ -57,7 +57,10 @@ function Details(props) {
 				<Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
 			</Navbar>
 			<br /><br /><br /><br />
-			<div style={{ display: 'inline-flex', width: '100%', marginLeft: '2%', cursor: 'pointer' }}>
+			{
+				// Profile Header
+			}
+			<div style={{ display: 'inline-flex', width: '95%', marginLeft: '2%', cursor: 'pointer' }}>
 				<div style={{ display: 'inline-block', width: '20%', marginRight: '8%' }}>
 					<Circle color="#5e09b8" icon={"\uf007"} style={{ marginLeft: '50%' }} />
 				</div>
@@ -66,6 +69,9 @@ function Details(props) {
 					<small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>{`${idParts.floor === 0 ? 'G' : idParts.floor}0${idParts.door}, #${idParts.building}`}</small><br/>
 				</div>
 			</div>
+			{
+				// Start Date Container
+			}
 			<div className='container'>
 				<div style={{ display: 'inline-flex', width: '100%' }}>
 					<b className="fas" style={{ display: 'inline-block', width: '10%', margin: '-1% 1% 2% 3%', fontSize: '40px', color:'#f03050' }}>{"\uf073"}</b>

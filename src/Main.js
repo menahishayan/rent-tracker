@@ -99,6 +99,19 @@ function Main() {
 			</center>
 			<br />
 			<center>
+				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
+			</center>
+			<div className="container">
+				<center>
+					<br/>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b>&nbsp;&nbsp;{totalCollection.current}</h2>
+					<ProgressBar now={totalCollection.percent} style={{borderRadius:'25px', margin:'5% 0', width:'95%'}}/>
+					<small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>out of {totalCollection.total}</small>
+				</center>
+			<br/>
+			</div>
+			<br />
+			<center>
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Upcoming Renewals</h4>
 			</center>
 			<div className="container">
@@ -161,19 +174,7 @@ function Main() {
 					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Replace</button>
 				</Overlay>
 			}
-			<center>
-				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
-			</center>
-			<div className="container">
-				<center>
-					<br/>
-					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b>&nbsp;&nbsp;{totalCollection.current}</h2>
-					<ProgressBar animated now={totalCollection.percent} />
-					<small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>out of {totalCollection.total}</small>
-				</center>
-			<br/>
-			</div>
-			<br /><br />
+			
 			<center>
 				<h4><b className="fas">{"\uf543"}</b>&nbsp;&nbsp;Invoices</h4>
 			</center>
