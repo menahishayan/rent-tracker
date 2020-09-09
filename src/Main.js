@@ -8,6 +8,8 @@ import { Circle, CircleCondition } from './Components'
 import Popover from 'react-bootstrap/Popover'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Button from 'react-bootstrap/Button'
+import ProgressBar from 'react-bootstrap/ProgressBar'
+
 var db = new DB()
 
 function Main() {
@@ -138,6 +140,14 @@ function Main() {
 				}
 			</div>
 			<br /><br />
+
+			<center>
+				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
+			</center>
+			<div className="container">
+				<ProgressBar animated now={45} />
+			</div>
+
 			<center>
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Invoice</h4>
 			</center>

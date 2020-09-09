@@ -4,7 +4,6 @@ import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
-import ProgressBar from 'react-bootstrap/ProgressBar'
 
 var db = new DB()
 
@@ -79,19 +78,20 @@ function Details(props) {
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
 			<div className="container" onClick={() => setShowHistoryOverlay(true)}>
-			{ person.payment_history!==undefined?
+			{ person.payment_history!==undefined ?
 				<HorizontalTimelineConditional
 					content={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
 							return {
 								title: moment(person.startdate).add(i, "M").format("MMM"),
-								subtitle: (db.getRent({id:person.id},true,false,i+1)) ? e.housing : 0
+								subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0
+
 							}
 						}).slice(-3)
 					}
 					conditionArray={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return person.payment_history[i]||0
+							return ((db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0)===0?false:true
 						}).slice(-3)
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -105,20 +105,20 @@ function Details(props) {
 				<br/>
 			{ person.payment_history!==undefined?
 				<VerticalTimelineConditional
-					content={
-						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return {
-								title: moment(person.startdate).add(i, "M").format("MMM YYYY"),
-								subtitle: (db.getRent({id:person.id},true,false,i+1)) ? e.housing : 0
-							}
-						})
-					}
-					conditionArray={
-						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return person.payment_history[i]||0
+				content={
+					db.getExpectedRent({id:person.id}).map((e, i) => {
+						return {
+							title: moment(person.startdate).add(i, "M").format("MMM"),
+							subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0
 
-						})
-					}
+						}
+					})
+				}
+				conditionArray={
+					db.getExpectedRent({id:person.id}).map((e, i) => {
+						return ((db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0)===0?false:true
+					})
+				}
 					color={['#07ab0a', 'darkgrey']}
 					icon={['\uf00c', '\uf00d']}
 				/>:null
@@ -151,12 +151,7 @@ function Details(props) {
 			</div>
 			<br />
 
-			<center>
-				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
-			</center>
-			<div className="container">
-				<ProgressBar animated now={45} />
-			</div>
+
 
 			{
 				// Less Advance Overlay
