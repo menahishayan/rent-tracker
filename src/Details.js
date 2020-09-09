@@ -44,11 +44,12 @@ function Details(props) {
 	var nextPayment = getNextPayment()
 	const [selectedMonth,setSelectedMonth] = useState(nextPayment);
 
-
 	const getAvailableMonths = () => {
 		setAvailableMonths(db.getExpectedRent({id:person.id}))
 		setShowMonthPicker(!showMonthPicker)
 	}
+
+	const paidRent = db.getPaidRent({id:person.id})
 
 	return (
 		<div>
@@ -84,14 +85,13 @@ function Details(props) {
 						db.getExpectedRent({id:person.id}).map((e, i) => {
 							return {
 								title: moment(person.startdate).add(i, "M").format("MMM"),
-								subtitle: db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1)
-
+								subtitle: paidRent[i].housing
 							}
 						}).slice(-3)
 					}
 					conditionArray={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return ((db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1)))===0?false:true
+							return paidRent[i].housing===0?false:true
 						}).slice(-3)
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -100,29 +100,29 @@ function Details(props) {
 			}
 			</div>
 
-			<SlidingOverlay visible={showHistoryOverlay} height={90} bgClick={() =>setShowHistoryOverlay(false)} >
+			<SlidingOverlay visible={showHistoryOverlay} height={85} bgClick={() =>setShowHistoryOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowHistoryOverlay(showHistoryOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ person.payment_history!==undefined?
-				<VerticalTimelineConditional
-				content={
-					db.getExpectedRent({id:person.id}).map((e, i) => {
-						return {
-							title: moment(person.startdate).add(i, "M").format("MMM"),
-							subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1))||0
+				{ person.payment_history!==undefined?
+					<VerticalTimelineConditional
+						content={
+							db.getExpectedRent({id:person.id}).map((e, i) => {
+								return {
+									title: moment(person.startdate).add(i, "M").format("MMM"),
+									subtitle: `${paidRent[i].housing}, ${paidRent[i].others}`
 
+								}
+							})
 						}
-					})
+						conditionArray={
+							db.getExpectedRent({id:person.id}).map((e, i) => {
+								return paidRent[i].housing===0?false:true
+							})
+						}
+						color={['#07ab0a', 'darkgrey']}
+						icon={['\uf00c', '\uf00d']}
+					/>:null
 				}
-				conditionArray={
-					db.getExpectedRent({id:person.id}).map((e, i) => {
-						return ((db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1))||0)===0?false:true
-					})
-				}
-					color={['#07ab0a', 'darkgrey']}
-					icon={['\uf00c', '\uf00d']}
-				/>:null
-			}
 			</SlidingOverlay>
 			<br />
 

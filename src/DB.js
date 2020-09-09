@@ -142,74 +142,6 @@ class DB extends React.Component {
       }
    }
 
-   getDues = (identifier, returnStatusOnly, getAllItems, month) => {
-      var person = this.getPersonFromIdentifier(identifier)
-      let expectedRent = []
-
-      for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1,"M")); s.add(1, "M").startOf('month')) {
-         if(s.isAfter(moment())) break;
-         let year = Math.floor(expectedRent.length / 11)
-         let expectedSubTotal = {
-            housing: person.base_rent * Math.pow(1.05, year),
-            others: 0
-         }
-         if (person.invoices)
-            person.invoices.forEach((invoice) => {
-               if (moment(invoice.date, "YYYY-MM-DD").month() === s.month())
-                  invoice.particulars.forEach(item => {
-                     expectedSubTotal.others += item.amount
-                  });
-            });
-         let lessForMonth = 0
-         // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
-         if (lessForMonth)
-            expectedSubTotal.housing -= lessForMonth.amount
-         expectedRent.push(expectedSubTotal)
-      }
-
-      let paidRent = [{housing:0,others:0}]
-      if(person.payment_history)
-         paidRent = [...person.payment_history]
-      let dueTotal = { housing: 0, others: 0 }
-
-      // console.log([person.profile.name,person.payment_history,expectedRent.length]);
-
-      while(paidRent.length !== expectedRent.length)
-         paidRent.push({housing:0,others:0})
-
-      let returnValue = {housing: 0,others:0}
-      paidRent.forEach((p, i) => {
-         let due_i = {
-            housing: expectedRent[i].housing - p.housing,
-            others: expectedRent[i].others - p.others
-         }
-         dueTotal.housing += due_i.housing
-         dueTotal.others += due_i.others
-         
-         if (i === month) {
-            // console.log([i,due_i.housing]);
-            if (returnStatusOnly) {
-               if (getAllItems)
-                  returnValue = (due_i.housing === 0 && due_i.others === 0) ? true : false
-               else
-                  returnValue = (due_i.housing === 0) ? true : false
-            }
-            else
-               returnValue =  (getAllItems) ? due_i : due_i.housing
-         }
-      });
-
-      if(month) dueTotal = returnValue 
-      if (returnStatusOnly) {
-         if (getAllItems)
-            return (dueTotal.housing === 0 && dueTotal.others === 0) ? true : false
-         else
-            return (dueTotal.housing === 0) ? true : false
-      }
-      else
-         return (getAllItems) ? dueTotal : dueTotal.housing
-   }
-
    getExpectedRent = (identifier, month) => {
       var person = this.getPersonFromIdentifier(identifier);
       let expectedRent = []
@@ -236,6 +168,54 @@ class DB extends React.Component {
          expectedRent.push(expectedSubTotal)
       }
       return expectedRent
+   }
+
+   getDues = (identifier, returnStatusOnly, getAllItems, month) => {
+      var person = this.getPersonFromIdentifier(identifier)
+      let expectedRent = this.getExpectedRent({id:person.id})
+
+      let paidRent = [{housing:0,others:0}]
+      if(person.payment_history) paidRent = [...person.payment_history]
+
+      let dueTotal = { housing: 0, others: 0 }
+      // console.log([person.profile.name,person.payment_history,expectedRent.length]);
+
+      while(paidRent.length !== expectedRent.length) paidRent.push({housing:0,others:0})
+
+      let returnValue = {housing: 0,others:0}
+      paidRent.forEach((p, i) => {
+         let due_i = {
+            housing: expectedRent[i].housing - p.housing,
+            others: expectedRent[i].others - p.others
+         }
+         dueTotal.housing += due_i.housing
+         dueTotal.others += due_i.others
+         
+         if (i === month) returnValue =  due_i
+      });
+
+      if(month) dueTotal = returnValue 
+      if (returnStatusOnly) {
+         if (getAllItems)
+            return (dueTotal.housing === 0 && dueTotal.others === 0) ? true : false
+         else
+            return (dueTotal.housing === 0) ? true : false
+      }
+      else
+         return (getAllItems) ? dueTotal : dueTotal.housing
+   }
+
+   getPaidRent = (identifier, month) => {
+      var person = this.getPersonFromIdentifier(identifier)
+      let expectedRent = this.getExpectedRent({id:person.id})
+
+      let paidRent = [{housing:0,others:0}]
+      if(person.payment_history) paidRent = [...person.payment_history]
+
+      while(paidRent.length !== expectedRent.length) paidRent.push({housing:0,others:0})
+      // console.log([person.profile.name,person.payment_history,expectedRent.length]);
+      
+      return month ? paidRent[month]||{housing: 0,others:0} : paidRent
    }
 
    getLess = (identifier, month) => {
