@@ -173,8 +173,8 @@ function Main() {
 					<h3><b>{db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name}</b></h3>
 						{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br/>
 						{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY") }<br/>
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#ED0034'}}>Vacate</button>&nbsp;&nbsp;
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}} onClick={() => {setRedirect('/addUser'); }}>Replace</button>
+					<button className="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#ED0034'}}>Vacate</button>&nbsp;&nbsp;
+					<button className="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}} onClick={() => {setRedirect('/add-person'); }}>Replace</button>
 				</Overlay>
 			}
 
@@ -194,7 +194,7 @@ function Main() {
 				<p style={{ marginTop:'-2%' }}>Stairs & Pump</p>
 				<input name="eb" style={{display:'inline-block', color:'black', backgroundColor:'white'}} type='number' pattern="[0-9]*" defaultValue={510} ref={register} className="editable-label-input"/>
 				<br/><br/>
-				<button className="overlay-button" style={{marginTop:'5%',backgroundColor:'#006CFF', color:'white'}} onClick={() => { setRedirectProps(getValues("eb")); setRedirect('/generate-invoice'); }}>Next</button>
+				<button className="overlay-button" style={{marginTop:'5%',backgroundColor:'#006CFF', color:'white'}} onClick={() => { setRedirectProps(parseInt(getValues("eb"))); setRedirect('/generate-invoice'); }}>Next</button>
 			</Overlay>
 			<br /><br />
 		</div>

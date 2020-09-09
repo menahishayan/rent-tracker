@@ -1,11 +1,11 @@
-import React ,{Fragment,useEffect }from 'react';
+import React ,{ Fragment, useEffect }from 'react';
 import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
-import Firebase from 'firebase';
-import config from './config';
 import DB from './DB';
 
-function addUser(){
+var db = new DB()
+
+function AddPerson(){
 	// const [name, setname] = useForm();
 	// const [id, setid] = useForm();
 	// const [mobile, setmobile] = useForm();
@@ -45,4 +45,4 @@ function addUser(){
 	)
 }
 
-export default addUser;
+export default AddPerson;
