@@ -17,6 +17,9 @@ function Main() {
 
 	useEffect(() => {
 		db.refreshCache()
+		db.persons().forEach(p => {
+			console.log(getNextPayment(p).month.isAfter(moment()));
+		})
 	}, [])
 
 	const generateRenewalsList = () => {
@@ -50,10 +53,15 @@ function Main() {
 			return {
 				i: month-1,
 				month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
-				amount: db.getExpectedRent({id:person.id},month)
+				amount: db.getExpectedRent(person,month)
 			}
 		}
-		else return moment(person.startdate)
+		else 
+			return {
+				i: 0,
+				month: moment(person.startdate),
+				amount: db.getExpectedRent(person,1)
+			}
 	}
 
 	if (redirect)
@@ -78,7 +86,7 @@ function Main() {
 								{
 									db.persons(building).map((person, i) => (
 										<Fragment key={b + i}>
-											<CircleCondition title={db.getNickname(person.profile)} condition={db.getPaidRent(person).slice(-1).housing>0} onClick={() => { setRedirectProps(person); setRedirect('/details'); }} color={['#07ab0a', 'darkgrey']} icon={['\uf00c', '\uf00d']} />
+											<CircleCondition title={db.getNickname(person.profile)} condition={getNextPayment(person).month.isAfter(moment())} onClick={() => { setRedirectProps(person); setRedirect('/details'); }} color={['#07ab0a', 'darkgrey']} icon={['\uf00c', '\uf00d']} />
 											<br style={i % 3 === 2 ? { display: 'block' } : { display: 'none' }} />
 										</Fragment>
 									))
@@ -160,12 +168,13 @@ function Main() {
 				<ProgressBar animated now={getProgressBar()} />
 
 			</div>
-
+			<br /><br />
 			<center>
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Invoice</h4>
 			</center>
 			<div className="container">
 			</div>
+			<br /><br />
 		</div>
 	)
 }
