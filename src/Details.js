@@ -189,12 +189,12 @@ function Details(props) {
 						</b>
 					</h3>
 					<br/><br/>
-					<div style={{display:'inline-block', width:'200%', transition:'.2s ease', marginLeft: !editOtherAmount ? '8%' : '-110%', position:'relative', zIndex:10}}>
-						<div style={{display:'inline-block', width:'40%'}}>
+					<div style={{display:'inline-block', width:'210%', transition:'.2s ease', marginLeft: !editOtherAmount ? '4%' : '-115%', position:'relative', zIndex:10}}>
+						<div style={{display:'inline-block', width:'45%'}}>
 							<b className="fas" style={{ fontSize: 30,display:'inline-block' }}>{"\uf156"}</b>
 							<input name="housing-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={selectedMonth.amount.housing} ref={register} className="editable-label-input"/>
 						</div>
-						<div style={{display:'inline-block', marginLeft:'15%', width:'40%'}}>
+						<div style={{display:'inline-block', marginLeft:'10%', width:'45%'}}>
 							<b className="fas" style={{ fontSize: 30,display:'inline-block' }}>{"\uf156"}</b>
 							<input name="other-payment" style={{display:'inline-block'}} type='number' pattern="[0-9]*" defaultValue={selectedMonth.amount.others} ref={register} className="editable-label-input"/>
 						</div>
@@ -202,7 +202,7 @@ function Details(props) {
 				</center>
 				<b className="fas" onClick={() => setEditOtherAmount(!editOtherAmount)} style={{ fontSize: 22, float:'right', marginRight:'5%', marginTop:'-15%', position:'relative', zIndex:15}}>{"\uf1b2"}</b>
 				<br/><br/>
-				<center><button className="overlay-button" onClick={() => console.log(selectedMonth.i,getValues(["housing-payment", "other-payment"]))} style={{color:'#006CFF'}}>Save</button></center>
+				<center><button className="overlay-button" onClick={() => {db.addPay(person,selectedMonth.i+1,{housing:parseInt(getValues("housing-payment")), others:parseInt(getValues("other-payment"))}); resetAddPayOverlay()}} style={{color:'#006CFF'}}>Save</button></center>
 			</SlidingOverlay>
 			{
 				// Date Picker Overlay

@@ -133,12 +133,22 @@ class DB extends React.Component {
 
    updateUser = (id, item, data) => {
       if (id && data) {
-         Firebase.database().ref(id + item).update(data, (error) => {
-            return new Promise((resolve, reject) => {
-               if (error) reject(error);
-               resolve(this.refreshCache(id))
+         if(Array.isArray(data))
+            Firebase.database().ref(id + '/' + item).set(data, (error) => {
+               console.log(data);
+               console.log(error);
+               return new Promise((resolve, reject) => {
+                  if (error) reject(error);
+                  resolve(this.refreshCache(id))
+               })
             })
-         })
+         else 
+            Firebase.database().ref(id + '/' + item).update(data, (error) => {
+               return new Promise((resolve, reject) => {
+                  if (error) reject(error);
+                  resolve(this.refreshCache(id))
+               })
+            })
       }
    }
 
@@ -243,6 +253,7 @@ class DB extends React.Component {
    }
 
    getNickname = (profile) => {
+      if(!profile) return 'undefined'
       return profile.nickname ? profile.nickname : profile.name.split(' ')[0]
    }
 

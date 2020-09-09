@@ -4,10 +4,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import './Main.css'
 import moment from 'moment';
 import { Redirect } from 'react-router';
-import { Circle, CircleCondition } from './Components'
-import Popover from 'react-bootstrap/Popover'
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Button from 'react-bootstrap/Button'
+import { Circle, CircleCondition, Overlay } from './Components'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 
 var db = new DB()
@@ -15,6 +12,9 @@ var db = new DB()
 function Main() {
 	const [redirect, setRedirect] = useState();
 	const [redirectProps, setRedirectProps] = useState();
+	const [tennantOverlay, setTennantOverlay] = useState(false);
+	const [selectedTennant, setSelectedTennant] = useState();
+
 	useEffect(() => {
 		db.refreshCache()
 	}, [])
@@ -106,27 +106,9 @@ function Main() {
 										<div className="floor">
 											{
 												db.getDoors(building, floor).map((door, d) =>
-												<OverlayTrigger  trigger="click" key={d}
-													overlay={
-														<Popover id={`popover-positioned-top`}>
-															<Popover.Title as="h3"><center><b>{db.data[`${building}_${floor}_${door}`].profile.name}</b></center></Popover.Title>
-												  			<Popover.Content style={{fontSize:18}}>
-																<center>
-																	<small>
-																		{`${floor === 0 ? 'G' : floor}0${door}, #${building}`}<br/>
-																		{'Since ' + moment(db.data[`${building}_${floor}_${door}`].startdate).format("Do MMM, YYYY") }<br/>
-																	</small>
-																</center>
-																<Button variant="danger" style={{marginTop:'2%'}}>Vacate</Button>&nbsp;&nbsp;
-																<Button variant="info" style={{marginTop:'2%'}}>Replace</Button>
-															</Popover.Content>
-														</Popover>
-													}
-												>
-													<div  style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
+													<div onClick={() => {setSelectedTennant({building,floor,door}); setTennantOverlay(true)}} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
 														<center><b className="door-label"><b className="fas">{"\uf52a"}</b>&nbsp;{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
 													</div>
-												</OverlayTrigger>
 												)
 											}
 										</div>
@@ -140,7 +122,15 @@ function Main() {
 				}
 			</div>
 			<br /><br />
-
+			{	selectedTennant && 
+				<Overlay visible={tennantOverlay} bgClick={() => setTennantOverlay(!tennantOverlay)} height={30}>
+					<h3><b>{db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name}</b></h3>
+						{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br/>
+						{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY") }<br/>
+					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#ED0034'}}>Vacate</button>&nbsp;&nbsp;
+					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Replace</button>
+				</Overlay>
+			}
 			<center>
 				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
 			</center>
