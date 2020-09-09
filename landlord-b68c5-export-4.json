@@ -451,6 +451,9 @@
     } ],
     "payment_history" : [ {
       "housing" : 12000,
+      "others" : 0
+    }, {
+      "housing" : 12000,
       "others" : 856
     }, {
       "housing" : 12000,

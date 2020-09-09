@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
-import { Circle, HorizontalTimeline,VerticalTimelineConditional, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
+import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
 
 var db = new DB()
 
@@ -90,7 +90,7 @@ function Details(props) {
 					}
 					conditionArray={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return db.getRent({id:person.id},true,false,i+1)
+							return person.payment_history[i]||0
 						}).slice(-3)
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -114,7 +114,8 @@ function Details(props) {
 					}
 					conditionArray={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return db.getRent({id:person.id},true,false,i+1)
+							return person.payment_history[i]||0
+							
 						})
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -149,19 +150,14 @@ function Details(props) {
 			</div>
 			<br />
 			{
-				// Less Advance Overlay 
+				// Less Advance Overlay
 			}
 			<SlidingOverlay visible={showAdvanceOverlay} height={90} bgClick={() =>setShowAdvanceOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 			{ person.payment_history!==undefined && db.getLess({ id: person.id })!==0?
-				<VerticalTimelineConditional
+				<VerticalTimeline
 					content={ person.less.map((item) => { return {title:item.reason, subtitle:item.amount}}) }
-					conditionArray={
-						db.getExpectedRent({id:person.id}).map((e, i) => db.getRent({id:person.id},true,false,i+1))
-					}
-					color={['#07ab0a', 'darkgrey']}
-					icon={['\uf00c', '\uf00d']}
 				/>:null
 			}
 			</SlidingOverlay>
@@ -185,7 +181,7 @@ function Details(props) {
 			}
 			<Circle color="#006CFF" icon={"\uf067"} style={{ position: 'fixed', bottom: '1%', right: '2%' }} onClick={() => setShowAddPayOverlay(true)}/>
 			{
-				// Add Pay Overlay 
+				// Add Pay Overlay
 			}
 			<SlidingOverlay visible={showAddPayOverlay} bgClick={() => resetAddPayOverlay()} height={48}>
 				<b className="fas" style={{ fontSize: 22,float:'right'}} onClick={() => resetAddPayOverlay()}>{"\uf00d"}</b>
@@ -193,8 +189,8 @@ function Details(props) {
 				<center>
 					<h3 style={{marginLeft:'5%'}}>
 						<b>
-							{!editOtherAmount ? 
-								<span onClick={() => getAvailableMonths()}>{`Rent ${selectedMonth.month.format("MMMM")}`}</span> 
+							{!editOtherAmount ?
+								<span onClick={() => getAvailableMonths()}>{`Rent ${selectedMonth.month.format("MMMM")}`}</span>
 								: "Utilities"
 							}
 						</b>
@@ -223,23 +219,23 @@ function Details(props) {
 				{	availableMonths.length > 0 &&
 					availableMonths.map((a,ai) => (
 						<Fragment key={ai}>
-							{ moment(person.startdate).add(ai,"M").startOf('month').isSame(selectedMonth.month,'month') ? 
+							{ moment(person.startdate).add(ai,"M").startOf('month').isSame(selectedMonth.month,'month') ?
 								<button className="overlay-button-mx" key={ai} style={{margin:'2% 1%'}}
 									onClick={() => {
-										setSelectedMonth({i: ai,month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
-										setValue("housing-payment", selectedMonth.amount.housing); 
+										setSelectedMonth({i: ai,month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a});
+										setValue("housing-payment", selectedMonth.amount.housing);
 										setValue("other-payment", selectedMonth.amount.others);
-										setShowMonthPicker(false); 
+										setShowMonthPicker(false);
 									}}>
 									{moment(person.startdate).add(ai,"M").format("MMM YY")}
 								</button>
-								: 
+								:
 								<span className="overlay-button-mx-light" key={ai}
 									onClick={() => {
-										setSelectedMonth({i: ai,month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a}); 
-										setValue("housing-payment", selectedMonth.amount.housing); 
+										setSelectedMonth({i: ai,month: moment(person.startdate).add(ai,"M").startOf('month'), amount:a});
+										setValue("housing-payment", selectedMonth.amount.housing);
 										setValue("other-payment", selectedMonth.amount.others);
-										setShowMonthPicker(false); 
+										setShowMonthPicker(false);
 									}}>
 										{moment(person.startdate).add(ai,"M").format("MMM YY")}
 								</span>

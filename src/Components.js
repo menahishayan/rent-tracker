@@ -22,7 +22,7 @@ export const Circle = props => (
 )
 
 export const VerticalTimeline = props => (
-	<div className="vertical-timeline">
+	<div className="vertical-timeline" style={{overflow:"scroll",height:'100%'}}>
 		{
 			props.content.map((item, i) => (
 				<div key={i} className="vertical-timeline-container">
