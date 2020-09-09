@@ -9,6 +9,31 @@
 			],
 			"label": "npm: start",
 			"detail": "react-scripts start"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"problemMatcher": [
+				"$eslint-compact"
+			],
+			"group": "build",
+			"label": "npm: build",
+			"detail": "react-scripts build"
+		},
+		{
+			"label": "firebase: deploy",
+			"type": "shell",
+			"command": "firebase deploy",
+			"group": "build"
+		},
+		{
+			"label": "Build",
+			"dependsOn": [
+				"npm: build",
+				"firebase: deploy"
+			],
+			"dependsOrder": "sequence",
+			"problemMatcher": []
 		}
 	]
 }
