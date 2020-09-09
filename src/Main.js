@@ -6,6 +6,7 @@ import moment from 'moment';
 import { Redirect } from 'react-router';
 import { Circle, CircleCondition, Overlay } from './Components'
 import ProgressBar from 'react-bootstrap/ProgressBar'
+import { useForm } from 'react-hook-form'
 
 var db = new DB()
 
@@ -14,6 +15,8 @@ function Main() {
 	const [redirectProps, setRedirectProps] = useState();
 	const [tennantOverlay, setTennantOverlay] = useState(false);
 	const [selectedTennant, setSelectedTennant] = useState();
+	const [ebOverlay, setEBOverlay] = useState(false);
+	const { register, getValues, setValue } = useForm();
 
 	useEffect(() => {
 		db.refreshCache()
@@ -179,7 +182,20 @@ function Main() {
 				<h4><b className="fas">{"\uf543"}</b>&nbsp;&nbsp;Invoices</h4>
 			</center>
 			<div className="container">
+				<center>
+					<h3>Generate</h3>
+					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#006CFF'}} onClick={() => setEBOverlay(true)}>{moment().format("MMMM")}</button>&nbsp;&nbsp;
+					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Quarterly</button>
+					<br/><br/>
+				</center>
 			</div>
+			<Overlay visible={ebOverlay} bgClick={() => setEBOverlay(!ebOverlay)} height={38}>
+				<h3><b>Electricity</b></h3>
+				<p style={{ marginTop:'-2%' }}>Stairs & Pump</p>
+				<input name="housing-payment" style={{display:'inline-block', color:'black', backgroundColor:'white'}} type='number' pattern="[0-9]*" defaultValue={510} ref={register} class="editable-label-input"/>
+				<br/><br/>
+				<button class="overlay-button" style={{marginTop:'5%',backgroundColor:'#006CFF', color:'white'}}>Next</button>
+			</Overlay>
 			<br /><br />
 		</div>
 	)
