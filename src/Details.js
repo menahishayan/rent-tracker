@@ -20,13 +20,7 @@ function Details(props) {
 	const idParts = db.parseId(person.id)
 
 	const getNextPayment = () => {
-		// let month = moment().diff(moment(person.startdate).startOf('month'),'months')+1
 		if(person.payment_history!==undefined) {
-			// return {
-			// 	i: month-1,
-			// 	month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
-			// 	amount: db.getExpectedRent(person,month)
-			// }
 			return {
 				i: person.payment_history.length,
 				month: moment(person.startdate).add(person.payment_history.length,"M").startOf('month'),
@@ -211,7 +205,7 @@ function Details(props) {
 				<center><button className="overlay-button" onClick={() => console.log(selectedMonth.i,getValues(["housing-payment", "other-payment"]))} style={{color:'#006CFF'}}>Save</button></center>
 			</SlidingOverlay>
 			{
-				// Date Picker Bootstrap Overlay
+				// Date Picker Overlay
 			}
 			<Overlay visible={showMonthPicker} bgClick={() => setShowMonthPicker(!showMonthPicker)} height={40}>
 				<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>

@@ -29,7 +29,7 @@ export const VerticalTimeline = props => (
 				<div key={i} className="vertical-timeline-container">
 					<div className="content">
 						<h5>{item.title}</h5>
-						<p>{item.subtitle}</p>
+						<div style={{marginBottom:'5%'}}>{item.subtitle}</div>
 					</div>
 				</div>
 			))
@@ -80,7 +80,7 @@ export const VerticalTimelineConditional = props => (
 				<div key={i} className="vertical-timeline-container">
 					<div className="content" style={{color:'white',width:'130%'}}>
 						<h5>{item.title}</h5>
-						<p>{item.subtitle}</p>
+						<div style={{marginBottom:'5%'}}>{item.subtitle}</div>
 						<CircleCondition small
 							color={props.color}
 							icon={props.icon}
