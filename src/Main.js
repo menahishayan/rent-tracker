@@ -56,7 +56,7 @@ function Main() {
 								{
 									db.persons(building).map((person, i) => (
 										<Fragment key={b + i}>
-											<CircleCondition title={db.getNickname(person.profile)} condition={db.getPaidRent({ identifier:person.id }).slice(-1).housing>0} onClick={() => { setRedirectProps(person); setRedirect('/details'); }} color={['#07ab0a', 'darkgrey']} icon={['\uf00c', '\uf00d']} />
+											<CircleCondition title={db.getNickname(person.profile)} condition={db.getPaidRent({id:person.id}).slice(-1).housing>0} onClick={() => { setRedirectProps(person); setRedirect('/details'); }} color={['#07ab0a', 'darkgrey']} icon={['\uf00c', '\uf00d']} />
 											<br style={i % 3 === 2 ? { display: 'block' } : { display: 'none' }} />
 										</Fragment>
 									))
