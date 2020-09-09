@@ -74,7 +74,9 @@ function Details(props) {
 				</div>
 			</div>
 			<br />
-
+			{
+				// Payment History Container
+			}
 			<center>
 				<h4><b className="fas">{"\uf1da"}</b>&nbsp;&nbsp;Rent History</h4>
 			</center>
@@ -82,50 +84,45 @@ function Details(props) {
 			{ person.payment_history!==undefined ?
 				<HorizontalTimelineConditional
 					content={
-						db.getExpectedRent({id:person.id}).map((e, i) => {
+						paidRent.map((p, i) => {
 							return {
 								title: moment(person.startdate).add(i, "M").format("MMM"),
-								subtitle: paidRent[i].housing
+								subtitle: p.housing
 							}
 						}).slice(-3)
 					}
-					conditionArray={
-						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return paidRent[i].housing===0?false:true
-						}).slice(-3)
-					}
+					conditionArray={ paidRent.map(p => p.housing!==0).slice(-3) }
 					color={['#07ab0a', 'darkgrey']}
 					icon={['\uf00c', '\uf00d']}
 				/>:null
 			}
 			</div>
-
+			{
+				// Payment History Overlay
+			}
 			<SlidingOverlay visible={showHistoryOverlay} height={85} bgClick={() =>setShowHistoryOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowHistoryOverlay(showHistoryOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 				{ person.payment_history!==undefined?
 					<VerticalTimelineConditional
 						content={
-							db.getExpectedRent({id:person.id}).map((e, i) => {
+							paidRent.map((p, i) => {
 								return {
-									title: moment(person.startdate).add(i, "M").format("MMM"),
-									subtitle: `${paidRent[i].housing}, ${paidRent[i].others}`
-
+									title: moment(person.startdate).add(i, "M").format("MMM YY"),
+									subtitle: <div><b className="fas">{"\uf015"}</b> {p.housing}&nbsp;&nbsp;&nbsp;&nbsp;<b className="fas">{"\uf1b2"}</b> {p.others}</div>
 								}
 							})
 						}
-						conditionArray={
-							db.getExpectedRent({id:person.id}).map((e, i) => {
-								return paidRent[i].housing===0?false:true
-							})
-						}
+						conditionArray={ paidRent.map(p => p.housing!==0) }
 						color={['#07ab0a', 'darkgrey']}
 						icon={['\uf00c', '\uf00d']}
 					/>:null
 				}
 			</SlidingOverlay>
 			<br />
-
+			{
+				// Less Advance Container
+			}
 			<center>
 				<h4><b className="fas">{"\uf3d1"}</b>&nbsp;&nbsp;Returnable Advance</h4>
 			</center>

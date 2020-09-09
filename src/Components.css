@@ -60,14 +60,14 @@ hr {
 }
 
 /* The actual vertical-timeline (the vertical ruler) */
-.vertical-timeline::after {
+.vertical-timeline::before {
   content: '';
   position: absolute;
   width: 3px;
   background-color: lightgrey;
   top: 0;
   bottom: 0;
-  left: 70%;
+  left: 80%;
   margin-left: -3px;
 }
 
@@ -76,16 +76,16 @@ hr {
   padding: 10px 40px;
   position: relative;
   background-color: inherit;
-  width: 60%;
+  width: 71%;
 }
 
 /* The circles on the vertical-timeline */
-.vertical-timeline-container::after {
+.vertical-timeline-container::before {
   content: '';
   position: absolute;
   width: 15px;
   height: 15px;
-  right: -20%;
+  right: -15%;
   background-color: grey;
   top: 15px;
   border-radius: 50%;
