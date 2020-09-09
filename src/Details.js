@@ -4,6 +4,7 @@ import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
+import ProgressBar from 'react-bootstrap/ProgressBar'
 
 var db = new DB()
 
@@ -115,7 +116,7 @@ function Details(props) {
 					conditionArray={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
 							return person.payment_history[i]||0
-							
+
 						})
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -149,6 +150,14 @@ function Details(props) {
 				}
 			</div>
 			<br />
+
+			<center>
+				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
+			</center>
+			<div className="container">
+				<ProgressBar animated now={45} />
+			</div>
+
 			{
 				// Less Advance Overlay
 			}
