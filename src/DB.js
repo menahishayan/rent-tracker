@@ -142,8 +142,7 @@ class DB extends React.Component {
       }
    }
 
-   getExpectedRent = (identifier, month) => {
-      var person = this.getPersonFromIdentifier(identifier);
+   getExpectedRent = (person, month) => {
       let expectedRent = []
 
       for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1,"M")); s.add(1, "M").startOf('month')) {
@@ -170,9 +169,8 @@ class DB extends React.Component {
       return expectedRent
    }
 
-   getDues = (identifier, returnStatusOnly, getAllItems, month) => {
-      var person = this.getPersonFromIdentifier(identifier)
-      let expectedRent = this.getExpectedRent({id:person.id})
+   getDues = (person, returnStatusOnly, getAllItems, month) => {
+      let expectedRent = this.getExpectedRent(person)
 
       let paidRent = [{housing:0,others:0}]
       if(person.payment_history) paidRent = [...person.payment_history]
@@ -205,21 +203,19 @@ class DB extends React.Component {
          return (getAllItems) ? dueTotal : dueTotal.housing
    }
 
-   getPaidRent = (identifier, month) => {
-      var person = this.getPersonFromIdentifier(identifier)
-      let expectedRent = this.getExpectedRent({id:person.id})
+   getPaidRent = (person, month) => {
+      let expectedRent = this.getExpectedRent(person)
 
       let paidRent = [{housing:0,others:0}]
       if(person.payment_history) paidRent = [...person.payment_history]
 
       while(paidRent.length !== expectedRent.length) paidRent.push({housing:0,others:0})
       // console.log([person.profile.name,person.payment_history,expectedRent.length]);
-      
+
       return month ? paidRent[month]||{housing: 0,others:0} : paidRent
    }
 
-   getLess = (identifier, month) => {
-      var person = this.getPersonFromIdentifier(identifier);
+   getLess = (person, month) => {
       var sum = 0, dueForMonth = 0
       if (person.less)
          person.less.forEach((item, i) => {
@@ -259,8 +255,7 @@ class DB extends React.Component {
       }
    }
 
-   addPay = (identifier, month, payment) => {
-      var person = this.getPersonFromIdentifier(identifier);
+   addPay = (person, month, payment) => {
       let paidRent = person.payment_history || []
       if(month > paidRent.length)
          paidRent.push(payment)

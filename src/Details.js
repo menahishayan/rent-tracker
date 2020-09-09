@@ -25,15 +25,19 @@ function Details(props) {
 			// return {
 			// 	i: month-1,
 			// 	month: moment().subtract(month - person.payment_history.length-1, "M").startOf('month'),
-			// 	amount: db.getExpectedRent({id:person.id},month)
+			// 	amount: db.getExpectedRent(person,month)
 			// }
 			return {
 				i: person.payment_history.length,
 				month: moment(person.startdate).add(person.payment_history.length,"M").startOf('month'),
-				amount: db.getExpectedRent({id:person.id},person.payment_history.length)
+				amount: db.getExpectedRent(person,person.payment_history.length)
 			}
 		}
-		else return moment(person.startdate)
+		else return {
+			i: 0,
+			month: moment(person.startdate),
+			amount: db.getExpectedRent(person,1)
+		}
 	}
 
 	const resetAddPayOverlay = () => {
@@ -45,11 +49,11 @@ function Details(props) {
 	const [selectedMonth,setSelectedMonth] = useState(nextPayment);
 
 	const getAvailableMonths = () => {
-		setAvailableMonths(db.getExpectedRent({id:person.id}))
+		setAvailableMonths(db.getExpectedRent(person))
 		setShowMonthPicker(!showMonthPicker)
 	}
 
-	const paidRent = db.getPaidRent({id:person.id})
+	const paidRent = db.getPaidRent(person)
 
 	return (
 		<div>
@@ -129,11 +133,11 @@ function Details(props) {
 			<div className="container">
 				<br/>
 				<center>
-					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-db.getLess({id: person.id})}</b></h2>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-db.getLess(person)}</b></h2>
 				</center>
 				<br/>
 				{
-				db.getLess({id: person.id})!==0?
+				db.getLess(person)!==0?
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
 						{
 							person.less.map((item, i) => (
@@ -153,7 +157,7 @@ function Details(props) {
 			<SlidingOverlay visible={showAdvanceOverlay} height={90} bgClick={() =>setShowAdvanceOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
-			{ person.payment_history!==undefined && db.getLess({id: person.id})!==0?
+			{ person.payment_history!==undefined && db.getLess(person)!==0?
 				<VerticalTimeline
 					content={ person.less.map((item) => { return {title:item.reason, subtitle:item.amount}}) }
 				/>:null
