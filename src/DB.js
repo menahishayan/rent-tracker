@@ -173,10 +173,10 @@ class DB extends React.Component {
          // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
          if (lessForMonth)
             expectedSubTotal.housing -= lessForMonth.amount
-         if(expectedRent.length+1 === month) return expectedSubTotal
+         if(expectedRent.length+1 === month) return Math.floor(expectedSubTotal)
          expectedRent.push(expectedSubTotal)
       }
-      return expectedRent
+      return Math.floor(expectedRent)
    }
 
    getDues = (person, returnStatusOnly, getAllItems, month) => {

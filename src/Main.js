@@ -17,9 +17,6 @@ function Main() {
 
 	useEffect(() => {
 		db.refreshCache()
-		db.persons().forEach(p => {
-			console.log(getNextPayment(p).month.isAfter(moment()));
-		})
 	}, [])
 
 	const generateRenewalsList = () => {
@@ -35,17 +32,6 @@ function Main() {
 					: null
 			))
 		return array
-	}
-
-	const getProgressBar = () => {
-		var sumRent=0 ,sumExpectedRent=0,month
-		db.persons().forEach((person) => {
-			month=getNextPayment(person)
-			sumRent+=db.getPaidRent(person,month.i).housing||0
-			sumExpectedRent+=db.getExpectedRent(person,month.i+1).housing
-			console.log(db.getPaidRent(person,month.i).housing);
-		});
-		return {current:sumRent,total:sumExpectedRent,percent:(sumRent/sumExpectedRent)*100}
 	}
 
 	const getNextPayment = (person) => {
@@ -64,6 +50,19 @@ function Main() {
 				amount: db.getExpectedRent(person,1)
 			}
 	}
+
+	const getTotalCollection = () => {
+		var sumRent=0 ,sumExpectedRent=0
+		db.persons().forEach((person) => {
+			let month=getNextPayment(person)
+			let paid = db.getPaidRent(person,month.i).housing||0
+			sumRent+=paid
+			sumExpectedRent+= paid===0 ? db.getExpectedRent(person,month.i+1).housing : paid
+		});
+		return {current:sumRent,total:sumExpectedRent,percent:(sumRent/sumExpectedRent)*100}
+	}
+
+	const totalCollection = getTotalCollection()
 
 	if (redirect)
 		return <Redirect push to={{
@@ -166,9 +165,13 @@ function Main() {
 				<h4><b className="fas">{"\uf4c0"}</b>&nbsp;&nbsp;Collected</h4>
 			</center>
 			<div className="container">
-			<center><h3>{getProgressBar().current}</h3>
-				<ProgressBar animated now={getProgressBar().percent} />
-			</center>
+				<center>
+					<br/>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b>&nbsp;&nbsp;{totalCollection.current}</h2>
+					<ProgressBar animated now={totalCollection.percent} />
+					<small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>out of {totalCollection.total}</small>
+				</center>
+			<br/>
 			</div>
 			<br /><br />
 			<center>
