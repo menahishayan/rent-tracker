@@ -43,7 +43,7 @@ function Main() {
 				amount: db.getExpectedRent(person,month)
 			}
 		}
-		else 
+		else
 			return {
 				i: 0,
 				month: moment(person.startdate),
@@ -165,16 +165,16 @@ function Main() {
 				}
 			</div>
 			<br /><br />
-			{	selectedTennant && 
+			{	selectedTennant &&
 				<Overlay visible={tennantOverlay} bgClick={() => setTennantOverlay(!tennantOverlay)} height={25}>
 					<h3><b>{db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name}</b></h3>
 						{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br/>
 						{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY") }<br/>
 					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#ED0034'}}>Vacate</button>&nbsp;&nbsp;
-					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}}>Replace</button>
+					<button class="overlay-button-mx" style={{marginTop:'5%',backgroundColor:'#00A4BC'}} onClick={() => {setRedirect('/addUser'); }}>Replace</button>
 				</Overlay>
 			}
-			
+
 			<center>
 				<h4><b className="fas">{"\uf543"}</b>&nbsp;&nbsp;Invoices</h4>
 			</center>
