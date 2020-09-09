@@ -84,14 +84,14 @@ function Details(props) {
 						db.getExpectedRent({id:person.id}).map((e, i) => {
 							return {
 								title: moment(person.startdate).add(i, "M").format("MMM"),
-								subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0
+								subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1))||0
 
 							}
 						}).slice(-3)
 					}
 					conditionArray={
 						db.getExpectedRent({id:person.id}).map((e, i) => {
-							return ((db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0)===0?false:true
+							return ((db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1))||0)===0?false:true
 						}).slice(-3)
 					}
 					color={['#07ab0a', 'darkgrey']}
@@ -109,14 +109,14 @@ function Details(props) {
 					db.getExpectedRent({id:person.id}).map((e, i) => {
 						return {
 							title: moment(person.startdate).add(i, "M").format("MMM"),
-							subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0
+							subtitle: (db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1))||0
 
 						}
 					})
 				}
 				conditionArray={
 					db.getExpectedRent({id:person.id}).map((e, i) => {
-						return ((db.getExpectedRent({id:person.id},i+1).housing-db.getRent({id:person.id},false,false,i+1))||0)===0?false:true
+						return ((db.getExpectedRent({id:person.id},i+1).housing-db.getDues({id:person.id},false,false,i+1))||0)===0?false:true
 					})
 				}
 					color={['#07ab0a', 'darkgrey']}
@@ -150,9 +150,6 @@ function Details(props) {
 				}
 			</div>
 			<br />
-
-
-
 			{
 				// Less Advance Overlay
 			}

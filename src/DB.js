@@ -142,7 +142,7 @@ class DB extends React.Component {
       }
    }
 
-   getRent = (identifier, returnStatusOnly, getAllItems, month) => {
+   getDues = (identifier, returnStatusOnly, getAllItems, month) => {
       var person = this.getPersonFromIdentifier(identifier)
       let expectedRent = []
 
