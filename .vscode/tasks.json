@@ -33,7 +33,11 @@
 				"firebase: deploy"
 			],
 			"dependsOrder": "sequence",
-			"problemMatcher": []
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
 		}
 	]
 }

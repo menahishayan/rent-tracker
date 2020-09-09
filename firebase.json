@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "rent-86",
     "public": "build",
     "ignore": [
       "firebase.json",

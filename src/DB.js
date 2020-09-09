@@ -1,4 +1,4 @@
-import Firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/database';
 import config from './config';
 import moment from 'moment';
@@ -9,8 +9,8 @@ class DB extends React.Component {
       super(props)
       // eslint-disable-next-line no-unused-vars
       var data;
-      if (!Firebase.apps.length) {
-         Firebase.initializeApp(config);
+      if (!firebase.apps.length) {
+         firebase.initializeApp(config);
          this.get()
       }
    }
@@ -22,7 +22,7 @@ class DB extends React.Component {
          if (item) path += '/' + item
       }
       console.log("refresh");
-      let ref = Firebase.database().ref(path);
+      let ref = firebase.database().ref(path);
       ref.on('value', async (snapshot) => {
          if (this.data && id) {
             if (item) this.data[id][item] = await snapshot.val()
@@ -43,7 +43,7 @@ class DB extends React.Component {
          if (cache)
             this.data = JSON.parse(cache)
          else {
-            let ref = Firebase.database().ref('/');
+            let ref = firebase.database().ref('/');
             ref.on('value', async (snapshot) => {
                this.data = await snapshot.val()
                localStorage.setItem('rent-db', JSON.stringify(this.data));
@@ -62,7 +62,7 @@ class DB extends React.Component {
       else {
          var id = Object.keys(this.data)[index]
          if (!this.data) this.get()
-         let ref = Firebase.database().ref('/' + id);
+         let ref = firebase.database().ref('/' + id);
          ref.on('value', async (snapshot) => {
             this.data[id] = await snapshot.val()
             localStorage.setItem('rent-db', JSON.stringify(this.data));
@@ -134,7 +134,7 @@ class DB extends React.Component {
    updateUser = (id, item, data) => {
       if (id && data) {
          if(Array.isArray(data))
-            Firebase.database().ref(id + '/' + item).set(data, (error) => {
+            firebase.database().ref(id + '/' + item).set(data, (error) => {
                console.log(data);
                console.log(error);
                return new Promise((resolve, reject) => {
@@ -143,7 +143,7 @@ class DB extends React.Component {
                })
             })
          else 
-            Firebase.database().ref(id + '/' + item).update(data, (error) => {
+            firebase.database().ref(id + '/' + item).update(data, (error) => {
                return new Promise((resolve, reject) => {
                   if (error) reject(error);
                   resolve(this.refreshCache(id))
@@ -243,7 +243,7 @@ class DB extends React.Component {
       if (Object.keys(this.data).find(id))
          return false
       else {
-         Firebase.database().ref('/' + id).set(data, (error) => {
+         firebase.database().ref('/' + id).set(data, (error) => {
             return new Promise((resolve, reject) => {
                if (error) reject(error);
                resolve(this.refreshCache(id))
@@ -261,7 +261,7 @@ class DB extends React.Component {
       if (!Object.keys(this.data).find(id))
          return true
       else {
-         Firebase.database().ref(id).remove().catch((e) => {
+         firebase.database().ref(id).remove().catch((e) => {
             console.log(e);
             return false
          });
