@@ -1,5 +1,5 @@
 import Navbar from 'react-bootstrap/Navbar'
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState,useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
@@ -70,7 +70,13 @@ function GenerateInvoice(props) {
 
     const [HS1, setHS1] = useState(formContent[0].isHeadSplit), [HS2, setHS2] = useState(formContent[1].isHeadSplit), [HS3, setHS3] = useState(formContent[2].isHeadSplit);
     const [HS4, setHS4] = useState(formContent[3] ? formContent[3].isHeadSplit : false), [HS5, setHS5] = useState(formContent[4] ? formContent[4].isHeadSplit : false), [HS6, setHS6] = useState(formContent[5] ? formContent[5].isHeadSplit : false);
-    const stateArray = [{ HS: HS1, setHS: setHS1 }, { HS: HS2, setHS: setHS2 }, { HS: HS3, setHS: setHS3 }, { HS: HS4, setHS: setHS4 }, { HS: HS5, setHS: setHS5 }, { HS: HS6, setHS: setHS6 }]
+    const HSStateArray = [{ HS: HS1, setHS: setHS1 }, { HS: HS2, setHS: setHS2 }, { HS: HS3, setHS: setHS3 }, { HS: HS4, setHS: setHS4 }, { HS: HS5, setHS: setHS5 }, { HS: HS6, setHS: setHS6 }]
+
+    // const [PPV1, setPPV1] = useState(), [PPV2, setPPV2] = useState(), [PPV3, setPPV3] = useState();
+    // const [PPV4, setPPV4] = useState(), [PPV5, setPPV5] = useState(), [PPV6, setPPV6] = useState();
+    // const PPVStateArray = [{ PPV: PPV1, setPPV: setPPV1 }, { PPV: PPV2, setPPV: setPPV2 }, { PPV: PPV3, setPPV: setPPV3 }, { PPV: PPV4, setPPV: setPPV4 }, { PPV: PPV5, setPPV: setPPV5 }, { PPV: PPV6, setPPV: setPPV6 }]
+
+    const [PPV, setPPV] = useState([{id: 0,value:0},{id: 0,value:0},{id: 0,value:0},{id: 0,value:0},{id: 0,value:0},{id: 0,value:0}]);
 
     const getDefaultValue = (item, i) => {
         let value = 0
@@ -79,12 +85,12 @@ function GenerateInvoice(props) {
                 if (person[item.valueTemplate])
                     item.perPersonValue.push({
                         id: person.id,
-                        value: stateArray[i].HS ? person[item.valueTemplate] * (person.profile.head_count || 0) : person[item.valueTemplate]
+                        value: HSStateArray[i].HS ? person[item.valueTemplate] * (person.profile.head_count || 0) : person[item.valueTemplate]
                     })
             })
         }
         else if (item.isShared) {
-            if (stateArray[i].HS)
+            if (HSStateArray[i].HS)
                 value = item.value / heads
             else value = item.value / houses
         }
@@ -92,12 +98,25 @@ function GenerateInvoice(props) {
         return Math.round(value, 0)
     }
 
+    useEffect(() => {
+        formContent.forEach((item,i) => {
+            if (item.isPPB) {
+                db.persons().forEach(person => {
+                    if (person[item.valueTemplate])
+                        item.perPersonValue.push({
+                            id: person.id,
+                            value: HSStateArray[i].HS ? person[item.valueTemplate] * (person.profile.head_count || 0) : person[item.valueTemplate]
+                        })
+                })
+                setPPV(item.perPersonValue)
+            }
+        })
+        console.log(PPV);
+    }, [])
+
     const step = (item,i,s) => {
         if(item.isPPB) {
-            item.perPersonValue.forEach(v => {
-                v.value += s
-            })
-            console.log(item.perPersonValue);
+            setPPV(PPV.map(v => {return {id:v.id,value:v.value+s}}))
             setValue(item.fieldname,parseInt(getValues(item.fieldname))+s)
             return
         } 
@@ -138,13 +157,13 @@ function GenerateInvoice(props) {
                                         { item.title.includes('+/-') && <Circle small icon={"\uf067"} style={{ margin: '0 5%', display: 'inline-block' }} onClick={() => step(item,i,10)} />}
                                     </center>
                                 </div>
-                                <small style={{ display: 'inline-block', width: '40%', color: 'darkgrey' }}>{stateArray[i].HS ? "per head" : (item.isShared ? "per house" : "")}</small>
+                                <small style={{ display: 'inline-block', width: '40%', color: 'darkgrey' }}>{HSStateArray[i].HS ? "per head" : (item.isShared ? "per house" : "")}</small>
                                 <br /><br />
                                 {item.isPPB &&
                                     <div style={{ display: 'inline-block', width: '80%' }}>
-                                        {item.isPPB &&
-                                            item.perPersonValue.map((v) => (
-                                                <Circle key={v.id} small color="#5e09b8" icon={"\uf007"} title={v.value || "0"} titleStyle={{ color: 'darkgrey' }} style={{ margin: '0 4%' }} />
+                                        {
+                                            item.perPersonValue.map((v,vi) => (
+                                                <Circle key={v.id} small color="#5e09b8" icon={"\uf007"} title={PPV[vi].value || "0"} titleStyle={{ color: 'darkgrey' }} style={{ margin: '0 4%' }} />
                                             ))
                                         }
                                     </div>
@@ -153,10 +172,10 @@ function GenerateInvoice(props) {
                             {item.isShared &&
                                 <div style={{ display: 'inline-flex', width: '40%', margin: '0 2% 3% 0' }}>
                                     <div style={{ display: 'inline-block', width: '20%', marginRight: '8%' }}>
-                                        <CircleCondition small condition={stateArray[i].HS} onClick={() => stateArray[i].setHS(!stateArray[i].HS)} color={['#006CFF', '#c20808']} icon={['\uf0c0', '\ue065']} />
+                                        <CircleCondition small condition={HSStateArray[i].HS} onClick={() => HSStateArray[i].setHS(!HSStateArray[i].HS)} color={['#006CFF', '#c20808']} icon={['\uf0c0', '\ue065']} />
                                     </div>
                                     <div style={{ display: 'inline-block', width: '80%', marginTop: '1%' }}>
-                                        <small style={{ display: 'inline-block', color: 'darkgrey' }}>{stateArray[i].HS ? "Split Per Head" : "Per House"}</small><br />
+                                        <small style={{ display: 'inline-block', color: 'darkgrey' }}>{HSStateArray[i].HS ? "Split Per Head" : "Per House"}</small><br />
                                     </div>
                                 </div>
                             }
@@ -166,6 +185,7 @@ function GenerateInvoice(props) {
                 ))
             }
             <br /><br />
+            <button>Next</button>
         </div>
     )
 }
