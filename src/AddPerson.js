@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
 import DB from './DB';
 
+
 var db = new DB()
 
 function AddPerson(props){
@@ -43,28 +44,49 @@ function AddPerson(props){
 		</center>
 		<br />
 		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={handleSubmit (d => testSubmitHandler(d))}>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<b className="fas">{"\uf234"}</b><Form.Control type="text" placeholder="Name" ref={register} name='name'/>
+			<Form.Group >
+				<div style={{display:'inline-flex',width:'100%'}}>
+					<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf2bd"}</div>
+					<Form.Control type="text" placeholder="Name" ref={register} name='name' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+				</div>
 			</Form.Group><br/>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="date" placeholder="startdate" ref={register} name='startdate'/>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'6%',fontSize:28}} className="fas">{"\uf073"}</div>
+				<Form.Control type="date" placeholder="startdate" ref={register} name='startdate' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
 			</Form.Group><br/>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="number" placeholder="Advance" ref={register} name='advance'/>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf3d1"}</div>
+				<Form.Control type="number" placeholder="Advance" ref={register} name='advance' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
 			</Form.Group><br/>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="number" placeholder="Base Rent" ref={register} name='base_rent'/>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'8%',fontSize:28}} className="fas">{"\uf156"}</div>
+				<Form.Control type="number" placeholder="Base Rent" ref={register} name='base_rent' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
 			</Form.Group><br/>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count'/>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
+				<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
 			</Form.Group><br/>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile'/>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf879"}</div>
+				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
 			</Form.Group><br/>
-			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="number" placeholder="Water" ref={register} name='water'/>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'7%',fontSize:28}} className="fas">{"\uf043"}</div>
+				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
 			</Form.Group><br/>
-			  <center><Button variant="primary" type="submit">submit</Button></center>
+			  <center> <Button variant="primary" type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
 		</Fragment>
 	)
