@@ -141,7 +141,7 @@ class DB extends React.Component {
                   resolve(this.refreshCache(id))
                })
             })
-         else 
+         else
             firebase.database().ref(id + '/' + item).update(data, (error) => {
                return new Promise((resolve, reject) => {
                   if (error) reject(error);
@@ -197,11 +197,11 @@ class DB extends React.Component {
          }
          dueTotal.housing += due_i.housing
          dueTotal.others += due_i.others
-         
+
          if (i === month) returnValue =  due_i
       });
 
-      if(month) dueTotal = returnValue 
+      if(month) dueTotal = returnValue
       if (returnStatusOnly) {
          if (getAllItems)
             return (dueTotal.housing === 0 && dueTotal.others === 0) ? true : false
@@ -238,6 +238,7 @@ class DB extends React.Component {
    }
 
    addUser = (id, data) => {
+	   console.log(Object.keys(this.data).find(id))
       if (Object.keys(this.data).find(id))
          return false
       else {

@@ -15,35 +15,49 @@ function AddPerson(){
 	// const [rent, setrent] = useForm();
 	// const [headCount, setheadCount] = useForm();
 
-   const { register, handleSubmit } = useForm()
+	const { register, handleSubmit } = useForm()
 
-   const testSubmitHandler = (d) => {
-  	console.log(d);
+	const testSubmitHandler = (d) => {
+		var data={
+				name:d.name,
+				startDate:d.startDate,
+				advance:d.advance,
+				rent:d.rent,
+				headCount:d.headCount,
+				mobile:d.mobile}
+		db.addUser(d.id,data)
 	}
 
 	return(
 		<Fragment>
-		<Form onSubmit={handleSubmit (d => testSubmitHandler(d))}>
 		<br/>
 		<center>
 			<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;Add User</b></h3>
 		</center>
 		<br />
-		<Form style={{marginLeft:'5%',marginRight:'5%'}}>
-			<Form.Group ref={register} style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="text" placeholder="Name" />
+		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={handleSubmit (d => testSubmitHandler(d))}>
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="text" placeholder="Name" ref={register} name='name'/>
 			</Form.Group><br/>
-			<Form.Group ref={register} style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="text" placeholder="ID" />
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="text" placeholder="ID" ref={register} name='id'/>
 			</Form.Group><br/>
-			<Form.Group ref={register} style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="date" placeholder="StartDate" />
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="date" placeholder="StartDate" ref={register} name='startDate'/>
 			</Form.Group><br/>
-			<Form.Group ref={register} style={{borderBottom: "2px solid #1055e0"}}>
-				<Form.Control type="number" placeholder="Advance" />
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="number" placeholder="Advance" ref={register} name='advance'/>
+			</Form.Group><br/>
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="number" placeholder="Rent" ref={register} name='rent'/>
+			</Form.Group><br/>
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="number" placeholder="HeadCount" ref={register} name='headCount'/>
+			</Form.Group><br/>
+			<Form.Group  style={{borderBottom: "2px solid #1055e0"}}>
+				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile'/>
 			</Form.Group><br/>
 			  <center><Button variant="primary" type="submit">submit</Button></center>
-			</Form>
 		</Form>
 		</Fragment>
 	)
