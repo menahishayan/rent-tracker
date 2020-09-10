@@ -111,12 +111,12 @@ function GenerateInvoice(props) {
                 setPPV(item.perPersonValue)
             }
         })
-        console.log(PPV);
     }, [])
 
     const step = (item,i,s) => {
         if(item.isPPB) {
             setPPV(PPV.map(v => {return {id:v.id,value:v.value+s}}))
+            item.perPersonValue = PPV
             setValue(item.fieldname,parseInt(getValues(item.fieldname))+s)
             return
         } 
@@ -124,6 +124,39 @@ function GenerateInvoice(props) {
         else if(item.isShared) item.value += s*houses
         else item.value += s
         setValue(item.fieldname,getDefaultValue(item,i))
+    }
+
+    const generate = (d) => {
+        let src = formContent
+
+        src.forEach((f,i) => {
+            f.value = parseInt(d[f.fieldname])
+            f.isHeadSplit = HSStateArray[i].HS
+            if(f.isPPB)
+                f.perPersonValue = PPV
+        })
+        console.log(src);
+
+        db.persons().forEach(person => {
+            let idParts = db.parseId(person.id)
+            let personInvoice = {
+                id: person.id, 
+                invoice: {
+                    date:moment().format("YYYY-MM-DD"), 
+                    id:`I-${idParts.building.padStart(2,'0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-01`,
+                    head_count: person.profile.head_count,
+                    particulars: []
+                }
+            }
+            src.forEach((f,i) => {
+                if(f.isPPB) {
+                    let ppvForPerson = f.perPersonValue.find(pv => pv.id === person.id) || {value:0}
+                    if(ppvForPerson.value>0) personInvoice.invoice.particulars.push({item: f.title.replace(' +/-',''), amount: ppvForPerson.value, isPerHead: f.isHeadSplit || false})
+                } else if(f.value > 0) personInvoice.invoice.particulars.push({item: f.title.replace(' +/-',''), amount:f.value, isPerHead: f.isHeadSplit || false})
+            })
+            
+            console.log(personInvoice);
+        })
     }
 
     return (
@@ -143,6 +176,7 @@ function GenerateInvoice(props) {
             {
                 // Containers
             }
+            <form onSubmit={handleSubmit((d) => generate(d))}>
             {
                 formContent.map((item, i) => (
                     <Fragment key={i}>
@@ -186,8 +220,9 @@ function GenerateInvoice(props) {
                 ))
             }
             <center>
-            <button className="overlay-button" style={{backgroundColor:'#006CFF', color:'white', width:'90%'}}>Create</button>
+            <button type="submit" className="overlay-button" style={{backgroundColor:'#006CFF', color:'white', width:'90%'}}>Create</button>
             </center>
+            </form>
             <br /><br />
         </div>
     )
