@@ -135,28 +135,27 @@ function GenerateInvoice(props) {
             if(f.isPPB)
                 f.perPersonValue = PPV
         })
-        console.log(src);
 
         db.persons().forEach(person => {
-            let idParts = db.parseId(person.id)
             let personInvoice = {
-                id: person.id, 
-                invoice: {
-                    date:moment().format("YYYY-MM-DD"), 
-                    id:`I-${idParts.building.padStart(2,'0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-01`,
-                    head_count: person.profile.head_count,
-                    particulars: []
-                }
+                date:moment().format("YYYY-MM-DD"), 
+                id: db.generateInvoiceId(person),
+                head_count: person.profile.head_count || 1,
+                particulars: []
             }
             src.forEach((f,i) => {
                 if(f.isPPB) {
                     let ppvForPerson = f.perPersonValue.find(pv => pv.id === person.id) || {value:0}
-                    if(ppvForPerson.value>0) personInvoice.invoice.particulars.push({item: f.title.replace(' +/-',''), amount: ppvForPerson.value, isPerHead: f.isHeadSplit || false})
-                } else if(f.value > 0) personInvoice.invoice.particulars.push({item: f.title.replace(' +/-',''), amount:f.value, isPerHead: f.isHeadSplit || false})
+                    if(ppvForPerson.value>0) personInvoice.particulars.push({item: f.title.replace(' +/-',''), amount: ppvForPerson.value, isPerHead: f.isHeadSplit || false})
+                } else if(f.value > 0) personInvoice.particulars.push({item: f.title.replace(' +/-',''), amount:f.value, isPerHead: f.isHeadSplit || false})
             })
+
+            //prodata 
             
-            console.log(personInvoice);
+            db.addInvoice(person, personInvoice)
         })
+
+        db.persons().forEach(person => console.log(person.invoices))
     }
 
     return (

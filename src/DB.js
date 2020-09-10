@@ -309,6 +309,24 @@ class DB extends React.Component {
       });
       return [...new Set(array)]
    }
+
+   generateInvoiceId = (person) => {
+      let idParts = this.parseId(person.id)
+      let id = `I-${idParts.building.padStart(2,'0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-01`
+
+      if(person.invoices) {
+         let invoices = person.invoices.map(i => i.id.includes(moment().format("YYYYMMDD")))
+         while(invoices.find(i => i === id)) id[id.length-1]++
+      }
+
+      return id
+   }
+
+   addInvoice = (person, invoice) => {
+      let invoices = person.invoices || []
+      invoices.push(invoice)
+      return this.updateUser(person.id, "invoices", invoices)
+   }
 }
 
 export default DB;
