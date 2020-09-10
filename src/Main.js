@@ -180,7 +180,7 @@ function Main() {
 					{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br />
 					{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY")}<br />
 					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }}>Vacate</button>&nbsp;&nbsp;
-					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }} onClick={() => { setRedirect('/add-person'); }}>Replace</button>
+					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }} onClick={() => { setRedirectProps(`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`);setRedirect('/add-person'); }}>Replace</button>
 				</Overlay>
 			}
 

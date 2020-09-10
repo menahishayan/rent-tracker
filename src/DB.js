@@ -238,11 +238,12 @@ class DB extends React.Component {
    }
 
    addUser = (id, data) => {
-	   console.log(Object.keys(this.data).find(id))
-      if (Object.keys(this.data).find(id))
-         return false
-      else {
-         firebase.database().ref('/' + id).set(data, (error) => {
+	   console.log(this.data)
+	   console.log(id)
+	   if (!this.data) this.get()
+	 	if (!this.data[id])	return false
+      	else {
+         	firebase.database().ref('/' + id).set(data, (error) => {
             return new Promise((resolve, reject) => {
                if (error) reject(error);
                resolve(this.refreshCache(id))
