@@ -16,7 +16,7 @@ function Main() {
 	const [tennantOverlay, setTennantOverlay] = useState(false);
 	const [selectedTennant, setSelectedTennant] = useState();
 	const [ebOverlay, setEBOverlay] = useState(false);
-	const { register, getValues } = useForm();
+	const { register, handleSubmit } = useForm();
 	const [editOtherAmount, setEditOtherAmount] = useState(0);
 
 	useEffect(() => {
@@ -198,6 +198,7 @@ function Main() {
 			<SlidingOverlay visible={ebOverlay} bgClick={() => resetEBOverlay()} height={48}>
 				<b className="fas" style={{ fontSize: 22, float: 'right' }} onClick={() => resetEBOverlay()}>{"\uf00d"}</b>
 				<br />
+				<form onSubmit={handleSubmit((d) => {setRedirectProps(d); setRedirect('/generate-invoice');})}>
 				<center>
 					<div style={{ display: 'inline-block', width: '420%', transition: '.2s ease', marginLeft: `${-2 - (editOtherAmount * 104)}%`, position: 'relative', zIndex: 10 }}>
 						<div style={{ display: 'inline-block', width: '20%' }}>
@@ -208,33 +209,34 @@ function Main() {
 							<input name="eb" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={850} ref={register} className="editable-label-input" />
 						</div>
 						<div style={{ display: 'inline-block', marginLeft: '5%', width: '20%' }}>
-							<h3><b>Other Charges</b></h3>
-							<p style={{ marginTop: '-2%' }}>Stairs & Pump</p>
-							<br />
+							<h3 style={{marginBottom:'-1%'}}><b>Other Charges</b></h3>
+							<input name="other1-title" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense 1" ref={register} className="editable-label-input" />
+							<br /><br/><br/>
 							<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
-							<input name="other1" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
+							<input name="other1-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
 						</div>
 						<div style={{ display: 'inline-block', marginLeft: '5%', width: '20%' }}>
-							<h3><b>Other Charges</b></h3>
-							<p style={{ marginTop: '-2%' }}>Stairs & Pump</p>
-							<br />
+							<h3 style={{marginBottom:'-1%'}}><b>Other Charges</b></h3>
+							<input name="other2-title" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense 2" ref={register} className="editable-label-input" />
+							<br /><br/><br/>
 							<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
-							<input name="other2" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
+							<input name="other2-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
 						</div>
 						<div style={{ display: 'inline-block', marginLeft: '5%', width: '20%' }}>
-							<h3><b>Other Charges</b></h3>
-							<p style={{ marginTop: '-2%' }}>Stairs & Pump</p>
-							<br />
+							<h3 style={{marginBottom:'-1%'}}><b>Other Charges</b></h3>
+							<input name="other3-title" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense 3" ref={register} className="editable-label-input" />
+							<br /><br/><br/>
 							<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
-							<input name="other3" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
+							<input name="other3-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
 						</div>
 					</div>
 				</center>
 				<b className="fas" onClick={() => setEditOtherAmount(editOtherAmount === 3 ? 0 : editOtherAmount + 1)} style={{ fontSize: 22, float: 'right', marginRight: '5%', marginTop: '-15%', position: 'relative', zIndex: 15 }}>{"\uf1b2"}</b>
 				<br />
 				<center>
-					<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} onClick={() => { setRedirectProps(parseInt(getValues("eb"))); setRedirect('/generate-invoice'); }}>Next</button>
+					<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit">Next</button>
 				</center>
+				</form>
 			</SlidingOverlay>
 			<br /><br />
 		</div>
