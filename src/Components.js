@@ -7,17 +7,17 @@ export const CircleCondition = props => (
 		<div className={props.small ? "circle-sm" :"circle"} style={props.condition ? { backgroundColor: props.color[0] } : { backgroundColor: props.color[1] }}>
 			<center><b className="fas">{props.condition ? props.icon[0] : props.icon[1]}</b></center>
 		</div>
-		{props.title ? <p style={{ marginTop: 8 }}>{props.title}</p> : null}
+		{props.title ? <p style={props.titleStyle || {}}>{props.title}</p> : null}
 	</div>
 )
 
 export const Circle = props => (
 	<div className='circle-container' style={props.style} onClick={props.onClick}>
-		<div className={props.small ? "circle-sm" :"circle"} style={{ backgroundColor: props.color || 'darkgrey' }}>
-			<center><b className="fas">{props.icon}</b></center>
+		<div className={props.small ? "circle-sm" :"circle"} style={{ backgroundColor: props.invert ? 'white': props.color || 'darkgrey' }}>
+			<center><b className="fas" style={{ color: !props.invert ? 'white': props.color}}>{props.icon}</b></center>
 		</div>
 		<br/>
-		{props.title ? <p className='name'>{props.title}</p> : null}
+		{props.title ? <p style={props.titleStyle || {}}>{props.title}</p> : null}
 	</div>
 )
 
