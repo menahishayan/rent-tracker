@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
+import {Overlay} from './Components';
+import { Redirect } from 'react-router';
 import DB from './DB';
 
 
@@ -11,6 +13,14 @@ var db = new DB()
 function AddPerson(props){
 	const [selectedTennant, setSelectedTennant] = useState();
 	const { register, handleSubmit } = useForm()
+	const [addpersonOverlay, setaddpersonOverlay] = useState(false);
+	const [redirect, setRedirect] = useState();
+
+	if (redirect)
+		return <Redirect push to={{
+			pathname: redirect,
+		}}
+		/>
 
 	const testSubmitHandler = (d) => {
 		var data={
@@ -86,8 +96,11 @@ function AddPerson(props){
 				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			  <center> <Button variant="primary" type="submit" size="lg" block><b>Submit</b></Button></center>
+			  <center> <Button variant="primary" onClick={() => {setaddpersonOverlay(true); setRedirect('/')}} type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
+		<Overlay visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
+			<center><div className="fas" style={{color:'#07ab0a',fontSize:90,marginTop:'5%'}}>{"\uf00c"}</div></center>
+		</Overlay>
 		</Fragment>
 	)
 }
