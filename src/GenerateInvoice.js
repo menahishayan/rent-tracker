@@ -8,7 +8,7 @@ import { Circle, CircleCondition } from './Components';
 var db = new DB()
 
 function GenerateInvoice(props) {
-    const { register, handleSubmit } = useForm();
+    const { register, getValues, setValue, handleSubmit } = useForm();
 
     const getHeads = () => {
         let heads = 4
@@ -49,7 +49,7 @@ function GenerateInvoice(props) {
             perPersonValue: []
         },
         {
-            title: 'Garbage',
+            title: 'Garbage +/-',
             value: 60,
             fieldname: 'garbage',
             icon: '\uf1f8',
@@ -68,13 +68,8 @@ function GenerateInvoice(props) {
             })
     })
 
-    const [HS1, setHS1] = useState(formContent[0].isHeadSplit);
-    const [HS2, setHS2] = useState(formContent[1].isHeadSplit);
-    const [HS3, setHS3] = useState(formContent[2].isHeadSplit);
-    const [HS4, setHS4] = useState(formContent[3] ? formContent[3].isHeadSplit : false);
-    const [HS5, setHS5] = useState(formContent[4] ? formContent[4].isHeadSplit : false);
-    const [HS6, setHS6] = useState(formContent[5] ? formContent[5].isHeadSplit : false);
-
+    const [HS1, setHS1] = useState(formContent[0].isHeadSplit), [HS2, setHS2] = useState(formContent[1].isHeadSplit), [HS3, setHS3] = useState(formContent[2].isHeadSplit);
+    const [HS4, setHS4] = useState(formContent[3] ? formContent[3].isHeadSplit : false), [HS5, setHS5] = useState(formContent[4] ? formContent[4].isHeadSplit : false), [HS6, setHS6] = useState(formContent[5] ? formContent[5].isHeadSplit : false);
     const stateArray = [{ HS: HS1, setHS: setHS1 }, { HS: HS2, setHS: setHS2 }, { HS: HS3, setHS: setHS3 }, { HS: HS4, setHS: setHS4 }, { HS: HS5, setHS: setHS5 }, { HS: HS6, setHS: setHS6 }]
 
     const getDefaultValue = (item, i) => {
@@ -95,6 +90,21 @@ function GenerateInvoice(props) {
         }
         else value = item.value || 0
         return Math.round(value, 0)
+    }
+
+    const step = (item,i,s) => {
+        if(item.isPPB) {
+            item.perPersonValue.forEach(v => {
+                v.value += s
+            })
+            console.log(item.perPersonValue);
+            setValue(item.fieldname,parseInt(getValues(item.fieldname))+s)
+            return
+        } 
+        else if(item.isHeadSplit) item.value += s*heads
+        else if(item.isShared) item.value += s*houses
+        else item.value += s
+        setValue(item.fieldname,getDefaultValue(item,i))
     }
 
     return (
@@ -121,10 +131,12 @@ function GenerateInvoice(props) {
                         </center>
                         <div className='container'>
                             <center>
-                                <div style={{ display: 'inline-flex' }}>
-                                    <Circle small icon={"\uf068"} style={{ margin: '5% 5% 0 5%', display: 'inline-block', width:'20%' }}/>
-                                    <input name={item.fieldname} style={{ display: 'inline-block', color: 'black', backgroundColor: 'white' }} type='number' pattern="[0-9]*" value={getDefaultValue(item, i)} ref={register} className="editable-label-input" readOnly />
-                                    <Circle small icon={"\uf067"} style={{ margin: '5% 5% 0 5%', display: 'inline-block', width:'20%' }}/>
+                                <div style={{ display: 'inline-flex', width: '100%' }}>
+                                    <center>
+                                        { item.title.includes('+/-') && <Circle small icon={"\uf068"} style={{ margin: '0 5%', display: 'inline-block' }} onClick={() => step(item,i,-10)} />}
+                                        <input name={item.fieldname} style={{ display: 'inline-block', color: 'black', backgroundColor: 'white' }} type='number' pattern="[0-9]*" value={getDefaultValue(item, i)} ref={register} className="editable-label-input" readOnly />
+                                        { item.title.includes('+/-') && <Circle small icon={"\uf067"} style={{ margin: '0 5%', display: 'inline-block' }} onClick={() => step(item,i,10)} />}
+                                    </center>
                                 </div>
                                 <small style={{ display: 'inline-block', width: '40%', color: 'darkgrey' }}>{stateArray[i].HS ? "per head" : (item.isShared ? "per house" : "")}</small>
                                 <br /><br />
