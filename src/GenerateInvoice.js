@@ -137,6 +137,7 @@ function GenerateInvoice(props) {
             }
             <center>
                 <h3><b className="fas">{"\uf543"}</b><b>&nbsp;&nbsp;New Invoice</b></h3>
+                <small style={{ display: 'inline-block', width: '40%', color:'darkgrey' }}>{moment().format("MMMM YYYY")}</small>
             </center>
             <br />
             {
@@ -184,8 +185,10 @@ function GenerateInvoice(props) {
                     </Fragment>
                 ))
             }
+            <center>
+            <button className="overlay-button" style={{backgroundColor:'#006CFF', color:'white', width:'90%'}}>Create</button>
+            </center>
             <br /><br />
-            <button>Next</button>
         </div>
     )
 }
