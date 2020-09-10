@@ -3,9 +3,6 @@ import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup'
-import Button from 'react-bootstrap/Button'
 import { Circle, CircleCondition } from './Components';
 
 var db = new DB()
@@ -78,19 +75,21 @@ function GenerateInvoice(props) {
     const [ HS5, setHS5 ] = useState(formContent[4] ? formContent[4].isHeadSplit : false);
     const [ HS6, setHS6 ] = useState(formContent[5] ? formContent[5].isHeadSplit : false);
 
-    const getDefaultValue = (item) => {
+    const stateArray = [{HS:HS1, setHS:setHS1}, {HS:HS2, setHS:setHS2}, {HS:HS3, setHS:setHS3}, {HS:HS4, setHS:setHS4}, {HS:HS5, setHS:setHS5}, {HS:HS6, setHS:setHS6}]
+
+    const getDefaultValue = (item,i) => {
         let value = 0
         if (item.isPPB) {
             db.persons().forEach(person => {
                 if(person[item.valueTemplate])
                 item.perPersonValue.push({
                     id: person.id,
-                    value: item.isHeadSplit ? person[item.valueTemplate] * (person.profile.head_count || 0) : person[item.valueTemplate]
+                    value: stateArray[i].HS ? person[item.valueTemplate] * (person.profile.head_count || 0) : person[item.valueTemplate]
                 })
             })
         }
         else if (item.isShared) {
-            if (item.isHeadSplit)
+            if (stateArray[i].HS)
                 value = item.value / heads
             else value = item.value / houses
         }
@@ -122,24 +121,32 @@ function GenerateInvoice(props) {
                         </center>
                         <div className='container'>
                             <center>
-                                <input name={item.fieldname} style={{ display: 'inline-block', color: 'black', backgroundColor: 'white' }} type='number' pattern="[0-9]*" defaultValue={getDefaultValue(item)} ref={register} className="editable-label-input" />
+                                <input name={item.fieldname} style={{ display: 'inline-block', color: 'black', backgroundColor: 'white' }} type='number' pattern="[0-9]*" value={getDefaultValue(item,i)} ref={register} className="editable-label-input" readOnly />
                                 <br />
-                                <small style={{ display: 'inline-block', width: '40%', color: 'darkgrey' }}>{item.isHeadSplit ? "per head" : (item.isShared ? "per house" : "")}</small>
+                                <small style={{ display: 'inline-block', width: '40%', color: 'darkgrey' }}>{stateArray[i].HS ? "per head" : (item.isShared ? "per house" : "")}</small>
                                 <br /><br />
                                 { item.isPPB && 
                                     <div style={{ display: 'inline-block', width: '80%' }}>
                                         {item.isPPB &&
                                             item.perPersonValue.map((v) => (
-                                                <Circle small color="#5e09b8" icon={"\uf007"} title={v.value || "0"} titleStyle={{color:'darkgrey'}} style={{margin:'0 4%'}} />
+                                                <Circle key={v.id} small color="#5e09b8" icon={"\uf007"} title={v.value || "0"} titleStyle={{color:'darkgrey'}} style={{margin:'0 4%'}} />
                                             ))
                                         }
                                     </div>
                                 }
                             </center>
-                            <CircleCondition small condition={HS1} onClick={() => setHS1(!HS1) } color={['#006CFF','darkgrey']} icon={['\uf0c0','\uf0c0']} />
-                            <br />
+                            { item.isShared && 
+                                <div style={{ display: 'inline-flex', width: '40%', margin: '0 2% 3% 0', cursor: 'pointer' }}>
+                                <div style={{ display: 'inline-block', width: '20%', marginRight: '8%' }}>
+                                    <CircleCondition small condition={stateArray[i].HS} onClick={() => stateArray[i].setHS(!stateArray[i].HS) } color={['#006CFF','#c20808']} icon={['\uf0c0','\ue065']} />
+                                </div>
+                                <div style={{ display: 'inline-block', width: '80%', marginTop: '1%' }}>
+                                    <small style={{ display: 'inline-block', color:'darkgrey' }}>{ stateArray[i].HS ? "Split Per Head" : "Per House"}</small><br/>
+                                </div>
+                            </div>
+                            }
                         </div>
-                        <br />
+                        <br /><br />
                     </Fragment>
                 ))
             }
