@@ -139,7 +139,6 @@ export function Adjustment(props) {
             if(l.reason.includes(moment().format("MMM YY")))
                 sum += rent
         })
-        console.log(sum);
         sum -= finalRent() + rent
     }
 
