@@ -41,7 +41,7 @@ function Invoice(props) {
     }
 
     return (
-        <PDFViewer width="60%" height="700">
+        <PDFViewer width="100%" height={window.innerHeight}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <Text style={[styles.small, styles.id]}>{invoice.id}</Text>

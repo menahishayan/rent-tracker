@@ -130,10 +130,6 @@ function GenerateInvoice(props) {
 
             let days = moment().diff(moment(person.startdate), 'days')
             if(days<30) {
-                // personInvoice.particulars.forEach(item => {
-                //     item.amount *= days/moment(person.startdate).daysInMonth()
-                //     item.amount = Math.round(item.amount,0)
-                // })
                 personInvoice.prodata = {
                     isProdata: true,
                     days: days,
