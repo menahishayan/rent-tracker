@@ -42,7 +42,7 @@ export const HorizontalTimeline = props => (
 	<div className="horizontal-timeline" >
 		{
 			props.content.map((item, i) => (
-				<div key={i} className="horizontal-timeline-container">
+				<div key={i} className="horizontal-timeline-container" onClick={item.onClick} style={{cursor: item.onClick ? 'pointer' : 'default'}}>
 					<div className="content">
 						<h5>{item.title}</h5>
 						<p>{item.subtitle}</p>

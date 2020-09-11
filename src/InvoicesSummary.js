@@ -21,7 +21,7 @@ function InvoicesSummary(props) {
             }
             <center>
                 <h3><b className="fas">{"\uf543"}</b><b>&nbsp;&nbsp;Summary</b></h3>
-                <small style={{ display: 'inline-block', width: '40%', color: 'darkgrey' }}>{moment().format("MMMM YYYY")}</small>
+                <small style={{ display: 'inline-block', color: 'darkgrey' }}>{`${moment(invoices[0].invoice.billing_start,"YYYY-MM").format("MMMM, YYYY")} to ${moment(invoices[0].invoice.billing_end,"YYYY-MM").format("MMMM, YYYY")}`}</small>
             </center>
             <br />
             {
@@ -33,11 +33,15 @@ function InvoicesSummary(props) {
                         <div style={{ display: 'inline-flex', width: '100%' }}>
                             <b className="fas" style={{ display: 'inline-block', width: '10%', margin: '-1% 1% 2% 3%', fontSize: '40px', color:'#0e8587' }}>{"\uf570"}</b>
                             <div style={{ marginLeft: '5%' }}><small style={{ display: 'inline-block' }}>{item.person.profile.name}</small>
-                                <h4 style={{ marginTop: '-1%' }}><b className="fas" style={{ fontSize: 20 }}>{"\uf156"}</b>&nbsp;<b>{item.sum}</b></h4></div>
+                                <h4 style={{ marginTop: '-1%' }}><b className="fas" style={{ fontSize: 20 }}>{"\uf156"}</b>&nbsp;<b>{item.invoice.sum}</b></h4></div>
                         </div>
                     </div>
                 )
             }
+            <br/><br />
+            <center>
+            <button className="overlay-button" style={{backgroundColor:'#006CFF', color:'white', width:'90%'}} onClick={() => setRedirect('/')}>Done</button>
+            </center>
             <br /><br />
         </div>
     )

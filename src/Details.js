@@ -2,6 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
 
@@ -14,6 +15,8 @@ function Details(props) {
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
+	const [redirect, setRedirect] = useState();
+	const [redirectProps, setRedirectProps] = useState();
 	const { register, getValues, setValue } = useForm();
 
 	const person = props.location.state
@@ -51,6 +54,7 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
+    if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
@@ -160,7 +164,6 @@ function Details(props) {
 					content={ less.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
 				/>
 			</SlidingOverlay>
-			<br />
 			{
 				// Renewals Container
 			}
@@ -172,6 +175,30 @@ function Details(props) {
 						<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
 					</div>
 				</Fragment>
+			<br />
+			{
+				// Invoices Container
+			}
+			<center>
+				<h4><b className="fas">{"\uf543"}</b>&nbsp;&nbsp;Invoices</h4>
+			</center>
+			<div className="container">
+			{ person.invoices!==undefined ?
+				<HorizontalTimeline
+					content={
+						person.invoices.map((invoice, i) => {
+							return {
+								title: moment(invoice.billing_end,"YYYY-MM").format("MMM"),
+								subtitle: invoice.sum,
+								onClick: () => {setRedirectProps({person: person, invoice: invoice}); setRedirect('/invoice')}
+							}
+						}).slice(-3)
+					}
+				/>:null
+			}
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Adjust</button>&nbsp;&nbsp;
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }} onClick={() => { setRedirectProps(person);setRedirect('/add-person'); }}>Settle</button>
+			</div>
 			<br /><br />
 			{
 				// Add Pay Floating Button

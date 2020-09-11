@@ -25,12 +25,12 @@ function Invoice(props) {
     let address = idParts.building === "86" ? "BTM 4th Stage, 2nd Block,\nVijaya Bank Layout" : "Vinayaka Nagar,\nNyanapanhalli"
 
     let proDataMultiplier = invoice.prodata.isProdata ? invoice.prodata.days/invoice.prodata.maxDays : 1
-    let sum = Math.round(props.location.state.sum*proDataMultiplier,0)
+    let sum = Math.round(invoice.sum*proDataMultiplier,0)
 
     var a = ['','One ','Two ','Three ','Four ', 'Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
     var b = ['', '', 'Twenty','Thirty','Forty','Fifty', 'Sixty','Seventy','Eighty','Ninety'];
 
-    function inWords (num) {
+    const inWords = (num) => {
         if ((num = num.toString()).length > 9) return 'overflow';
         let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
         if (!n) return; var str = '';
@@ -40,15 +40,23 @@ function Invoice(props) {
         return str;
     }
 
+    const getQty = (item) => {
+        let qty = 1
+        if(item.isPerHead) qty *= invoice.head_count
+        if(item.isPerMonth) qty *= invoice.months
+        return qty
+    }
+
     return (
         <PDFViewer width="100%" height={window.innerHeight}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <Text style={[styles.small, styles.id]}>{invoice.id}</Text>
-                    <Text style={styles.h1}>Utilities Invoice{'\n'}</Text>
+                    <Text style={styles.h1}>{invoice.type.charAt(0).toUpperCase() + invoice.type.slice(1)} Invoice{'\n'}</Text>
                     <Text style={styles.small}>{moment(invoice.date).format("Do MMMM, YYYY")}</Text>
                     <View style={styles.small}>
                         <Text>{`\n\n${person.profile.name}\n${idParts.floor === 0 ? 'G' : idParts.floor}0${idParts.door}, #${idParts.building},\n${address}, Bengaluru - 560076\n\n\n`}</Text>
+                        <Text>{`Billing Period: ${moment(invoice.billing_start,"YYYY-MM").format("MMMM, YYYY")} to ${moment(invoice.billing_end,"YYYY-MM").format("MMMM, YYYY")}\nNo of. heads: ${invoice.head_count}\n\n\n`}</Text>
                     </View>
                     <View style={styles.table}>
                         <View style={styles.tr}>
@@ -70,21 +78,24 @@ function Invoice(props) {
                         </View>
                         {
                             invoice.particulars.map((item, i) =>
-                                <View style={styles.tr}>
+                                <View style={styles.tr} key={i}>
                                     <View style={[styles.tcol,{width:'5%'}]}>
                                         <Text style={styles.tcell}>{i+1}</Text>
                                     </View>
                                     <View style={[styles.tcol,{width:'70%',justifyContent:'flex-start'}]}>
-                                        <Text style={styles.tcell}>{item.item} {invoice.prodata.isProdata ? `\n(Calculated as per prodata basis for ${invoice.prodata.days} days: price*(${invoice.prodata.days}/${invoice.prodata.maxDays}))` : ''}</Text>
+                                        <Text style={styles.tcell}>
+                                            {item.item} {item.isPerMonth? ` ( x ${invoice.months} months)` : ''} {item.isPerHead ? ` ( x ${invoice.head_count} heads)` : ''}
+                                            {invoice.prodata.isProdata ? `\n(Calculated as per prodata basis for ${invoice.prodata.days} days: price*(${invoice.prodata.days}/${invoice.prodata.maxDays}))` : ''}
+                                        </Text>
                                     </View>
                                     <View style={[styles.tcol,{width:'10%'}]}>
                                         <Text style={styles.tcell}>{item.amount}/-</Text>
                                     </View>
                                     <View style={[styles.tcol,{width:'5%'}]}>
-                                        <Text style={styles.tcell}>{item.isPerHead ? invoice.head_count : 1}</Text>
+                                        <Text style={styles.tcell}>{getQty(item)}</Text>
                                     </View>
                                     <View style={[styles.tcol,{width:'10%'}]}>
-                                        <Text style={styles.tcell}>{Math.round((item.isPerHead ? invoice.head_count*item.amount : item.amount)*proDataMultiplier,0)}/-</Text>
+                                        <Text style={styles.tcell}>{Math.round(item.amount*getQty(item)*proDataMultiplier,0)}/-</Text>
                                     </View>
                                 </View>
                             )
