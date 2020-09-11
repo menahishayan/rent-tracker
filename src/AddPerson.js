@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
-import {Overlay} from './Components';
+import {Overlay,HeadCountBox} from './Components';
 import { Redirect } from 'react-router';
 import DB from './DB';
 
@@ -14,24 +14,12 @@ function AddPerson(props){
 	const { register, handleSubmit } = useForm()
 	const [addpersonOverlay, setaddpersonOverlay] = useState(false);
 	const [redirect, setRedirect] = useState();
-	const [checkForm, setcheckForm] = useState(false);
-
-	if (redirect)
-		return <Redirect push to={{
-			pathname: redirect,
-		}}
-		/>
+	const [checkForm, setcheckForm] = useState(true);
 
 	const checkFormValue = (d) => {
 			Object.keys(d).forEach(i => {
-				for(var i=0;i<8;++i)
-				{
-					console.log(i);
-					console.log(d[i]);
-					if(d[i]==='')	setcheckForm(false)
-					else setcheckForm(true)
-				}
-			})
+					if(d[i]===undefined) setcheckForm(false)
+				})
 			console.log(checkForm);
 	}
 
@@ -41,7 +29,7 @@ function AddPerson(props){
 			startdate:d.startdate,
 			advance:parseInt(d.advance),
 			base_rent:parseInt(d.base_rent),
-			water:parseInt(d.base_rent),
+			water:parseInt(d.water),
 			profile:
 				{
 				name:d.name,
@@ -53,6 +41,12 @@ function AddPerson(props){
 		if (checkForm)	db.addUser(d.id,data)
 		else return false
 	}
+
+	if (redirect)
+		return <Redirect push to={{
+			pathname: redirect,
+		}}
+		/>
 
 	return(
 		<Fragment>
@@ -105,12 +99,19 @@ function AddPerson(props){
 				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			<Form.Group  >
-			<div style={{display:'inline-flex',width:'100%'}}>
-				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
-				<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
+			<div style={{display:'inline-flex',width:'100%'}}>&nbsp;&nbsp;
+				<HeadCountBox style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '10%'}} ><div className="fas">{"\uf007"}</div></HeadCountBox>&nbsp;&nbsp;
+				<HeadCountBox style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%'}} ><div className="fas">{"\uf500"}</div></HeadCountBox>&nbsp;&nbsp;
+				<HeadCountBox style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%'}} ><div className="fas">{"\uf0c0"}</div></HeadCountBox>&nbsp;&nbsp;
+			</div><br/><br/><br/>
+			{
+			// <Form.Group  >
+			// <div style={{display:'inline-flex',width:'100%'}}>
+			// 	<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
+			// 	<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			// </div>
+			// </Form.Group><br/>
+			}
 			  <center> <Button variant="primary" onClick={() => {setTimeout(() => setRedirect('/'), 1500); {checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)} }} type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
 		<Overlay  style={{transition:'1s ease'}}visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>

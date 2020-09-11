@@ -94,6 +94,12 @@ export const VerticalTimelineConditional = props => (
 	</div>
 )
 
+export const HeadCountBox = props => (
+	<Fragment>
+		<div className="headCountContainer" style={props.style} onClick={props.bgClick}>{props.children}</div>
+	</Fragment>
+)
+
 export const SlidingOverlay = props => (
 	<Fragment>
 		<div className="overlay" onClick={props.bgClick} style={{opacity:(props.visible===true? 1 : 0), display: (props.visible===true? 'block' : 'none')}}></div>
