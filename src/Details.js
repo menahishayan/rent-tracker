@@ -196,8 +196,8 @@ function Details(props) {
 					}
 				/>:null
 			}
-			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Adjust</button>&nbsp;&nbsp;
-			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }} onClick={() => { setRedirectProps(person);setRedirect('/add-person'); }}>Settle</button>
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC',width:'48%' }}>Adjust</button>&nbsp;&nbsp;
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034',width:'48%' }} onClick={() => { setRedirectProps(person);setRedirect('/add-person'); }}>Settle</button>
 			</div>
 			<br /><br />
 			{

@@ -10,7 +10,6 @@ var db = new DB()
 
 function GenerateInvoice(props) {
     const { register, getValues, handleSubmit } = useForm();
-	const [billPeriod, setBillPeriod] = useState(moment().subtract(1,"M"));
 	const [months, setMonths] = useState(3);
     const [formContent,setFormContent] = useState();
     const [successOverlay,setSuccessOverlay] = useState(false);
@@ -178,8 +177,8 @@ function GenerateInvoice(props) {
             }
             <center>
                 <h3><b className="fas">{"\uf543"}</b><b>&nbsp;&nbsp;New Invoice</b></h3>
-                <input name="billing-start" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal', backgroundColor:'#fafafa',color:'grey' }} defaultValue={moment(billPeriod).subtract(2,"M").format("YYYY-MM")} type="month" ref={register} onChange={() => setMonths(moment(getValues("billing-end"),"YYYY-MM").diff(moment(getValues("billing-start"),"YYYY-MM"),'months')+1)} className="editable-label-input" />
-                <input name="billing-end" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal', backgroundColor:'#fafafa',color:'grey' }} defaultValue={billPeriod.format("YYYY-MM")} type="month" ref={register} onChange={() => setMonths(moment(getValues("billing-end")).diff(moment(getValues("billing-start")),'months')+1)} className="editable-label-input" />
+                <input name="billing-start" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal', backgroundColor:'#fafafa',color:'grey' }} defaultValue={moment().subtract(3,"M").format("YYYY-MM")} type="month" ref={register} onChange={() => setMonths(moment(getValues("billing-end"),"YYYY-MM").diff(moment(getValues("billing-start"),"YYYY-MM"),'months')+1)} className="editable-label-input" />
+                <input name="billing-end" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal', backgroundColor:'#fafafa',color:'grey' }} defaultValue={moment().subtract(1,"M").format("YYYY-MM")} type="month" ref={register} onChange={() => setMonths(moment(getValues("billing-end")).diff(moment(getValues("billing-start")),'months')+1)} className="editable-label-input" />
             </center>
             <br />
             {
