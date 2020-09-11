@@ -134,8 +134,6 @@ class DB extends React.Component {
       if (id && data) {
          if(Array.isArray(data))
             firebase.database().ref(id + '/' + item).set(data, (error) => {
-               console.log(data);
-               console.log(error);
                return new Promise((resolve, reject) => {
                   if (error) reject(error);
                   resolve(this.refreshCache(id))
@@ -312,14 +310,18 @@ class DB extends React.Component {
 
    generateInvoiceId = (person) => {
       let idParts = this.parseId(person.id)
-      let id = `I-${idParts.building.padStart(2,'0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-01`
+      let id = `I-${idParts.building.padStart(2,'0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-`
 
       if(person.invoices) {
-         let invoices = person.invoices.map(i => i.id.includes(moment().format("YYYYMMDD")))
-         while(invoices.find(i => i === id)) id[id.length-1]++
+         let invoices = person.invoices.filter(i => i.date === moment().format("YYYY-MM-DD"))
+         let index = 0, indexString = ''
+         do {
+            indexString = (++index).toString().padStart(2,'0')
+         } while(invoices.find(i => i.id === id+indexString))
+         return id+indexString
       }
 
-      return id
+      return id+'01'
    }
 
    addInvoice = (person, invoice) => {

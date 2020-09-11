@@ -98,6 +98,8 @@ function GenerateInvoice(props) {
         return Math.round(value, 0)
     }
 
+    const [defaultValues, setDefaultValues] = useState(() => formContent.map((item,i) => getDefaultValue(item,i)))
+
     useEffect(() => {
         formContent.forEach((item,i) => {
             if (item.isPPB) {
@@ -113,6 +115,14 @@ function GenerateInvoice(props) {
         })
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    const updateHS = (item,i) => {
+        console.log(item,i);
+        if(item[i].isHeadSplit)
+            item[i].isHeadSplit = !item[i].isHeadSplit
+        else item[i].isHeadSplit = true
+        return item
+    }
 
     const step = (item,i,s) => {
         if(item.isPPB) {
@@ -155,8 +165,10 @@ function GenerateInvoice(props) {
 
             let days = moment().diff(moment(person.startdate), 'days')
             if(days<30) 
-                personInvoice.forEach(() => {})
-            //prodata 
+                personInvoice.particulars.forEach(item => {
+                    item.amount *= days/moment(person.startdate).daysInMonth()
+                })
+            //prodata for vacate
             
             db.addInvoice(person, personInvoice)
         })
@@ -193,7 +205,7 @@ function GenerateInvoice(props) {
                                 <div style={{ display: 'inline-flex', width: '100%' }}>
                                     <center>
                                         { item.title.includes('+/-') && <Circle small icon={"\uf068"} style={{ margin: '0 5%', display: 'inline-block' }} onClick={() => step(item,i,-10)} />}
-                                        <input name={item.fieldname} style={{ display: 'inline-block', color: 'black', backgroundColor: 'white' }} type='number' pattern="[0-9]*" value={getDefaultValue(item, i)} ref={register} className="editable-label-input" readOnly />
+                                        <input name={item.fieldname} style={{ display: 'inline-block', color: 'black', backgroundColor: 'white' }} type='number' pattern="[0-9]*" value={defaultValues[i]} ref={register} className="editable-label-input" readOnly />
                                         { item.title.includes('+/-') && <Circle small icon={"\uf067"} style={{ margin: '0 5%', display: 'inline-block' }} onClick={() => step(item,i,10)} />}
                                     </center>
                                 </div>
@@ -212,7 +224,7 @@ function GenerateInvoice(props) {
                             {item.isShared &&
                                 <div style={{ display: 'inline-flex', width: '40%', margin: '0 2% 3% 0' }}>
                                     <div style={{ display: 'inline-block', width: '20%', marginRight: '8%' }}>
-                                        <CircleCondition small condition={HSStateArray[i].HS} onClick={() => HSStateArray[i].setHS(!HSStateArray[i].HS)} color={['#006CFF', '#c20808']} icon={['\uf0c0', '\ue065']} />
+                                        <CircleCondition small condition={HSStateArray[i].HS} onClick={() => setDefaultValues((d,di) => updateHS(d,di))} color={['#006CFF', '#c20808']} icon={['\uf0c0', '\ue065']} />
                                     </div>
                                     <div style={{ display: 'inline-block', width: '80%', marginTop: '1%' }}>
                                         <small style={{ display: 'inline-block', color: 'darkgrey' }}>{HSStateArray[i].HS ? "Split Per Head" : "Per House"}</small><br />
