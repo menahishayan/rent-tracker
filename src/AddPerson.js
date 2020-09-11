@@ -14,7 +14,7 @@ function AddPerson(props){
 	const { register, handleSubmit } = useForm()
 	const [addpersonOverlay, setaddpersonOverlay] = useState(false);
 	const [redirect, setRedirect] = useState();
-	const [checkForm, setcheckForm] = useState();
+	const [checkForm, setcheckForm] = useState(false);
 
 	if (redirect)
 		return <Redirect push to={{
@@ -24,9 +24,15 @@ function AddPerson(props){
 
 	const checkFormValue = (d) => {
 			Object.keys(d).forEach(i => {
-				if(d[i]==='')	setcheckForm(false)
-				else setcheckForm(true)
+				for(var i=0;i<8;++i)
+				{
+					console.log(i);
+					console.log(d[i]);
+					if(d[i]==='')	setcheckForm(false)
+					else setcheckForm(true)
+				}
 			})
+			console.log(checkForm);
 	}
 
 	const testSubmitHandler = (d) => {
