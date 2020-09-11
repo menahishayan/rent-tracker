@@ -23,8 +23,8 @@ function AddPerson(props){
 		/>
 
 	const checkFormValue = (d) => {
-			d.values(obj).forEach(value => {
-				if(values(obj)==='')	setcheckForm(false)
+			Object.keys(d).forEach(i => {
+				if(d[i]==='')	setcheckForm(false)
 				else setcheckForm(true)
 			})
 	}
