@@ -111,6 +111,7 @@ function GenerateInvoice(props) {
                 setPPV(item.perPersonValue)
             }
         })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const step = (item,i,s) => {
@@ -144,12 +145,17 @@ function GenerateInvoice(props) {
                 particulars: []
             }
             src.forEach((f,i) => {
+                let item = {item: f.title.replace(' +/-',''), isPerHead: f.isHeadSplit || false}
                 if(f.isPPB) {
                     let ppvForPerson = f.perPersonValue.find(pv => pv.id === person.id) || {value:0}
-                    if(ppvForPerson.value>0) personInvoice.particulars.push({item: f.title.replace(' +/-',''), amount: ppvForPerson.value, isPerHead: f.isHeadSplit || false})
-                } else if(f.value > 0) personInvoice.particulars.push({item: f.title.replace(' +/-',''), amount:f.value, isPerHead: f.isHeadSplit || false})
+                    item.amount = ppvForPerson.value
+                } else item.amount = f.value
+                if(item.amount) personInvoice.particulars.push(item)
             })
 
+            let days = moment().diff(moment(person.startdate), 'days')
+            if(days<30) 
+                personInvoice.forEach(() => {})
             //prodata 
             
             db.addInvoice(person, personInvoice)
