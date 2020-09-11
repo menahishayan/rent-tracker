@@ -14,6 +14,7 @@ function Details(props) {
 	const [showAdvanceOverlay,setShowAdvanceOverlay] = useState(false);
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
+	const [adjustmentOverlay,setAdjustmentOverlay] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
 	const [redirect, setRedirect] = useState();
 	const [redirectProps, setRedirectProps] = useState();
@@ -196,8 +197,8 @@ function Details(props) {
 					}
 				/>:null
 			}
-			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC',width:'48%' }}>Adjust</button>&nbsp;&nbsp;
-			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034',width:'48%' }} onClick={() => { setRedirectProps(person);setRedirect('/add-person'); }}>Settle</button>
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC',width:'48%' }} onClick={() => setAdjustmentOverlay(true)}>Adjust</button>&nbsp;&nbsp;
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034',width:'48%' }} onClick={() => {setRedirectProps({person:person,end:moment().format("YYYY-MM-DD"), type: 'settlement', less: less, lessTotal: lessTotal}); setRedirect('/adjustment')}}>Settle</button>
 			</div>
 			<br /><br />
 			{
@@ -267,6 +268,33 @@ function Details(props) {
 							{ ai%3===2 ? <br/> : null }
 						</Fragment>
 					))
+				}
+				</div>
+			</Overlay>
+			{
+				// Adjustment Overlay
+			}
+			<Overlay visible={adjustmentOverlay} bgClick={() => setAdjustmentOverlay(!adjustmentOverlay)} height={40}>
+				<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>
+				{	person.renewals ?
+					[person.startdate,...person.renewals].map((r,ri) => (
+						<Fragment key={ri}>
+								<button className="overlay-button-mx-light" key={ri}
+									onClick={() => {
+											setRedirectProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri+1]).format("MMMM YYYY")})
+											setRedirect('/adjustment')
+									}}>
+									{moment(r).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri+1]).format("MMM YY")}
+								</button>
+							<br/>
+						</Fragment>
+					)) : <button className="overlay-button-mx-light" style={{margin:'2% 1%'}}
+							onClick={() => {
+								setRedirectProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
+								setRedirect('/adjustment')
+							}}>
+							{moment(person.startdate).format("MMM YY")} - {moment().format("MMM YY")}
+						</button>
 				}
 				</div>
 			</Overlay>
