@@ -96,7 +96,7 @@ function AddPerson(props){
 				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			  <center> <Button variant="primary" onClick={() => {setaddpersonOverlay(true); setRedirect('/')}} type="submit" size="lg" block><b>Submit</b></Button></center>
+			  <center> <Button variant="primary" onClick={() => {setTimeout(() => setRedirect('/'), 2000);setaddpersonOverlay(true) }} type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
 		<Overlay visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
 			<center><div className="fas" style={{color:'#07ab0a',fontSize:90,marginTop:'5%'}}>{"\uf00c"}</div></center>
