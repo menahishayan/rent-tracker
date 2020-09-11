@@ -192,7 +192,7 @@ function Main() {
 			<SlidingOverlay visible={ebOverlay} bgClick={() => resetEBOverlay()} height={48}>
 				<b className="fas" style={{ fontSize: 22, float: 'right' }} onClick={() => resetEBOverlay()}>{"\uf00d"}</b>
 				<br />
-				<form onSubmit={handleSubmit((d) => {setRedirectProps(d); resetEBOverlay(); setTimeout(() => setRedirect('/generate-invoice'),300);})}>
+				<form onSubmit={handleSubmit((d) => {setRedirectProps(d); setRedirect('/generate-invoice')})}>
 				<center>
 					<div style={{ display: 'inline-block', width: '420%', transition: '.2s ease', marginLeft: `${-2 - (editOtherAmount * 104)}%`, position: 'relative', zIndex: 10 }}>
 						<div style={{ display: 'inline-block', width: '20%' }}>

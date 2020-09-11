@@ -107,6 +107,7 @@ function GenerateInvoice(props) {
     const generate = (d) => {
         let generatedInvoices = []
         db.persons().forEach(person => {
+            let sum = 0
             let personInvoice = {
                 date:moment().format("YYYY-MM-DD"), 
                 id: db.generateInvoiceId(person),
@@ -120,7 +121,10 @@ function GenerateInvoice(props) {
                     item.amount = ppvForPerson.value
                 } else item.amount = f.value
                 item.amount = Math.round(item.amount,0)
-                if(item.amount) personInvoice.particulars.push(item)
+                if(item.amount > 0) {
+                    personInvoice.particulars.push(item)
+                    sum += item.amount
+                }
             })
 
             let days = moment().diff(moment(person.startdate), 'days')
@@ -131,7 +135,7 @@ function GenerateInvoice(props) {
                 })
             //prodata for vacate
             db.addInvoice(person, personInvoice)
-            generatedInvoices.push(personInvoice)
+            generatedInvoices.push({person: person, invoice: personInvoice, sum: sum})
         })
         setSuccessOverlay(true)
         setRedirectProps(generatedInvoices)

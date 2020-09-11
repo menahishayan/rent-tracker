@@ -56,43 +56,13 @@ class DB extends React.Component {
       }
    }
 
-   getUser = (index) => {
-      if (!index) return this.get()
-      else {
-         var id = Object.keys(this.data)[index]
-         if (!this.data) this.get()
-         let ref = firebase.database().ref('/' + id);
-         ref.on('value', async (snapshot) => {
-            this.data[id] = await snapshot.val()
-            localStorage.setItem('rent-db', JSON.stringify(this.data));
-            return new Promise((resolve, reject) => {
-               setTimeout(() => {
-                  if (this.data[id]) resolve(this.data[id])
-               }, 200)
-            })
-         })
-      }
-   }
-
-   getPersonFromIdentifier = (identifier) => {
-      if (!identifier) return false
-      var id
-      if (identifier.index)
-         id = Object.keys(this.data)[identifier.index]
-      else if (identifier.id)
-         id = identifier.id
-      else return false
-      if (!this.data) this.get()
-      return this.data[id]
-   }
-
-   persons = (filter) => {
+   persons = (building) => {
       if (!this.data) this.get()
       let array = []
 
       Object.keys(this.data).forEach((id, i) => {
-         if (filter) {
-            if (id.split("_")[0] === filter)
+         if (building) {
+            if (id.split("_")[0] === building)
                array.push(this.data[id])
          } else array.push(this.data[id])
       });
@@ -100,13 +70,13 @@ class DB extends React.Component {
       return array
    }
 
-   profiles = (filter) => {
+   profiles = (building) => {
       if (!this.data) this.get()
       let array = []
 
       Object.keys(this.data).forEach((id, i) => {
-         if (filter) {
-            if (id.split("_")[0] === filter)
+         if (building) {
+            if (id.split("_")[0] === building)
                array.push(this.data[id].profile)
          } else array.push(this.data[id].profile)
       });
@@ -317,6 +287,7 @@ class DB extends React.Component {
          let index = 0, indexString = ''
          do {
             indexString = (++index).toString().padStart(2,'0')
+         // eslint-disable-next-line no-loop-func
          } while(invoices.find(i => i.id === id+indexString))
          return id+indexString
       }
