@@ -2,14 +2,18 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState,useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form'
-import { Circle, CircleCondition } from './Components';
+import { Circle, CircleCondition, Overlay } from './Components';
 
 var db = new DB()
 
 function GenerateInvoice(props) {
     const { register, handleSubmit } = useForm();
-    const [formContent,setFormContent] = useState()
+    const [formContent,setFormContent] = useState();
+    const [successOverlay,setSuccessOverlay] = useState(false);
+	const [redirect, setRedirect] = useState();
+	const [redirectProps, setRedirectProps] = useState();
 
     const getHeads = () => {
         let heads = 4
@@ -101,6 +105,7 @@ function GenerateInvoice(props) {
     }
 
     const generate = (d) => {
+        let generatedInvoices = []
         db.persons().forEach(person => {
             let personInvoice = {
                 date:moment().format("YYYY-MM-DD"), 
@@ -126,9 +131,15 @@ function GenerateInvoice(props) {
                 })
             //prodata for vacate
             db.addInvoice(person, personInvoice)
+            generatedInvoices.push(personInvoice)
         })
+        setSuccessOverlay(true)
+        setRedirectProps(generatedInvoices)
+        setTimeout(() => setRedirect('invoice-summary'),500)
+
     }
 
+    if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
     return (
         <div>
             <Navbar bg="primary" variant="dark" fixed="top">
@@ -194,6 +205,9 @@ function GenerateInvoice(props) {
             </center>
             </form>
             <br /><br />
+            <Overlay  style={{transition:'.3s ease'}} visible={successOverlay} height={25}>
+                <center><div className="fas" style={{color:'#07ab0a',fontSize:90,marginTop:'5%'}}>{"\uf00c"}</div></center>
+            </Overlay>
         </div>
     )
 }

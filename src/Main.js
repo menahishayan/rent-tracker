@@ -73,13 +73,7 @@ function Main() {
 		setEditOtherAmount(0)
 	}
 
-	if (redirect)
-		return <Redirect push to={{
-			pathname: redirect,
-			state: redirectProps
-		}}
-		/>
-
+	if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
