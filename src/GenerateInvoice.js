@@ -120,6 +120,7 @@ function GenerateInvoice(props) {
                     let ppvForPerson = f.perPersonValue.find(pv => pv.id === person.id) || {value:0}
                     item.amount = ppvForPerson.value
                 } else item.amount = f.value
+                if(item.isPerHead) item.amount /= personInvoice.head_count
                 item.amount = Math.round(item.amount,0)
                 if(item.amount > 0) {
                     personInvoice.particulars.push(item)
@@ -128,11 +129,17 @@ function GenerateInvoice(props) {
             })
 
             let days = moment().diff(moment(person.startdate), 'days')
-            if(days<30) 
-                personInvoice.particulars.forEach(item => {
-                    item.amount *= days/moment(person.startdate).daysInMonth()
-                    item.amount = Math.round(item.amount,0)
-                })
+            if(days<30) {
+                // personInvoice.particulars.forEach(item => {
+                //     item.amount *= days/moment(person.startdate).daysInMonth()
+                //     item.amount = Math.round(item.amount,0)
+                // })
+                personInvoice.prodata = {
+                    isProdata: true,
+                    days: days,
+                    maxDays: moment(person.startdate).daysInMonth()
+                }
+            } else personInvoice.prodata = { isProdata: false }
             //prodata for vacate
             db.addInvoice(person, personInvoice)
             generatedInvoices.push({person: person, invoice: personInvoice, sum: sum})
