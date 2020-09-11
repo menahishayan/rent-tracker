@@ -7,7 +7,6 @@ import {Overlay} from './Components';
 import { Redirect } from 'react-router';
 import DB from './DB';
 
-
 var db = new DB()
 
 function AddPerson(props){
@@ -15,12 +14,29 @@ function AddPerson(props){
 	const { register, handleSubmit } = useForm()
 	const [addpersonOverlay, setaddpersonOverlay] = useState(false);
 	const [redirect, setRedirect] = useState();
+	const [checkForm, setcheckForm] = useState();
 
 	if (redirect)
 		return <Redirect push to={{
 			pathname: redirect,
 		}}
 		/>
+
+	const checkFormValue = (d) => {
+		var BreakException= {};
+		try{
+			d.forEach((item) => {
+				if(d.item==='')
+				{	setcheckForm(false)
+					throw BreakException
+				}
+				else setcheckForm(true)
+			})
+		}
+		catch(e) {
+			if (e!==BreakException) throw e;
+		}
+	}
 
 	const testSubmitHandler = (d) => {
 		var data={
@@ -36,7 +52,9 @@ function AddPerson(props){
 				mobile:d.mobile
 				}
 			}
-		db.addUser(d.id,data)
+		checkFormValue(data)
+		if (checkForm)	db.addUser(d.id,data)
+		else return false
 	}
 
 	return(
@@ -80,12 +98,6 @@ function AddPerson(props){
 			</Form.Group><br/>
 			<Form.Group  >
 			<div style={{display:'inline-flex',width:'100%'}}>
-				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
-				<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
-			<Form.Group  >
-			<div style={{display:'inline-flex',width:'100%'}}>
 				<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf879"}</div>
 				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
@@ -96,9 +108,15 @@ function AddPerson(props){
 				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			  <center> <Button variant="primary" onClick={() => {setTimeout(() => setRedirect('/'), 2000);setaddpersonOverlay(true) }} type="submit" size="lg" block><b>Submit</b></Button></center>
+			<Form.Group  >
+			<div style={{display:'inline-flex',width:'100%'}}>
+				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
+				<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>
+			</Form.Group><br/>
+			  <center> <Button variant="primary" onClick={() => {setTimeout(() => setRedirect('/'), 1500); {checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)} }} type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
-		<Overlay visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
+		<Overlay  style={{transition:'1s ease'}}visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
 			<center><div className="fas" style={{color:'#07ab0a',fontSize:90,marginTop:'5%'}}>{"\uf00c"}</div></center>
 		</Overlay>
 		</Fragment>
