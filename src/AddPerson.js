@@ -23,19 +23,10 @@ function AddPerson(props){
 		/>
 
 	const checkFormValue = (d) => {
-		var BreakException= {};
-		try{
-			d.forEach((item) => {
-				if(d.item==='')
-				{	setcheckForm(false)
-					throw BreakException
-				}
+			d.values(obj).forEach(value => {
+				if(values(obj)==='')	setcheckForm(false)
 				else setcheckForm(true)
 			})
-		}
-		catch(e) {
-			if (e!==BreakException) throw e;
-		}
 	}
 
 	const testSubmitHandler = (d) => {
@@ -46,7 +37,7 @@ function AddPerson(props){
 			base_rent:parseInt(d.base_rent),
 			water:parseInt(d.base_rent),
 			profile:
-			{
+				{
 				name:d.name,
 				head_count:parseInt(d.head_count),
 				mobile:d.mobile
