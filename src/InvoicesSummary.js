@@ -11,7 +11,7 @@ function InvoicesSummary(props) {
 
     let invoices = props.location.state || []
 
-    if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
+    if (redirect) return <Redirect from={props.location.pathname} exact to={{ pathname: redirect, state: redirectProps }} />
     return (
         <div>
             <Header />
