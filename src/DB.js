@@ -110,12 +110,22 @@ class DB extends React.Component {
                })
             })
          else
-            firebase.database().ref(id + '/' + item).update(data, (error) => {
-               return new Promise((resolve, reject) => {
-                  if (error) reject(error);
-                  resolve(this.refreshCache(id))
+         firebase.database().ref(id + '/' + item).once('value').then(snapshot => {
+            if(snapshot.val())
+               firebase.database().ref(id + '/' + item).update(data, (error) => {
+                  return new Promise((resolve, reject) => {
+                     if (error) reject(error);
+                     resolve(this.refreshCache(id))
+                  })
                })
-            })
+            else 
+               firebase.database().ref(id + '/' + item).set(data, (error) => {
+                  return new Promise((resolve, reject) => {
+                     if (error) reject(error);
+                     resolve(this.refreshCache(id))
+                  })
+               })
+         })
       }
    }
 
