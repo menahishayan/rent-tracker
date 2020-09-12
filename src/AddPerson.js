@@ -10,7 +10,6 @@ import DB from './DB';
 var db = new DB()
 
 function AddPerson(props){
-	const [selectedTennant, setSelectedTennant] = useState();
 	const { register, handleSubmit } = useForm()
 	const [addpersonOverlay, setaddpersonOverlay] = useState(false);
 	const [redirect, setRedirect] = useState();
@@ -63,38 +62,38 @@ function AddPerson(props){
 			<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;Add User</b></h3>
 		</center>
 		<br />
-		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={ () => (handleSubmit (d => testSubmitHandler(d)), (checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)), setTimeout(() => setRedirect('/'), 1500))} >
+		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={() => (handleSubmit (d => testSubmitHandler(d)), (checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)), setTimeout(() => setRedirect('/'), 1500))} >
 			<Form.Group >
 				<div style={{display:'inline-flex',width:'100%'}}>
 					<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf2bd"}</div>
 					<Form.Control type="text" placeholder="Name" ref={register} name='name' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 				</div>
 			</Form.Group><br/>
-			<Form.Group  >
+			<Form.Group>
 			<div style={{display:'inline-flex',width:'100%'}}>
 				<div style={{display:'inline-block',marginRight:'6%',fontSize:28}} className="fas">{"\uf073"}</div>
 				<Form.Control type="date" placeholder="startdate" ref={register} name='startdate' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			<Form.Group  >
+			<Form.Group>
 			<div style={{display:'inline-flex',width:'100%'}}>
 				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf3d1"}</div>
 				<Form.Control type="number" placeholder="Advance" ref={register} name='advance' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			<Form.Group  >
+			<Form.Group>
 			<div style={{display:'inline-flex',width:'100%'}}>
 				<div style={{display:'inline-block',marginRight:'8%',fontSize:28}} className="fas">{"\uf156"}</div>
 				<Form.Control type="number" placeholder="Base Rent" ref={register} name='base_rent' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			<Form.Group  >
+			<Form.Group>
 			<div style={{display:'inline-flex',width:'100%'}}>
 				<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf879"}</div>
 				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			<Form.Group  >
+			<Form.Group>
 			<div style={{display:'inline-flex',width:'100%'}}>
 				<div style={{display:'inline-block',marginRight:'7%',fontSize:28}} className="fas">{"\uf043"}</div>
 				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
@@ -106,7 +105,7 @@ function AddPerson(props){
 				<HeadCountBox style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%'}} ><div className="fas">{"\uf0c0"}</div></HeadCountBox>&nbsp;&nbsp;
 			</div><br/><br/><br/>
 			{
-			// <Form.Group  >
+			// <Form.Group>
 			// <div style={{display:'inline-flex',width:'100%'}}>
 			// 	<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
 			// 	<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>

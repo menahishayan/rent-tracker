@@ -88,7 +88,7 @@ function Main() {
 						db.data && db.getBuildings().reverse().map((building, b) => (
 							<Fragment key={b}>
 								{
-									db.persons(building).map((person, i) => (
+									db.persons(building).filter(p => !p.isEmpty).map((person, i) => (
 										<Fragment key={b + i}>
 											<CircleCondition title={db.getNickname(person.profile)} condition={getNextPayment(person).month.isAfter(moment())} onClick={() => { setRedirectProps(person); setRedirect('/details'); }} color={['#07ab0a', 'darkgrey']} icon={['\uf00c', '\uf00d']} />
 											<br style={i % 3 === 2 ? { display: 'block' } : { display: 'none' }} />
@@ -241,7 +241,7 @@ function Main() {
 				<h3><b>Vacating Date</b></h3>
 				<input name="vacate-date" className="editable-label-input" type="date" style={{backgroundColor:'white',color:'black',fontSize:16}} defaultValue={moment().endOf('month').format("YYYY-MM-DD")} ref={register}/>
 				<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }} onClick={() => {setRedirectProps({person:db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`],end:getValues('vacate-date'), type: 'settlement', less: db.getLess(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`]), lessTotal: db.getLess(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`],true)}); setRedirect('/adjustment')}}>Settle</button>
-				<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }} onClick={() => {db.updateUser(`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`,"isEmpty",true); db.refreshCache(); setRedirect('/')}}>Vacate</button>
+				<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }} onClick={() => {db.updateUser(`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`,'',{isEmpty:true}); db.refreshCache(); setRedirect('/')}}>Vacate</button>
 			</Overlay>
 			<br /><br />
 
