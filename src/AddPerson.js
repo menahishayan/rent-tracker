@@ -66,11 +66,7 @@ function AddPerson(props){
 			<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;Add User</b></h3>
 		</center>
 		<br />
-<<<<<<< HEAD
-		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={ handleSubmit (d => testSubmitHandler(d))} >
-=======
 		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={() => (handleSubmit (d => testSubmitHandler(d)), (checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)), setTimeout(() => setRedirect('/'), 1500))} >
->>>>>>> de537f13143adff996e2b28388221d3ea534a676
 			<Form.Group >
 				<div style={{display:'inline-flex',width:'100%'}}>
 					<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf2bd"}</div>

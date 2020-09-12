@@ -1,6 +1,6 @@
 {
   "name": "rent",
-  "version": "0.1.0",
+  "version": "2.0.4",
   "private": true,
   "dependencies": {
     "@react-pdf/renderer": "^1.6.11",
