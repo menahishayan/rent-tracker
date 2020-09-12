@@ -19,8 +19,8 @@ function AddPerson(props){
 	const checkFormValue = (d) => {
 			Object.keys(d).forEach(i => {
 					if(d[i]===undefined) setcheckForm(false)
+					else setcheckForm(true)
 				})
-			console.log(checkForm);
 	}
 
 	const testSubmitHandler = (d) => {
@@ -38,8 +38,9 @@ function AddPerson(props){
 				}
 			}
 		checkFormValue(data)
+		console.log(checkForm);
 		if (checkForm)	db.addUser(d.id,data)
-		else return false
+
 	}
 
 	if (redirect)
@@ -62,7 +63,7 @@ function AddPerson(props){
 			<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;Add User</b></h3>
 		</center>
 		<br />
-		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={handleSubmit (d => testSubmitHandler(d))}>
+		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={ () => (handleSubmit (d => testSubmitHandler(d)), (checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)), setTimeout(() => setRedirect('/'), 1500))} >
 			<Form.Group >
 				<div style={{display:'inline-flex',width:'100%'}}>
 					<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf2bd"}</div>
@@ -112,7 +113,7 @@ function AddPerson(props){
 			// </div>
 			// </Form.Group><br/>
 			}
-			  <center> <Button variant="primary" onClick={() => {setTimeout(() => setRedirect('/'), 1500); {checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)} }} type="submit" size="lg" block><b>Submit</b></Button></center>
+			  <center> <Button variant="primary" type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
 		<Overlay  style={{transition:'1s ease'}}visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
 			<center><div className="fas" style={{color:'#07ab0a',fontSize:90,marginTop:'5%'}}>{"\uf00c"}</div></center>
