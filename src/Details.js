@@ -2,9 +2,10 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { Invoice, Adjustment } from './Invoice'
 
 var db = new DB()
 
@@ -16,9 +17,9 @@ function Details(props) {
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
 	const [adjustmentOverlay,setAdjustmentOverlay] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
-	const [redirect, setRedirect] = useState();
-	const [redirectProps, setRedirectProps] = useState();
 	const { register, getValues, setValue } = useForm();
+	const [invoiceProps, setInvoiceProps] = useState();
+	const [invoiceOverlay, setInvoiceOverlay] = useState(false);
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
@@ -55,7 +56,6 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
-    if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
@@ -137,7 +137,7 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf3d1"}</b>&nbsp;&nbsp;Returnable Advance</h4>
 			</center>
-			<div className="container">
+			<div className="container"  onClick={() => setShowAdvanceOverlay(true)}>
 				<br/>
 				<center>
 					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-lessTotal}</b></h2>
@@ -168,14 +168,15 @@ function Details(props) {
 			{
 				// Renewals Container
 			}
-				<Fragment>
-					<center>
-						<h4><b className="fas">{"\uf251"}</b>&nbsp;&nbsp;Renewals</h4>
-					</center>
-					<div className="container">
-						<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
-					</div>
-				</Fragment>
+			<center>
+				<h4><b className="fas">{"\uf251"}</b>&nbsp;&nbsp;Renewals</h4>
+			</center>
+			<div className="container">
+				<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
+			<center>
+			<button className="btn btn-link" onClick={() => setAdjustmentOverlay(true)}>Adjust Advance</button>
+			</center>
+			</div>
 			<br />
 			{
 				// Invoices Container
@@ -191,14 +192,12 @@ function Details(props) {
 							return {
 								title: moment(invoice.billing_end,"YYYY-MM").format("MMM"),
 								subtitle: invoice.sum,
-								onClick: () => {setRedirectProps({person: person, invoice: invoice}); setRedirect('/invoice')}
+								onClick: () => {setInvoiceProps({person: person, invoice: invoice}); setInvoiceOverlay(true)}
 							}
 						}).slice(-3)
 					}
 				/>:null
 			}
-			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC',width:'48%' }} onClick={() => setAdjustmentOverlay(true)}>Adjust</button>&nbsp;&nbsp;
-			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034',width:'48%' }} onClick={() => {setRedirectProps({person:person,end:moment().format("YYYY-MM-DD"), type: 'settlement', less: less, lessTotal: lessTotal}); setRedirect('/adjustment')}}>Settle</button>
 			</div>
 			<br /><br />
 			{
@@ -274,15 +273,15 @@ function Details(props) {
 			{
 				// Adjustment Overlay
 			}
-			<Overlay visible={adjustmentOverlay} bgClick={() => setAdjustmentOverlay(!adjustmentOverlay)} height={40}>
+			<Overlay visible={adjustmentOverlay} bgClick={() => setAdjustmentOverlay(!adjustmentOverlay)} height={25}>
 				<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>
 				{	person.renewals ?
 					[person.startdate,...person.renewals].map((r,ri) => (
 						<Fragment key={ri}>
 								<button className="overlay-button-mx-light" key={ri}
 									onClick={() => {
-											setRedirectProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri+1]).format("MMMM YYYY")})
-											setRedirect('/adjustment')
+											setInvoiceProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri+1]).format("MMMM YYYY")})
+											setInvoiceOverlay(true)
 									}}>
 									{moment(r).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri+1]).format("MMM YY")}
 								</button>
@@ -290,14 +289,30 @@ function Details(props) {
 						</Fragment>
 					)) : <button className="overlay-button-mx-light" style={{margin:'2% 1%'}}
 							onClick={() => {
-								setRedirectProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
-								setRedirect('/adjustment')
+								setInvoiceProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
+								setInvoiceOverlay(true)
 							}}>
 							{moment(person.startdate).format("MMM YY")} - {moment().format("MMM YY")}
 						</button>
 				}
 				</div>
 			</Overlay>
+			{
+				// Invoice Overlay
+			}
+			{ invoiceOverlay &&
+				<Overlay visible={invoiceOverlay} bgClick={() => setInvoiceOverlay(!invoiceOverlay)} height={25}>
+					<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>
+					<h3><b>{invoiceProps.type === 'adjustment' ? 'Adjustment Invoice' : 'Utilities Invoice'}</b></h3>
+					{invoiceProps.type === 'adjustment' ? `${invoiceProps.start} - ${invoiceProps.end}` : `${moment(invoiceProps.invoice.billing_start,"YYYY-MM").format("MMMM, YYYY")} - ${moment(invoiceProps.invoice.billing_end,"YYYY-MM").format("MMMM, YYYY")}`}
+					<PDFDownloadLink document={invoiceProps.type === 'adjustment' ? <Adjustment {...invoiceProps} /> : <Invoice {...invoiceProps} />} fileName={`${person.profile.name} ${invoiceProps.type === 'adjustment' ? 'Adjustment ' : ''}${moment().format("YYYY-MM-DD")}.pdf`} style={{textDecoration: 'none',color:'black'}}>
+							{({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> : 
+								<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Download</button>
+							)}
+					</PDFDownloadLink>
+					</div>
+				</Overlay>
+			}
 		</div>
 	);
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import moment from 'moment';
 import DB from './DB';
 
@@ -34,8 +34,9 @@ const styles = StyleSheet.create({
 });
 
 export function Invoice(props) {
-    let invoice = props.location.state.invoice
-    let person = props.location.state.person
+    if(!props.invoice || !props.person) return null
+    let invoice = props.invoice
+    let person = props.person
     let idParts = db.parseId(person.id)
     let address = idParts.building === "86" ? "BTM 4th Stage, 2nd Block,\nVijaya Bank Layout" : "Vinayaka Nagar,\nNyanapanhalli"
 
@@ -50,7 +51,6 @@ export function Invoice(props) {
     }
 
     return (
-        <PDFViewer width="100%" height={window.innerHeight}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <Text style={[styles.small, styles.id]}>{invoice.id}</Text>
@@ -110,20 +110,21 @@ export function Invoice(props) {
                     </View>
                 </Page>
             </Document>
-        </PDFViewer>
     )
 }
 
 export function Adjustment(props) {
-    let person = props.location.state.person
+    if(!props.person) return null
 
-    let start = props.location.state.start
-    let end = props.location.state.end
+    let person = props.person
 
-    let type = props.location.state.type
+    let start = props.start
+    let end = props.end
 
-    let less = props.location.state.less
-    let lessTotal = props.location.state.lessTotal
+    let type = props.type
+
+    let less = props.less
+    let lessTotal = props.lessTotal
     let sum = person.advance - lessTotal
     let rent = db.getExpectedRent(person,person.payment_history.length).housing
 
@@ -143,7 +144,6 @@ export function Adjustment(props) {
     }
 
     return (
-        <PDFViewer width="100%" height={window.innerHeight}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <Text style={styles.h1}>{type.charAt(0).toUpperCase() + type.slice(1)} Invoice{'\n'}</Text>
@@ -251,7 +251,6 @@ export function Adjustment(props) {
                     </View>
                 </Page>
             </Document>
-        </PDFViewer>
     )
 }
 

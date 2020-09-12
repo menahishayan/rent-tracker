@@ -1,7 +1,9 @@
 import Navbar from 'react-bootstrap/Navbar'
-import React, { useState} from 'react';
+import React, { Fragment, useState} from 'react';
 import moment from 'moment';
 import { Redirect } from 'react-router';
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { Invoice } from './Invoice'
 
 function InvoicesSummary(props) {
     const [redirect, setRedirect] = useState();
@@ -29,13 +31,17 @@ function InvoicesSummary(props) {
             }
             {
                 invoices.map((item,i) =>
-                    <div className='container' key={i} style={{cursor:'pointer'}} onClick={() => {setRedirectProps(item); setRedirect('/invoice')}}>
-                        <div style={{ display: 'inline-flex', width: '100%' }}>
-                            <b className="fas" style={{ display: 'inline-block', width: '10%', margin: '-1% 1% 2% 3%', fontSize: '40px', color:'#0e8587' }}>{"\uf570"}</b>
-                            <div style={{ marginLeft: '5%' }}><small style={{ display: 'inline-block' }}>{item.person.profile.name}</small>
-                                <h4 style={{ marginTop: '-1%' }}><b className="fas" style={{ fontSize: 20 }}>{"\uf156"}</b>&nbsp;<b>{item.invoice.sum}</b></h4></div>
-                        </div>
-                    </div>
+                    <PDFDownloadLink document={<Invoice {...item} />} fileName={`${item.person.profile.name} ${moment().format("YYYY-MM-DD")}.pdf`} key={i} style={{textDecoration: 'none',color:'black'}}>
+                        {({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> : 
+                            <div className='container' style={{cursor:'pointer'}} onClick={() => {setRedirectProps(item); setRedirect('/invoice')}}>
+                                <div style={{ display: 'inline-flex', width: '100%' }}>
+                                    <b className="fas" style={{ display: 'inline-block', width: '10%', margin: '-1% 1% 2% 3%', fontSize: '40px', color:'#0e8587', textDecoration: 'none' }}>{"\uf570"}</b>
+                                    <div style={{ marginLeft: '5%' }}><small style={{ display: 'inline-block', textDecoration: 'none', color:'darkgrey' }}>{item.person.profile.name}</small>
+                                        <h4 style={{ marginTop: '-1%', textDecoration: 'none', color:'black' }}><b className="fas" style={{ fontSize: 20, textDecoration: 'none', color:'black' }}>{"\uf156"}</b>&nbsp;<b>{item.invoice.sum}</b></h4></div>
+                                </div>
+                            </div>
+                        )}
+                    </PDFDownloadLink>
                 )
             }
             <br/><br />

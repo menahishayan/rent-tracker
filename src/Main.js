@@ -7,6 +7,8 @@ import { Redirect } from 'react-router';
 import { Circle, CircleCondition, Overlay, SlidingOverlay } from './Components'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import { useForm } from 'react-hook-form'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { Adjustment } from './Invoice'
 
 var db = new DB()
 
@@ -16,8 +18,12 @@ function Main() {
 	const [tennantOverlay, setTennantOverlay] = useState(false);
 	const [selectedTennant, setSelectedTennant] = useState();
 	const [ebOverlay, setEBOverlay] = useState(false);
-	const { register, handleSubmit } = useForm();
+	const { register, getValues, handleSubmit } = useForm();
 	const [editOtherAmount, setEditOtherAmount] = useState(0);
+	const [vacateOverlay, setVacateOverlay] = useState(false);
+
+	const [invoiceProps, setInvoiceProps] = useState();
+	const [settleDownloadOverlay, setSettleDownloadOverlay] = useState(false);
 
 	useEffect(() => {
 		db.refreshCache()
@@ -87,7 +93,7 @@ function Main() {
 						db.data && db.getBuildings().reverse().map((building, b) => (
 							<Fragment key={b}>
 								{
-									db.persons(building).map((person, i) => (
+									db.persons(building).filter(p => !p.isEmpty).map((person, i) => (
 										<Fragment key={b + i}>
 											<CircleCondition title={db.getNickname(person.profile)} condition={getNextPayment(person).month.isAfter(moment())} onClick={() => { setRedirectProps(person); setRedirect('/details'); }} color={['#07ab0a', 'darkgrey']} icon={['\uf00c', '\uf00d']} />
 											<br style={i % 3 === 2 ? { display: 'block' } : { display: 'none' }} />
@@ -152,8 +158,12 @@ function Main() {
 										<div className="floor">
 											{
 												db.getDoors(building, floor).map((door, d) =>
+													!db.data[`${building}_${floor}_${door}`].isEmpty ? 
 													<div key={d} onClick={() => { setSelectedTennant({ building, floor, door }); setTennantOverlay(true) }} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
 														<center><b className="door-label"><b className="fas">{"\uf52a"}</b>&nbsp;{floor === 0 ? 'G' : floor}0{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
+													</div> : 
+													<div key={d} onClick={() => { setRedirectProps(`${building}_${floor}_${door}`);setRedirect('/add-person'); }} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: 'lightgrey' }} className="door">
+														<center><b className="door-label" style={{color:'#777'}}><b className="fas">{"\uf52a"}</b>&nbsp;{floor === 0 ? 'G' : floor}0{door}</b><p className="door-subtitle" style={{color:'#777'}}>Empty</p></center>
 													</div>
 												)
 											}
@@ -173,8 +183,7 @@ function Main() {
 					<h3><b>{db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name}</b></h3>
 					{`${selectedTennant.floor === 0 ? 'G' : selectedTennant.floor}0${selectedTennant.door}, #${selectedTennant.building}`}<br />
 					{'Since ' + moment(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].startdate).format("Do MMM, YYYY")}<br />
-					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }}>Vacate</button>&nbsp;&nbsp;
-					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }} onClick={() => { setRedirectProps(`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`);setRedirect('/add-person'); }}>Replace</button>
+					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }} onClick={() => setVacateOverlay(true)}>Vacate</button>
 				</Overlay>
 			}
 
@@ -183,9 +192,7 @@ function Main() {
 			</center>
 			<div className="container">
 				<center>
-					<h3>Generate</h3>
-					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#006CFF' }} onClick={() => setEBOverlay(true)}>{moment().format("MMMM")}</button>&nbsp;&nbsp;
-					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Quarterly</button>
+					<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#006CFF' }} onClick={() => setEBOverlay(true)}>Create New</button>
 					<br /><br />
 				</center>
 			</div>
@@ -232,6 +239,22 @@ function Main() {
 				</center>
 				</form>
 			</SlidingOverlay>
+			{
+				// Vacate Overlay
+			}
+			<Overlay visible={vacateOverlay} bgClick={() => setVacateOverlay(!vacateOverlay)} height={25}>
+				<h3><b>Vacating Date</b></h3>
+				<input name="vacate-date" className="editable-label-input" type="date" style={{backgroundColor:'white',color:'black',fontSize:16}} defaultValue={moment().endOf('month').format("YYYY-MM-DD")} ref={register}/>
+				{ !settleDownloadOverlay ?
+				<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }} onClick={() => { setInvoiceProps({person:db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`],end:getValues('vacate-date'), type: 'settlement', less: db.getLess(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`]), lessTotal: db.getLess(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`],true)}); setSettleDownloadOverlay(true)}}>Settle</button>
+				: <PDFDownloadLink document={<Adjustment {...invoiceProps} />} fileName={`${db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name} Settlement.pdf`} style={{textDecoration: 'none',color:'black'}}>
+                        {({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> : 
+							<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Settlement</button>
+                        )}
+				</PDFDownloadLink>
+				}
+				<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034' }} onClick={() => {db.updateUser(`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`,'',{isEmpty:true}); db.refreshCache(); setRedirect('/')}}>Vacate</button>
+			</Overlay>
 			<br /><br />
 		</div>
 	)
