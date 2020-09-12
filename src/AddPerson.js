@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
 import {Overlay} from './Components';
 import { Redirect } from 'react-router';
-import InputGroup from 'react-bootstrap/InputGroup'
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import ToggleButton from 'react-bootstrap/ToggleButton'
 import DB from './DB';
 
 var db = new DB()
@@ -66,11 +67,7 @@ function AddPerson(props){
 			<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;Add User</b></h3>
 		</center>
 		<br />
-<<<<<<< HEAD
 		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={ handleSubmit (d => testSubmitHandler(d))} >
-=======
-		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={() => (handleSubmit (d => testSubmitHandler(d)), (checkForm? setaddpersonOverlay(true): setaddpersonOverlay(false)), setTimeout(() => setRedirect('/'), 1500))} >
->>>>>>> de537f13143adff996e2b28388221d3ea534a676
 			<Form.Group >
 				<div style={{display:'inline-flex',width:'100%'}}>
 					<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf2bd"}</div>
@@ -78,19 +75,20 @@ function AddPerson(props){
 				</div>
 			</Form.Group><br/>
 			<Form.Group>
-			<div style={{display:'inline-flex',width:'100%'}}>
+			<div style={{display:'inline-flex',width:'48%'}}>
 				<div style={{display:'inline-block',marginRight:'6%',fontSize:28}} className="fas">{"\uf073"}</div>
 				<Form.Control type="date" placeholder="startdate" ref={register} name='startdate' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
+			</div>&nbsp;&nbsp;&nbsp;&nbsp;
+			<div style={{display:'inline-flex',width:'40%'}}>
+				<div style={{display:'inline-block',marginRight:'7%',fontSize:28}} className="fas">{"\uf043"}</div>
+				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
 			<Form.Group>
-			<div style={{display:'inline-flex',width:'100%'}}>
-				<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf3d1"}</div>
+			<div style={{display:'inline-flex',width:'36%'}}>
+				<div style={{display:'inline-block',marginRight:'6%',fontSize:28}} className="fas">{"\uf3d1"}</div>
 				<Form.Control type="number" placeholder="Advance" ref={register} name='advance' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
-			<Form.Group>
-			<div style={{display:'inline-flex',width:'100%'}}>
+				&nbsp;&nbsp;&nbsp;&nbsp;
 				<div style={{display:'inline-block',marginRight:'8%',fontSize:28}} className="fas">{"\uf156"}</div>
 				<Form.Control type="number" placeholder="Base Rent" ref={register} name='base_rent' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
@@ -101,37 +99,46 @@ function AddPerson(props){
 				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
 			</div>
 			</Form.Group><br/>
-			<Form.Group>
-			<div style={{display:'inline-flex',width:'100%'}}>
-				<div style={{display:'inline-block',marginRight:'7%',fontSize:28}} className="fas">{"\uf043"}</div>
-				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
 
-			<Form.Group>
-			<div style={{display:'inline-flex',width:'100%'}}>
-			<label>
-			  <InputGroup className="mb-3">
-			    <InputGroup.Prepend>
-			      <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-			    </InputGroup.Prepend>
-				<Button  variant="light" style={{display:'inline-flex',width:'15%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf007"}</div></Button>
-				&nbsp;&nbsp;
-				<InputGroup.Prepend>
-				  <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-				</InputGroup.Prepend>
-				<Button variant="light" style={{display:'inline-flex',width:'19%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf500"}</div></Button>
-				&nbsp;&nbsp;
-				<InputGroup.Prepend>
-				  <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-				</InputGroup.Prepend>
-				<Button variant="light" style={{display:'inline-flex',width:'20%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf0c0"}</div></Button>
-			  </InputGroup>
-			 </label>
-			</div>
-			</Form.Group>
+			<center>
+			<ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+				<ToggleButton variant="light"  placeholder="head_count" ref={register} name='head_count' value={1}><div className="fas" style={{fontSize:40}}>{"\uf007"}</div></ToggleButton>
+				<ToggleButton variant="light"  placeholder="head_count" ref={register} name='head_count' value={2}><div className="fas"style={{fontSize:40}}>{"\uf500"}</div></ToggleButton>
+				<ToggleButton variant="light"  placeholder="head_count" ref={register} name='head_count' value={3}><div className="fas"style={{fontSize:40}}>{"\uf0c0"}</div></ToggleButton>
+			</ToggleButtonGroup>
+			</center><br/>
 			{
-<<<<<<< HEAD
+				// <Form.Group>
+				// <div style={{display:'inline-flex',width:'100%'}}>
+				// 	<div style={{display:'inline-flex'}}>
+				// 	<Button  variant="light" style={{display:'inline-flex',width:'90%',fontSize:38,paddingLeft: '1%',border:'1px solid black'}} ><Form.Control type="Checkbox" placeholder="Head Count" ref={register} name='head_count' value='1' style={{fontSize:10}} /><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
+				// 	<Button  variant="light" style={{display:'inline-flex',width:'90%',fontSize:38,paddingLeft: '1%',border:'1px solid black'}} ><Form.Control type="Checkbox" placeholder="Head Count" ref={register} name='head_count' value='1' style={{fontSize:10}} /><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
+				// 	<Button  variant="light" style={{display:'inline-flex',width:'90%',fontSize:38,paddingLeft: '1%',border:'1px solid black'}} ><Form.Control type="Checkbox" placeholder="Head Count" ref={register} name='head_count' value='1' style={{fontSize:10}} /><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
+				// 	</div>
+				// </div>
+				// </Form.Group><br/>
+				// <Form.Group>
+				// <div style={{display:'inline-flex',width:'100%'}}>
+				// <label>
+				//   <InputGroup className="mb-3">
+				// 	<InputGroup.Prepend>
+				// 	</InputGroup.Prepend>
+				// 	<Button  variant="light" style={{display:'inline-flex',width:'15%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf007"}</div></Button>
+				// 	&nbsp;&nbsp;
+				// 	<InputGroup.Prepend>
+				// 	  <InputGroup.Checkbox aria-label="Checkbox for following text input" />
+				// 	</InputGroup.Prepend>
+				// 	<Button variant="light" style={{display:'inline-flex',width:'19%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf500"}</div></Button>
+				// 	&nbsp;&nbsp;
+				// 	<InputGroup.Prepend>
+				// 	  <InputGroup.Checkbox aria-label="Checkbox for following text input" />
+				// 	</InputGroup.Prepend>
+				// 	<Button variant="light" style={{display:'inline-flex',width:'20%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf0c0"}</div></Button>
+				//   </InputGroup>
+				//  </label>
+				// </div>
+				// </Form.Group>
+
 							//
 							// <Form.Group>
 							// <div style={{display:'inline-flex',width:'100%'}}>&nbsp;&nbsp;
@@ -141,15 +148,7 @@ function AddPerson(props){
 							// </div>
 							// </Form.Group><br/>
 
-			// <Form.Group  >
-=======
-			// <Form.Group>
->>>>>>> de537f13143adff996e2b28388221d3ea534a676
-			// <div style={{display:'inline-flex',width:'100%'}}>
-			// 	<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
-			// 	<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			// </div>
-			// </Form.Group><br/>
+
 			}
 			  <center> <Button variant="primary" type="submit" size="lg" block><b>Submit</b></Button></center>
 		</Form>
