@@ -31,7 +31,7 @@ function InvoicesSummary(props) {
             }
             {
                 invoices.map((item,i) =>
-                    <PDFDownloadLink document={<Invoice {...item} invoices={invoices} />} fileName={`${item.person.profile.name} ${moment().format("YYYY-MM-DD")}.pdf`} key={i} style={{textDecoration: 'none',color:'black'}}>
+                    <PDFDownloadLink document={<Invoice {...item} />} fileName={`${item.person.profile.name} ${moment().format("YYYY-MM-DD")}.pdf`} key={i} style={{textDecoration: 'none',color:'black'}}>
                         {({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> : 
                             <div className='container' style={{cursor:'pointer'}} onClick={() => {setRedirectProps(item); setRedirect('/invoice')}}>
                                 <div style={{ display: 'inline-flex', width: '100%' }}>

@@ -114,15 +114,17 @@ export function Invoice(props) {
 }
 
 export function Adjustment(props) {
-    let person = props.location.state.person
+    if(!props.person) return null
 
-    let start = props.location.state.start
-    let end = props.location.state.end
+    let person = props.person
 
-    let type = props.location.state.type
+    let start = props.start
+    let end = props.end
 
-    let less = props.location.state.less
-    let lessTotal = props.location.state.lessTotal
+    let type = props.type
+
+    let less = props.less
+    let lessTotal = props.lessTotal
     let sum = person.advance - lessTotal
     let rent = db.getExpectedRent(person,person.payment_history.length).housing
 
@@ -142,7 +144,6 @@ export function Adjustment(props) {
     }
 
     return (
-        <PDFViewer width="100%" height={window.innerHeight}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <Text style={styles.h1}>{type.charAt(0).toUpperCase() + type.slice(1)} Invoice{'\n'}</Text>
@@ -250,7 +251,6 @@ export function Adjustment(props) {
                     </View>
                 </Page>
             </Document>
-        </PDFViewer>
     )
 }
 
