@@ -124,7 +124,7 @@ export const Overlay = props => (
 export const Header = props => (
 	<Fragment>
 		<Navbar bg="primary" variant="dark" fixed="top">
-			<Navbar.Brand className="mx-auto" style={{display:'inline-flex'}}><img src="favicon/icon-transparent.png" height={26} width={26} alt="logo" style={{margin:'2% 5% 0 -5%'}}/><h3><b>Rent Tracker</b></h3></Navbar.Brand>
+			<Navbar.Brand className="mx-auto" style={{display:'inline-flex'}} onClick={props.onClick}><img src="favicon/icon-transparent.png" height={26} width={26} alt="logo" style={{margin:'2% 5% 0 -5%'}}/><h3><b>Rent Tracker</b></h3></Navbar.Brand>
 		</Navbar>
 		<br /><br /><br /><br />
 	</Fragment>

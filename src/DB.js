@@ -63,8 +63,8 @@ class DB extends React.Component {
       Object.keys(this.data).forEach(id => {
          if (building) {
             if (id.split("_")[0] === building)
-               if(!this.data[id].isEmpty) array.push(this.data[id])
-         } else if(!this.data[id].isEmpty) array.push(this.data[id])
+               if (!this.data[id].isEmpty) array.push(this.data[id])
+         } else if (!this.data[id].isEmpty) array.push(this.data[id])
       });
 
       return array
@@ -77,8 +77,8 @@ class DB extends React.Component {
       Object.keys(this.data).forEach(id => {
          if (building) {
             if (id.split("_")[0] === building)
-            if(!this.data[id].isEmpty) array.push(this.data[id].profile)
-         } else if(!this.data[id].isEmpty) array.push(this.data[id].profile)
+               if (!this.data[id].isEmpty) array.push(this.data[id].profile)
+         } else if (!this.data[id].isEmpty) array.push(this.data[id].profile)
       });
 
       return array
@@ -102,7 +102,7 @@ class DB extends React.Component {
 
    updateUser = (id, item, data) => {
       if (id && data) {
-         if(Array.isArray(data))
+         if (Array.isArray(data))
             firebase.database().ref(id + '/' + item).set(data, (error) => {
                return new Promise((resolve, reject) => {
                   if (error) reject(error);
@@ -110,41 +110,41 @@ class DB extends React.Component {
                })
             })
          else
-         firebase.database().ref(id + '/' + item).once('value').then(snapshot => {
-            if(snapshot.val())
-               firebase.database().ref(id + '/' + item).update(data, (error) => {
-                  return new Promise((resolve, reject) => {
-                     if (error) reject(error);
-                     resolve(this.refreshCache(id))
+            firebase.database().ref(id + '/' + item).once('value').then(snapshot => {
+               if (snapshot.val())
+                  firebase.database().ref(id + '/' + item).update(data, (error) => {
+                     return new Promise((resolve, reject) => {
+                        if (error) reject(error);
+                        resolve(this.refreshCache(id))
+                     })
                   })
-               })
-            else 
-               firebase.database().ref(id + '/' + item).set(data, (error) => {
-                  return new Promise((resolve, reject) => {
-                     if (error) reject(error);
-                     resolve(this.refreshCache(id))
+               else
+                  firebase.database().ref(id + '/' + item).set(data, (error) => {
+                     return new Promise((resolve, reject) => {
+                        if (error) reject(error);
+                        resolve(this.refreshCache(id))
+                     })
                   })
-               })
-         })
+            })
       }
    }
 
    getExpectedRent = (person, month) => {
       let expectedRent = []
 
-      for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1,"M")); s.add(1, "M").startOf('month')) {
-         if(s.isAfter(moment())) break;
+      for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1, "M")); s.add(1, "M").startOf('month')) {
+         if (s.isAfter(moment())) break;
          let year = Math.floor(expectedRent.length / 11)
          let expectedSubTotal = {
             housing: Math.floor(person.base_rent * Math.pow(1.05, year)),
             others: 0
          }
-         if (person.invoices) expectedSubTotal.others += this.getInvoiceSum(person,s.month()-1)
+         if (person.invoices) expectedSubTotal.others += this.getInvoiceSum(person, s.month() - 1)
          let lessForMonth = 0
          // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
          if (lessForMonth)
             expectedSubTotal.housing -= lessForMonth.amount
-         if(expectedRent.length+1 === month) return expectedSubTotal
+         if (expectedRent.length + 1 === month) return expectedSubTotal
          expectedRent.push(expectedSubTotal)
       }
       return expectedRent
@@ -153,15 +153,15 @@ class DB extends React.Component {
    getDues = (person, returnStatusOnly, getAllItems, month) => {
       let expectedRent = this.getExpectedRent(person)
 
-      let paidRent = [{housing:0,others:0}]
-      if(person.payment_history) paidRent = [...person.payment_history]
+      let paidRent = [{ housing: 0, others: 0 }]
+      if (person.payment_history) paidRent = [...person.payment_history]
 
       let dueTotal = { housing: 0, others: 0 }
       // console.log([person.profile.name,person.payment_history,expectedRent.length]);
 
-      while(paidRent.length !== expectedRent.length) paidRent.push({housing:0,others:0})
+      while (paidRent.length !== expectedRent.length) paidRent.push({ housing: 0, others: 0 })
 
-      let returnValue = {housing: 0,others:0}
+      let returnValue = { housing: 0, others: 0 }
       paidRent.forEach((p, i) => {
          let due_i = {
             housing: expectedRent[i].housing - p.housing,
@@ -170,10 +170,10 @@ class DB extends React.Component {
          dueTotal.housing += due_i.housing
          dueTotal.others += due_i.others
 
-         if (i === month) returnValue =  due_i
+         if (i === month) returnValue = due_i
       });
 
-      if(month) dueTotal = returnValue
+      if (month) dueTotal = returnValue
       if (returnStatusOnly) {
          if (getAllItems)
             return (dueTotal.housing === 0 && dueTotal.others === 0) ? true : false
@@ -187,35 +187,33 @@ class DB extends React.Component {
    getPaidRent = (person, month) => {
       let expectedRent = this.getExpectedRent(person)
 
-      let paidRent = [{housing:0,others:0}]
-      if(person.payment_history) paidRent = [...person.payment_history]
+      let paidRent = [{ housing: 0, others: 0 }]
+      if (person.payment_history) paidRent = [...person.payment_history]
 
-      while(paidRent.length !== expectedRent.length) paidRent.push({housing:0,others:0})
+      while (paidRent.length !== expectedRent.length) paidRent.push({ housing: 0, others: 0 })
 
-      return month ? paidRent[month]||{housing: 0,others:0} : paidRent
+      return month ? paidRent[month] || { housing: 0, others: 0 } : paidRent
    }
 
-   getLess = (person,getSum) => {
+   getLess = (person, getSum) => {
       var sum = 0, less = []
-		this.getExpectedRent(person).forEach((e,i) => {
-         let dueForMonth = this.getDues(person,false,true,i+1)
+      this.getExpectedRent(person).forEach((e, i) => {
+         let dueForMonth = this.getDues(person, false, true, i + 1)
          less.push({
-            month:i+1,
+            month: i + 1,
             amount: dueForMonth.housing + dueForMonth.others,
-            reason: `Rent ${dueForMonth.others > 0 ? '& Utilities ' : ''}- ${moment(person.startdate).add(i+1,"M").format("MMM YY")}`
+            reason: `Rent ${dueForMonth.others > 0 ? '& Utilities ' : ''} - ${moment(person.startdate).add(i + 1, "M").format("MMM YY")}`
          })
-         sum+=dueForMonth.housing + dueForMonth.others
+         sum += dueForMonth.housing + dueForMonth.others
       })
       return getSum ? sum : less
    }
 
    addUser = (id, data) => {
-	   console.log(this.data)
-	   console.log(id)
-	   if (!this.data) this.get()
-	 	if (!this.data[id])	return false
-      	else {
-         	firebase.database().ref('/' + id).set(data, (error) => {
+      if (!this.data) this.get()
+      if (!this.data[id]) return false
+      else {
+         firebase.database().ref('/' + id).set(data, (error) => {
             return new Promise((resolve, reject) => {
                if (error) reject(error);
                resolve(this.refreshCache(id))
@@ -225,7 +223,7 @@ class DB extends React.Component {
    }
 
    getNickname = (profile) => {
-      if(!profile) return 'undefined'
+      if (!profile) return 'undefined'
       return profile.nickname ? profile.nickname : profile.name.split(' ')[0]
    }
 
@@ -242,9 +240,9 @@ class DB extends React.Component {
 
    addPay = (person, month, payment) => {
       let paidRent = person.payment_history || []
-      if(month > paidRent.length)
+      if (month > paidRent.length)
          paidRent.push(payment)
-      else paidRent[month-1] = payment
+      else paidRent[month - 1] = payment
       return this.updateUser(person.id, "payment_history", paidRent)
    }
 
@@ -284,19 +282,19 @@ class DB extends React.Component {
 
    generateInvoiceId = (person) => {
       let idParts = this.parseId(person.id)
-      let id = `I-${idParts.building.padStart(2,'0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-`
+      let id = `I-${idParts.building.padStart(2, '0')}${idParts.floor}${idParts.door}-${person.profile.mobile.slice(-4)}-${moment().format("YYYYMMDD")}-`
 
-      if(person.invoices) {
+      if (person.invoices) {
          let invoices = person.invoices.filter(i => i.date === moment().format("YYYY-MM-DD"))
          let index = 0, indexString = ''
          do {
-            indexString = (++index).toString().padStart(2,'0')
-         // eslint-disable-next-line no-loop-func
-         } while(invoices.find(i => i.id === id+indexString))
-         return id+indexString
+            indexString = (++index).toString().padStart(2, '0')
+            // eslint-disable-next-line no-loop-func
+         } while (invoices.find(i => i.id === id + indexString))
+         return id + indexString
       }
 
-      return id+'01'
+      return id + '01'
    }
 
    addInvoice = (person, invoice) => {
@@ -305,13 +303,13 @@ class DB extends React.Component {
       return this.updateUser(person.id, "invoices", invoices)
    }
 
-   getInvoiceSum = (person,month) => {
+   getInvoiceSum = (person, month) => {
       let invoices = person.invoices || []
       let sum = 0
 
       invoices.forEach(invoice => {
-         if(month) {
-            if(month === moment(invoice.billing_end,"YYYY-MM").month()+1)
+         if (month) {
+            if (month === moment(invoice.billing_end, "YYYY-MM").month() + 1)
                sum += invoice.sum || 0
          }
          else sum += invoice.sum || 0

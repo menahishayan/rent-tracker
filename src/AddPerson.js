@@ -1,155 +1,113 @@
-import React ,{ Fragment ,useState}from 'react';
-import Button from 'react-bootstrap/Button'
+import React, { Fragment, useState } from 'react';
 import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
 import { Overlay, Header } from './Components';
 import { Redirect } from 'react-router';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import ToggleButton from 'react-bootstrap/ToggleButton'
+import moment from 'moment';
+import './Main.css'
 import DB from './DB';
 
 var db = new DB()
 
-function AddPerson(props){
+function AddPerson(props) {
 	const { register, handleSubmit } = useForm()
 	const [addpersonOverlay, setaddpersonOverlay] = useState(false);
 	const [redirect, setRedirect] = useState();
-	const [checkForm, setcheckForm] = useState(true);
+	const [headCount, setHeadCount] = useState(1);
 
-	const checkFormValue = (d) => {
-			Object.keys(d).forEach(i => {
-					if(d[i]===undefined) setcheckForm(false)
-					else setcheckForm(true)
-				})
-	}
-
-	const testSubmitHandler = (d) => {
-		var data={
-			id:props.location.state,
-			startdate:d.startdate,
-			advance:parseInt(d.advance),
-			base_rent:parseInt(d.base_rent),
-			water:parseInt(d.water),
+	const submitHandler = (d) => {
+		var data = {
+			id: props.location.state,
+			startdate: d.startdate,
+			advance: parseInt(d.advance),
+			base_rent: parseInt(d.base_rent),
+			water: parseInt(d.water),
 			profile:
-				{
-				name:d.name,
-				head_count:parseInt(d.head_count),
-				mobile:d.mobile
-				}
-			}
-		checkFormValue(data)
-		console.log(checkForm);
-		if (checkForm)	{
-			db.addUser(d.id,data)
+			{
+				name: d.name,
+				nickname: d.shortname,
+				head_count: headCount,
+				mobile: d.mobile
+			},
+			payment_history: [{ housing: parseInt(d.base_rent), others: 0 }],
+			isEmpty: false
+		}
+
+		let isValid = true
+		Object.keys(d).forEach(i => {
+			if (d[i].length < 1) isValid = false
+		})
+
+		if (isValid) {
+			db.addUser(data.id, data)
 			setaddpersonOverlay(true)
-		}else setaddpersonOverlay(false)
-		setTimeout(() => setRedirect('/'), 1500)
+			db.refreshCache()
+			setTimeout(() => setRedirect('/'), 500)
+		}
 	}
 
-	if (redirect)
-		return <Redirect push to={{
-			pathname: redirect,
-		}}
-		/>
-
-	return(
+	if (redirect) return <Redirect push to={{ pathname: redirect }} />
+	return (
 		<Fragment>
-		<Header/>
-		{
-			// Title
-		}
-		<center>
-			<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;Add User</b></h3>
-		</center>
-		<br />
-		<Form style={{marginLeft:'5%',marginRight:'5%'}} onSubmit={ handleSubmit (d => testSubmitHandler(d))} >
-			<Form.Group >
-				<div style={{display:'inline-flex',width:'100%'}}>
-					<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf2bd"}</div>
-					<Form.Control type="text" placeholder="Name" ref={register} name='name' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-				</div>
-			</Form.Group><br/>
-			<Form.Group>
-			<div style={{display:'inline-flex',width:'48%'}}>
-				<div style={{display:'inline-block',marginRight:'6%',fontSize:28}} className="fas">{"\uf073"}</div>
-				<Form.Control type="date" placeholder="startdate" ref={register} name='startdate' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>&nbsp;&nbsp;&nbsp;&nbsp;
-			<div style={{display:'inline-flex',width:'40%'}}>
-				<div style={{display:'inline-block',marginRight:'7%',fontSize:28}} className="fas">{"\uf043"}</div>
-				<Form.Control type="number" placeholder="Water" ref={register} name='water' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
-			<Form.Group>
-			<div style={{display:'inline-flex',width:'36%'}}>
-				<div style={{display:'inline-block',marginRight:'6%',fontSize:28}} className="fas">{"\uf3d1"}</div>
-				<Form.Control type="number" placeholder="Advance" ref={register} name='advance' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-				&nbsp;&nbsp;&nbsp;&nbsp;
-				<div style={{display:'inline-block',marginRight:'8%',fontSize:28}} className="fas">{"\uf156"}</div>
-				<Form.Control type="number" placeholder="Base Rent" ref={register} name='base_rent' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
-			<Form.Group>
-			<div style={{display:'inline-flex',width:'100%'}}>
-				<div style={{display:'inline-block',marginRight:'5%',fontSize:28}} className="fas">{"\uf879"}</div>
-				<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
-			</div>
-			</Form.Group><br/>
-
+			<Header />
 			<center>
-			<ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-				<ToggleButton variant="light"  placeholder="head_count" ref={register} name='head_count' value={1}><div className="fas" style={{fontSize:40}}>{"\uf007"}</div></ToggleButton>
-				<ToggleButton variant="light"  placeholder="head_count" ref={register} name='head_count' value={2}><div className="fas"style={{fontSize:40}}>{"\uf500"}</div></ToggleButton>
-				<ToggleButton variant="light"  placeholder="head_count" ref={register} name='head_count' value={3}><div className="fas"style={{fontSize:40}}>{"\uf0c0"}</div></ToggleButton>
-			</ToggleButtonGroup>
-			</center><br/>
-			{
-				// <Form.Group>
-				// <div style={{display:'inline-flex',width:'100%'}}>
-				// 	<div style={{display:'inline-flex'}}>
-				// 	<Button  variant="light" style={{display:'inline-flex',width:'90%',fontSize:38,paddingLeft: '1%',border:'1px solid black'}} ><Form.Control type="Checkbox" placeholder="Head Count" ref={register} name='head_count' value='1' style={{fontSize:10}} /><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
-				// 	<Button  variant="light" style={{display:'inline-flex',width:'90%',fontSize:38,paddingLeft: '1%',border:'1px solid black'}} ><Form.Control type="Checkbox" placeholder="Head Count" ref={register} name='head_count' value='1' style={{fontSize:10}} /><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
-				// 	<Button  variant="light" style={{display:'inline-flex',width:'90%',fontSize:38,paddingLeft: '1%',border:'1px solid black'}} ><Form.Control type="Checkbox" placeholder="Head Count" ref={register} name='head_count' value='1' style={{fontSize:10}} /><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
-				// 	</div>
-				// </div>
-				// </Form.Group><br/>
-				// <Form.Group>
-				// <div style={{display:'inline-flex',width:'100%'}}>
-				// <label>
-				//   <InputGroup className="mb-3">
-				// 	<InputGroup.Prepend>
-				// 	</InputGroup.Prepend>
-				// 	<Button  variant="light" style={{display:'inline-flex',width:'15%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf007"}</div></Button>
-				// 	&nbsp;&nbsp;
-				// 	<InputGroup.Prepend>
-				// 	  <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-				// 	</InputGroup.Prepend>
-				// 	<Button variant="light" style={{display:'inline-flex',width:'19%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf500"}</div></Button>
-				// 	&nbsp;&nbsp;
-				// 	<InputGroup.Prepend>
-				// 	  <InputGroup.Checkbox aria-label="Checkbox for following text input" />
-				// 	</InputGroup.Prepend>
-				// 	<Button variant="light" style={{display:'inline-flex',width:'20%',fontSize:38,paddingLeft: '2%',border:'1px solid black'}} ><div className="fas">{"\uf0c0"}</div></Button>
-				//   </InputGroup>
-				//  </label>
-				// </div>
-				// </Form.Group>
-
-							//
-							// <Form.Group>
-							// <div style={{display:'inline-flex',width:'100%'}}>&nbsp;&nbsp;
-							// 	<Button  variant="light" style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '10%',border:'1px solid black'}} ><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
-							// 	<Button variant="light" style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%',border:'1px solid black'}} ><div className="fas">{"\uf500"}</div></Button>&nbsp;&nbsp;
-							// 	<Button variant="light" style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%',border:'1px solid black'}} ><div className="fas">{"\uf0c0"}</div></Button>&nbsp;&nbsp;
-							// </div>
-							// </Form.Group><br/>
-
-
-			}
-			  <center> <Button variant="primary" type="submit" size="lg" block><b>Submit</b></Button></center>
-		</Form>
-		<Overlay  style={{transition:'1s ease'}}visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
-			<center><div className="fas" style={{color:'#07ab0a',fontSize:90,marginTop:'5%'}}>{"\uf00c"}</div></center>
-		</Overlay>
+				<h3><b className="fas">{"\uf234"}</b><b>&nbsp;&nbsp;New Tennant</b></h3>
+			</center>
+			<br />
+			<Form style={{ padding: '5% 8%' }} onSubmit={handleSubmit(d => submitHandler(d))}>
+			<center>
+				<Form.Group>
+					<div style={{ display: 'inline-flex', width: '100%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf2c2"}</div>
+						<Form.Control type="text" placeholder="Name" ref={register} name='name' className="textfield" />
+					</div>
+				</Form.Group><br />
+				<Form.Group>
+					<div style={{ display: 'inline-flex', width: '100%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf2c1"}</div>
+						<Form.Control type="text" placeholder="Short Name" ref={register} name='shortname' className="textfield" />
+					</div>
+				</Form.Group><br />
+				<Form.Group>
+					<div style={{ display: 'inline-flex', width: '47%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf073"}</div>
+						<Form.Control type="date" placeholder="Start Date" ref={register} name='startdate' className="textfield" defaultValue={moment().startOf('month').format("YYYY-MM-DD")} />
+					</div>&nbsp;&nbsp;&nbsp;&nbsp;
+					<div style={{ display: 'inline-flex', width: '47%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf043"}</div>
+						<Form.Control type="number" placeholder="Water" ref={register} name='water' className="textfield" />
+					</div>
+				</Form.Group><br />
+				<Form.Group>
+					<div style={{ display: 'inline-flex', width: '47%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf3d1"}</div>
+						<Form.Control type="number" placeholder="Advance" ref={register} name='advance' className="textfield" />
+					</div>&nbsp;&nbsp;&nbsp;&nbsp;
+					<div style={{ display: 'inline-flex', width: '47%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf156"}</div>
+						<Form.Control type="number" placeholder="Rent" ref={register} name='base_rent' className="textfield" />
+					</div>
+				</Form.Group><br />
+				<Form.Group>
+					<div style={{ display: 'inline-flex', width: '100%' }}>
+						<div className="input-icon fas" style={{fontSize:24}}>{"\uf879"}</div>
+						<Form.Control type="number" placeholder="Mobile" ref={register} name='mobile' className="textfield" />
+					</div>
+				</Form.Group><br />
+				
+					<ToggleButtonGroup type="radio" name="options" defaultValue={headCount}>
+						<ToggleButton variant="light" name='head_count' onClick={() => setHeadCount(1)} value={1}><div className="fas" style={{ fontSize: 28 }}>{"\uf007"}</div></ToggleButton>
+						<ToggleButton variant="light" name='head_count' onClick={() => setHeadCount(2)} value={2}><div className="fas" style={{ fontSize: 28 }}>{"\uf500"}</div></ToggleButton>
+						<ToggleButton variant="light" name='head_count' onClick={() => setHeadCount(3)} value={3}><div className="fas" style={{ fontSize: 28 }}>{"\uf0c0"}</div></ToggleButton>
+					</ToggleButtonGroup>
+				<br /><br />
+				<button className="overlay-button-mx" type="submit" style={{width:'100%'}}>Add Tennant</button> </center>
+			</Form>
+			<Overlay style={{ transition: '.3s ease' }} visible={addpersonOverlay} bgClick={() => setaddpersonOverlay(!addpersonOverlay)} height={25}>
+				<center><div className="fas" style={{ color: '#07ab0a', fontSize: 90, marginTop: '5%' }}>{"\uf00c"}</div></center>
+			</Overlay>
 		</Fragment>
 	)
 }

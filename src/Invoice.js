@@ -5,7 +5,6 @@ import DB from './DB';
 
 var db = new DB()
 
-
 var a = ['','One ','Two ','Three ','Four ', 'Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
 var b = ['', '', 'Twenty','Thirty','Forty','Fifty', 'Sixty','Seventy','Eighty','Ninety'];
 
@@ -126,7 +125,7 @@ export function Adjustment(props) {
     let less = props.less
     let lessTotal = props.lessTotal
     let sum = person.advance - lessTotal
-    let rent = db.getExpectedRent(person,person.payment_history.length).housing
+    let rent = db.getExpectedRent(person,person.payment_history ? person.payment_history.length : 1).housing
 
     let idParts = db.parseId(person.id)
     let address = idParts.building === "86" ? "BTM 4th Stage, 2nd Block,\nVijaya Bank Layout" : "Vinayaka Nagar,\nNyanapanhalli"

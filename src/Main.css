@@ -121,6 +121,16 @@ textarea:focus, input:focus{
 	cursor: pointer;
 }
 
+.textfield {
+	border: 0;
+	background-color: #fafafa;
+}
+
+.input-icon {
+	display: inline-block;
+	margin-right: 5%;
+}
+
 @media only screen and (max-width: 600px) {
 	.circle {
 		height: 60px;

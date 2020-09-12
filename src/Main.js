@@ -11,7 +11,7 @@ import { Adjustment } from './Invoice'
 
 var db = new DB()
 
-function Main() {
+function Main(props) {
 	const [redirect, setRedirect] = useState();
 	const [redirectProps, setRedirectProps] = useState();
 	const [tennantOverlay, setTennantOverlay] = useState(false);
