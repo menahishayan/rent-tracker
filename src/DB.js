@@ -60,11 +60,11 @@ class DB extends React.Component {
       if (!this.data) this.get()
       let array = []
 
-      Object.keys(this.data).forEach((id, i) => {
+      Object.keys(this.data).forEach(id => {
          if (building) {
             if (id.split("_")[0] === building)
-               array.push(this.data[id])
-         } else array.push(this.data[id])
+               if(!this.data[id].isEmpty) array.push(this.data[id])
+         } else if(!this.data[id].isEmpty) array.push(this.data[id])
       });
 
       return array
@@ -74,11 +74,11 @@ class DB extends React.Component {
       if (!this.data) this.get()
       let array = []
 
-      Object.keys(this.data).forEach((id, i) => {
+      Object.keys(this.data).forEach(id => {
          if (building) {
             if (id.split("_")[0] === building)
-               array.push(this.data[id].profile)
-         } else array.push(this.data[id].profile)
+            if(!this.data[id].isEmpty) array.push(this.data[id].profile)
+         } else if(!this.data[id].isEmpty) array.push(this.data[id].profile)
       });
 
       return array
