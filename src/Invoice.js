@@ -34,8 +34,9 @@ const styles = StyleSheet.create({
 });
 
 export function Invoice(props) {
-    let invoice = props.location.state.invoice
-    let person = props.location.state.person
+    if(!props.invoice || !props.person) return null
+    let invoice = props.invoice
+    let person = props.person
     let idParts = db.parseId(person.id)
     let address = idParts.building === "86" ? "BTM 4th Stage, 2nd Block,\nVijaya Bank Layout" : "Vinayaka Nagar,\nNyanapanhalli"
 
@@ -50,7 +51,6 @@ export function Invoice(props) {
     }
 
     return (
-        <PDFViewer width="100%" height={window.innerHeight}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <Text style={[styles.small, styles.id]}>{invoice.id}</Text>
@@ -110,7 +110,6 @@ export function Invoice(props) {
                     </View>
                 </Page>
             </Document>
-        </PDFViewer>
     )
 }
 
