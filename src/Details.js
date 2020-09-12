@@ -2,6 +2,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
+import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
 
@@ -13,7 +14,10 @@ function Details(props) {
 	const [showAdvanceOverlay,setShowAdvanceOverlay] = useState(false);
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
+	const [adjustmentOverlay,setAdjustmentOverlay] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
+	const [redirect, setRedirect] = useState();
+	const [redirectProps, setRedirectProps] = useState();
 	const { register, getValues, setValue } = useForm();
 
 	const person = props.location.state
@@ -51,6 +55,7 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
+    if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
@@ -160,7 +165,6 @@ function Details(props) {
 					content={ less.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
 				/>
 			</SlidingOverlay>
-			<br />
 			{
 				// Renewals Container
 			}
@@ -172,6 +176,30 @@ function Details(props) {
 						<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
 					</div>
 				</Fragment>
+			<br />
+			{
+				// Invoices Container
+			}
+			<center>
+				<h4><b className="fas">{"\uf543"}</b>&nbsp;&nbsp;Invoices</h4>
+			</center>
+			<div className="container">
+			{ person.invoices!==undefined ?
+				<HorizontalTimeline
+					content={
+						person.invoices.map((invoice, i) => {
+							return {
+								title: moment(invoice.billing_end,"YYYY-MM").format("MMM"),
+								subtitle: invoice.sum,
+								onClick: () => {setRedirectProps({person: person, invoice: invoice}); setRedirect('/invoice')}
+							}
+						}).slice(-3)
+					}
+				/>:null
+			}
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC',width:'48%' }} onClick={() => setAdjustmentOverlay(true)}>Adjust</button>&nbsp;&nbsp;
+			<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034',width:'48%' }} onClick={() => {setRedirectProps({person:person,end:moment().format("YYYY-MM-DD"), type: 'settlement', less: less, lessTotal: lessTotal}); setRedirect('/adjustment')}}>Settle</button>
+			</div>
 			<br /><br />
 			{
 				// Add Pay Floating Button
@@ -240,6 +268,33 @@ function Details(props) {
 							{ ai%3===2 ? <br/> : null }
 						</Fragment>
 					))
+				}
+				</div>
+			</Overlay>
+			{
+				// Adjustment Overlay
+			}
+			<Overlay visible={adjustmentOverlay} bgClick={() => setAdjustmentOverlay(!adjustmentOverlay)} height={40}>
+				<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>
+				{	person.renewals ?
+					[person.startdate,...person.renewals].map((r,ri) => (
+						<Fragment key={ri}>
+								<button className="overlay-button-mx-light" key={ri}
+									onClick={() => {
+											setRedirectProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri+1]).format("MMMM YYYY")})
+											setRedirect('/adjustment')
+									}}>
+									{moment(r).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri+1]).format("MMM YY")}
+								</button>
+							<br/>
+						</Fragment>
+					)) : <button className="overlay-button-mx-light" style={{margin:'2% 1%'}}
+							onClick={() => {
+								setRedirectProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
+								setRedirect('/adjustment')
+							}}>
+							{moment(person.startdate).format("MMM YY")} - {moment().format("MMM YY")}
+						</button>
 				}
 				</div>
 			</Overlay>

@@ -129,13 +129,7 @@ class DB extends React.Component {
             housing: Math.floor(person.base_rent * Math.pow(1.05, year)),
             others: 0
          }
-         if (person.invoices)
-            person.invoices.forEach((invoice) => {
-               if (moment(invoice.date, "YYYY-MM-DD").month() === s.month())
-                  invoice.particulars.forEach(item => {
-                     expectedSubTotal.others += item.amount
-                  });
-            });
+         if (person.invoices) expectedSubTotal.others += this.getInvoiceSum(person,s.month()-1)
          let lessForMonth = 0
          // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
          if (lessForMonth)
@@ -194,13 +188,13 @@ class DB extends React.Component {
    getLess = (person,getSum) => {
       var sum = 0, less = []
 		this.getExpectedRent(person).forEach((e,i) => {
-         let dueForMonth = this.getDues(person,false,false,i+1)
+         let dueForMonth = this.getDues(person,false,true,i+1)
          less.push({
             month:i+1,
-            amount: dueForMonth,
-            reason: `Rent - ${moment(person.startdate).add(i+1,"M").format("MMM YY")}`
+            amount: dueForMonth.housing + dueForMonth.others,
+            reason: `Rent ${dueForMonth.others > 0 ? '& Utilities ' : ''}- ${moment(person.startdate).add(i+1,"M").format("MMM YY")}`
          })
-         sum+=dueForMonth
+         sum+=dueForMonth.housing + dueForMonth.others
       })
       return getSum ? sum : less
    }
@@ -299,6 +293,20 @@ class DB extends React.Component {
       let invoices = person.invoices || []
       invoices.push(invoice)
       return this.updateUser(person.id, "invoices", invoices)
+   }
+
+   getInvoiceSum = (person,month) => {
+      let invoices = person.invoices || []
+      let sum = 0
+
+      invoices.forEach(invoice => {
+         if(month) {
+            if(month === moment(invoice.billing_end,"YYYY-MM").month()+1)
+               sum += invoice.sum || 0
+         }
+         else sum += invoice.sum || 0
+      })
+      return sum
    }
 }
 
