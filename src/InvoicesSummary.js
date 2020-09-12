@@ -1,6 +1,6 @@
-import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState} from 'react';
 import moment from 'moment';
+import { Header } from './Components';
 import { Redirect } from 'react-router';
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Invoice } from './Invoice'
@@ -14,10 +14,7 @@ function InvoicesSummary(props) {
     if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
     return (
         <div>
-            <Navbar bg="primary" variant="dark" fixed="top">
-                <Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
-            </Navbar>
-            <br /><br /><br /><br />
+            <Header />
             {
                 // Title
             }

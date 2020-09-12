@@ -1,10 +1,9 @@
-import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState,useEffect } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form'
-import { Circle, CircleCondition, Overlay } from './Components';
+import { Circle, CircleCondition, Overlay, Header } from './Components';
 
 var db = new DB()
 
@@ -168,10 +167,7 @@ function GenerateInvoice(props) {
     if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
     return (
         <div>
-            <Navbar bg="primary" variant="dark" fixed="top">
-                <Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
-            </Navbar>
-            <br /><br /><br /><br />
+            <Header />
             {
                 // Title
             }

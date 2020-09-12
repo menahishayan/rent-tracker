@@ -1,10 +1,9 @@
-import Navbar from 'react-bootstrap/Navbar'
 import DB from './DB';
 import React, { Fragment, useState, useEffect } from 'react';
 import './Main.css'
 import moment from 'moment';
 import { Redirect } from 'react-router';
-import { Circle, CircleCondition, Overlay, SlidingOverlay } from './Components'
+import { Circle, CircleCondition, Overlay, SlidingOverlay, Header } from './Components'
 import ProgressBar from 'react-bootstrap/ProgressBar'
 import { useForm } from 'react-hook-form'
 import { PDFDownloadLink } from '@react-pdf/renderer'
@@ -82,10 +81,7 @@ function Main() {
 	if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
 	return (
 		<div>
-			<Navbar bg="primary" variant="dark" fixed="top">
-				<Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
-			</Navbar>
-			<br /><br /><br /><br />
+			<Header />
 			<center>
 				<h4><b className="fas">{"\uf662"}</b>&nbsp;&nbsp;{moment().format("MMMM")}</h4>
 				<div className="container" >

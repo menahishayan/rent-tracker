@@ -1,9 +1,8 @@
 import React ,{ Fragment ,useState}from 'react';
 import Button from 'react-bootstrap/Button'
-import Navbar from 'react-bootstrap/Navbar'
 import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
-import {Overlay} from './Components';
+import { Overlay, Header } from './Components';
 import { Redirect } from 'react-router';
 import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
 import ToggleButton from 'react-bootstrap/ToggleButton'
@@ -55,11 +54,7 @@ function AddPerson(props){
 
 	return(
 		<Fragment>
-		<br/>
-		<Navbar bg="primary" variant="dark" fixed="top">
-			<Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
-		</Navbar>
-		<br /><br /><br />
+		<Header/>
 		{
 			// Title
 		}

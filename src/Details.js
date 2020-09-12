@@ -1,9 +1,8 @@
-import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
-import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
+import { Circle, Header, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Invoice, Adjustment } from './Invoice'
 
@@ -58,10 +57,7 @@ function Details(props) {
 
 	return (
 		<div>
-			<Navbar bg="primary" variant="dark" fixed="top">
-				<Navbar.Brand className="mx-auto"><h3><b>Rent</b></h3></Navbar.Brand>
-			</Navbar>
-			<br /><br /><br /><br />
+			<Header />
 			{
 				// Profile Header
 			}
