@@ -1,4 +1,4 @@
-import React ,{ Fragment, useEffect ,useState}from 'react';
+import React ,{ Fragment ,useState}from 'react';
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
 import { useForm } from "react-hook-form";
@@ -127,20 +127,7 @@ function AddPerson(props){
 			</div>
 			</Form.Group>
 			{
-<<<<<<< HEAD
-							//
-							// <Form.Group>
-							// <div style={{display:'inline-flex',width:'100%'}}>&nbsp;&nbsp;
-							// 	<Button  variant="light" style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '10%',border:'1px solid black'}} ><div className="fas">{"\uf007"}</div></Button>&nbsp;&nbsp;
-							// 	<Button variant="light" style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%',border:'1px solid black'}} ><div className="fas">{"\uf500"}</div></Button>&nbsp;&nbsp;
-							// 	<Button variant="light" style={{display:'inline-flex',width:'30%',fontSize:38,paddingLeft: '8%',border:'1px solid black'}} ><div className="fas">{"\uf0c0"}</div></Button>&nbsp;&nbsp;
-							// </div>
-							// </Form.Group><br/>
-
-			// <Form.Group  >
-=======
 			// <Form.Group>
->>>>>>> de537f13143adff996e2b28388221d3ea534a676
 			// <div style={{display:'inline-flex',width:'100%'}}>
 			// 	<div style={{display:'inline-block',marginRight:'3%',fontSize:28}} className="fas">{"\uf500"}</div>
 			// 	<Form.Control type="number" placeholder="Head Count" ref={register} name='head_count' style={{borderBottom: "2px solid darkgrey",borderTop:'none',borderLeft:'none',borderRight:'none'}}/>
