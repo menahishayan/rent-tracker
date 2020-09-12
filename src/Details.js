@@ -2,7 +2,6 @@ import Navbar from 'react-bootstrap/Navbar'
 import React, { Fragment, useState } from 'react';
 import DB from './DB';
 import moment from 'moment';
-import { Redirect } from 'react-router';
 import { useForm } from 'react-hook-form'
 import { Circle, HorizontalTimeline,VerticalTimelineConditional,VerticalTimeline, HorizontalTimelineConditional,SlidingOverlay, Overlay } from './Components'
 import { PDFDownloadLink } from '@react-pdf/renderer'
@@ -18,8 +17,6 @@ function Details(props) {
 	const [showMonthPicker,setShowMonthPicker] = useState(false);
 	const [adjustmentOverlay,setAdjustmentOverlay] = useState(false);
 	const [availableMonths,setAvailableMonths] = useState([]);
-	const [redirect, setRedirect] = useState();
-	const [redirectProps, setRedirectProps] = useState();
 	const { register, getValues, setValue } = useForm();
 	const [invoiceProps, setInvoiceProps] = useState();
 	const [invoiceOverlay, setInvoiceOverlay] = useState(false);
@@ -59,7 +56,6 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
-    if (redirect) return <Redirect push to={{ pathname: redirect, state: redirectProps }} />
 	return (
 		<div>
 			<Navbar bg="primary" variant="dark" fixed="top">
@@ -202,7 +198,6 @@ function Details(props) {
 					}
 				/>:null
 			}
-			{/* <button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#ED0034',width:'48%' }} onClick={() => {setRedirectProps({person:person,end:moment().format("YYYY-MM-DD"), type: 'settlement', less: less, lessTotal: lessTotal}); setRedirect('/adjustment')}}>Settle</button> */}
 			</div>
 			<br /><br />
 			{
