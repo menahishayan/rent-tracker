@@ -140,7 +140,7 @@ function Details(props) {
 				</center>
 				<br/>
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
-						{
+						{	
 							less.filter(l => l.amount!==0).map((item, i) => (
 								<Fragment key={i}>
 									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
@@ -302,7 +302,7 @@ function Details(props) {
 					<h3><b>{invoiceProps.type === 'adjustment' ? 'Adjustment Invoice' : 'Utilities Invoice'}</b></h3>
 					{invoiceProps.type === 'adjustment' ? `${invoiceProps.start} - ${invoiceProps.end}` : `${moment(invoiceProps.invoice.billing_start,"YYYY-MM").format("MMMM, YYYY")} - ${moment(invoiceProps.invoice.billing_end,"YYYY-MM").format("MMMM, YYYY")}`}
 					<PDFDownloadLink document={invoiceProps.type === 'adjustment' ? <Adjustment {...invoiceProps} /> : <Invoice {...invoiceProps} />} fileName={`${person.profile.name} ${invoiceProps.type === 'adjustment' ? 'Adjustment ' : ''}${moment().format("YYYY-MM-DD")}.pdf`} style={{textDecoration: 'none',color:'black'}}>
-							{({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> : 
+							{({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> :
 								<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Download</button>
 							)}
 					</PDFDownloadLink>

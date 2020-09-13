@@ -131,21 +131,25 @@ class DB extends React.Component {
 
    getExpectedRent = (person, month) => {
       let expectedRent = []
-
+	  let increaserentby=0
       for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1, "M")); s.add(1, "M").startOf('month')) {
-         if (s.isAfter(moment())) break;
-         let year = Math.floor(expectedRent.length / 11)
-         let expectedSubTotal = {
-            housing: Math.floor(person.base_rent * Math.pow(1.05, year)),
+        if (s.isAfter(moment())) break;
+		if (person.renewals)
+		 	increaserentby = person.renewals.slice(-1)[0].increaserent
+		else increaserentby=0
+		console.log(increaserentby);
+        let year = Math.floor(expectedRent.length / 11)
+        let expectedSubTotal = {
+            housing: Math.floor(person.base_rent * Math.pow(1+(increaserentby/100), year)),
             others: 0
-         }
-         if (person.invoices) expectedSubTotal.others += this.getInvoiceSum(person, s.month() - 1)
-         let lessForMonth = 0
-         // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
-         if (lessForMonth)
+        }
+        if (person.invoices) expectedSubTotal.others += this.getInvoiceSum(person, s.month() - 1)
+        let lessForMonth = 0
+        // if (person.less) lessForMonth = person.less.find((l) => { return l.month === s.month() + 1 })
+        if (lessForMonth)
             expectedSubTotal.housing -= lessForMonth.amount
-         if (expectedRent.length + 1 === month) return expectedSubTotal
-         expectedRent.push(expectedSubTotal)
+        if (expectedRent.length + 1 === month) return expectedSubTotal
+        expectedRent.push(expectedSubTotal)
       }
       return expectedRent
    }
@@ -206,6 +210,7 @@ class DB extends React.Component {
          })
          sum += dueForMonth.housing + dueForMonth.others
       })
+	  console.log(less);
       return getSum ? sum : less
    }
 
