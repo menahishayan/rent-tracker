@@ -156,10 +156,10 @@ function Main(props) {
 												db.getDoors(building, floor).map((door, d) =>
 													!db.data[`${building}_${floor}_${door}`].isEmpty ? 
 													<div key={d} onClick={() => { setSelectedTennant({ building, floor, door }); setTennantOverlay(true) }} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
-														<center><b className="door-label"><b className="fas">{"\uf52a"}</b>&nbsp;{floor === 0 ? 'G' : floor}0{door}</b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
+														<center><b className="door-label"><b className="fas">{"\uf52a"}</b></b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
 													</div> : 
 													<div key={d} onClick={() => { setRedirectProps(`${building}_${floor}_${door}`);setRedirect('/add-person'); }} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: 'lightgrey' }} className="door">
-														<center><b className="door-label" style={{color:'#777'}}><b className="fas">{"\uf52a"}</b>&nbsp;{floor === 0 ? 'G' : floor}0{door}</b><p className="door-subtitle" style={{color:'#777'}}>Empty</p></center>
+														<center><b className="door-label" style={{color:'#777'}}><b className="fas">{"\uf52a"}</b></b><p className="door-subtitle" style={{color:'#777'}}>Empty</p></center>
 													</div>
 												)
 											}
