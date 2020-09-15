@@ -137,7 +137,6 @@ class DB extends React.Component {
 		if (person.renewals)
 		 	increaserentby = person.renewals.slice(-1)[0].increaserent
 		else increaserentby=0
-		console.log(increaserentby);
         let year = Math.floor(expectedRent.length / 11)
         let expectedSubTotal = {
             housing: Math.floor(person.base_rent * Math.pow(1+(increaserentby/100), year)),
@@ -210,7 +209,6 @@ class DB extends React.Component {
          })
          sum += dueForMonth.housing + dueForMonth.others
       })
-	  console.log(less);
       return getSum ? sum : less
    }
 
@@ -253,7 +251,10 @@ class DB extends React.Component {
 
    getNextRenewal = (person) => {
       let r = person.renewals
-      return moment((r !== undefined && r.length > 0) ? r[r.length - 1] : person.startdate, "YYYY-MM-DD", true).add(11, "M")
+	  let date,increase
+	  console.log(r)
+	  return {(r !== undefined && r.length > 0) ? { date: moment(r[r.length - 1]).add(11, "M") ,increase: r.increase} : {  date : moment(person.startdate, "YYYY-MM-DD", true).add(11, "M"), increase : 0 }}
+	  //return (date===true)?{(r !== undefined && r.length > 0) ?  moment(r[r.length - 1]).add(11, "M") :  moment(person.startdate, "YYYY-MM-DD", true).add(11, "M")}:{(r !== undefined && r.length > 0) ? r.slice(-1)[0].incre:0}
    }
 
    getBuildings = () => {

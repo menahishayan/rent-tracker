@@ -55,6 +55,8 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
+	console.log(db.getNextRenewal(person));
+
 	return (
 		<div>
 			<Header />
@@ -140,7 +142,7 @@ function Details(props) {
 				</center>
 				<br/>
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
-						{	
+						{
 							less.filter(l => l.amount!==0).map((item, i) => (
 								<Fragment key={i}>
 									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
@@ -168,7 +170,7 @@ function Details(props) {
 				<h4><b className="fas">{"\uf251"}</b>&nbsp;&nbsp;Renewals</h4>
 			</center>
 			<div className="container">
-				<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r).format("MMM"), subtitle: moment(r).format("YYYY") } })} />
+				<HorizontalTimeline content={[...person.renewals||[], db.getNextRenewal(person)].map((r) => { return { title: moment(r.date).format("MMM"), subtitle: moment(r.date).format("YYYY") } })} />
 			<center>
 			<button className="btn btn-link" onClick={() => setAdjustmentOverlay(true)}>Adjust Advance</button>
 			</center>
