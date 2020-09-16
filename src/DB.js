@@ -135,7 +135,7 @@ class DB extends React.Component {
       for (let s = moment(person.startdate); s.isSameOrBefore(moment().add(1, "M")); s.add(1, "M").startOf('month')) {
         if (s.isAfter(moment())) break;
 		if (person.renewals)
-		 	increaserentby = person.renewals.slice(-1)[0].increaserent
+		 	increaserentby = person.renewals.slice(-1)[0].increase
 		else increaserentby=0
         let year = Math.floor(expectedRent.length / 11)
         let expectedSubTotal = {
@@ -253,9 +253,9 @@ class DB extends React.Component {
       let r = person.renewals
 	  let date,increase
 	  console.log(r)
-	  return {(r !== undefined && r.length > 0) ? { date: moment(r[r.length - 1]).add(11, "M") ,increase: r.increase} : {  date : moment(person.startdate, "YYYY-MM-DD", true).add(11, "M"), increase : 0 }}
+	  return (r !== undefined && r.length > 0) ? { date: moment(r.slice(-1)[0].date).add(11, "M") ,increase: r.slice(-1)[0].increase} : {  date : moment(person.startdate, "YYYY-MM-DD", true).add(11, "M"), increase : 0 }
 	  //return (date===true)?{(r !== undefined && r.length > 0) ?  moment(r[r.length - 1]).add(11, "M") :  moment(person.startdate, "YYYY-MM-DD", true).add(11, "M")}:{(r !== undefined && r.length > 0) ? r.slice(-1)[0].incre:0}
-   }
+  }
 
    getBuildings = () => {
       if (!this.data) this.get()

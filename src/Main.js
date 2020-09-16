@@ -32,11 +32,12 @@ function Main(props) {
 		let array = []
 		if (db.data)
 			db.persons().map((person, i) => (
-				db.getNextRenewal(person).isBetween(moment().subtract(1, "M"), moment().add(7, "M"), "M") ?
+				db.getNextRenewal(person).date.isBetween(moment().subtract(1, "M"), moment().add(7, "M"), "M") ?
 					array.push({
 						i: i,
 						name: person.profile.name,
-						date: db.getNextRenewal(person).format("Do MMMM, YYYY")
+						date: db.getNextRenewal(person).date.format("Do MMMM, YYYY"),
+						increase:db.getNextRenewal(person).increase
 					})
 					: null
 			))
@@ -154,10 +155,10 @@ function Main(props) {
 										<div className="floor">
 											{
 												db.getDoors(building, floor).map((door, d) =>
-													!db.data[`${building}_${floor}_${door}`].isEmpty ? 
+													!db.data[`${building}_${floor}_${door}`].isEmpty ?
 													<div key={d} onClick={() => { setSelectedTennant({ building, floor, door }); setTennantOverlay(true) }} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: `hsl(${48 - (f + d) * 2}, ${(((f + d + 1) / db.getDoors(building, floor).length) * 80) + 15}%, ${(((f + d) / db.getDoors(building, floor).length) * 13) + 74}%)` }} className="door">
 														<center><b className="door-label"><b className="fas">{"\uf52a"}</b></b><p className="door-subtitle">{db.getNickname(db.data[`${building}_${floor}_${door}`].profile)}</p></center>
-													</div> : 
+													</div> :
 													<div key={d} onClick={() => { setRedirectProps(`${building}_${floor}_${door}`);setRedirect('/add-person'); }} style={{ width: `${100 / db.getDoors(building, floor).length}%`, backgroundColor: 'lightgrey' }} className="door">
 														<center><b className="door-label" style={{color:'#777'}}><b className="fas">{"\uf52a"}</b></b><p className="door-subtitle" style={{color:'#777'}}>Empty</p></center>
 													</div>
@@ -244,7 +245,7 @@ function Main(props) {
 				{ !settleDownloadOverlay ?
 				<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }} onClick={() => { setInvoiceProps({person:db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`],end:getValues('vacate-date'), type: 'settlement', less: db.getLess(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`]), lessTotal: db.getLess(db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`],true)}); setSettleDownloadOverlay(true)}}>Settle</button>
 				: <PDFDownloadLink document={<Adjustment {...invoiceProps} />} fileName={`${db.data[`${selectedTennant.building}_${selectedTennant.floor}_${selectedTennant.door}`].profile.name} Settlement.pdf`} style={{textDecoration: 'none',color:'black'}}>
-                        {({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> : 
+                        {({ blob, url, loading, error }) => (loading ? <Fragment></Fragment> :
 							<button className="overlay-button-mx" style={{ marginTop: '5%', backgroundColor: '#00A4BC' }}>Settlement</button>
                         )}
 				</PDFDownloadLink>
