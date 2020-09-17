@@ -57,15 +57,17 @@ class DB extends React.Component {
    }
 
    persons = (building) => {
-      if (!this.data) this.get()
-      let array = []
-	  console.log(this.data)
-      Object.keys(this.data).forEach(id => {
-         if (building) {
+    if (!this.data) this.get()
+    let array = []
+	if (this.data)
+	(
+	    Object.keys(this.data).forEach(id => {
+        if (building) {
             if (id.split("_")[0] === building)
                if (!this.data[id].isEmpty) array.push(this.data[id])
-         } else if (!this.data[id].isEmpty) array.push(this.data[id])
-      });
+        } else if (!this.data[id].isEmpty) array.push(this.data[id])
+      	})
+  	)
 
       return array
    }
