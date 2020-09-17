@@ -55,7 +55,6 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
-	console.log(db.getNextRenewal(person));
 
 	return (
 		<div>
@@ -270,6 +269,10 @@ function Details(props) {
 			</Overlay>
 			{
 				// Adjustment Overlay
+				//[person.startdate,...person.renewals].map((r,ri) => (
+					//console.log(moment(r).format("MMM YY"))
+					//console.log(ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri].date).format("MMM YY"))
+			//	))
 			}
 			<Overlay visible={adjustmentOverlay} bgClick={() => setAdjustmentOverlay(!adjustmentOverlay)} height={25}>
 				<div style={{display:'inline-block', width: '100%', overflow:'scroll'}}>
@@ -278,10 +281,10 @@ function Details(props) {
 						<Fragment key={ri}>
 								<button className="overlay-button-mx-light" key={ri}
 									onClick={() => {
-											setInvoiceProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri+1].date).format("MMMM YYYY")})
+											setInvoiceProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri].date).format("MMMM YYYY")})
 											setInvoiceOverlay(true)
 									}}>
-									{moment(r).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals.slice(-1)[0].date).format("MMM YY")}
+									{moment(r).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri].date).format("MMM YY")}
 								</button>
 							<br/>
 						</Fragment>
