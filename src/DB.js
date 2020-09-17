@@ -252,7 +252,6 @@ class DB extends React.Component {
    getNextRenewal = (person) => {
       let r = person.renewals
 	  let date,increase
-	  console.log(r)
 	  return (r !== undefined && r.length > 0) ? { date: moment(r.slice(-1)[0].date).add(11, "M") ,increase: r.slice(-1)[0].increase} : {  date : moment(person.startdate, "YYYY-MM-DD", true).add(11, "M"), increase : 0 }
 	  //return (date===true)?{(r !== undefined && r.length > 0) ?  moment(r[r.length - 1]).add(11, "M") :  moment(person.startdate, "YYYY-MM-DD", true).add(11, "M")}:{(r !== undefined && r.length > 0) ? r.slice(-1)[0].incre:0}
   }
