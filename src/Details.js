@@ -6,6 +6,7 @@ import { Circle, Header, HorizontalTimeline,VerticalTimelineConditional,Vertical
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { Invoice, Adjustment } from './Invoice'
 import Button from 'react-bootstrap/Button'
+import './Details.css'
 
 var db = new DB()
 
@@ -113,8 +114,8 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf2a0"}</b>&nbsp;&nbsp;Contact</h4>
 			<div className="container">
-				<Button variant="success" style={{paddingLeft:'16%',paddingRight:'16%',borderRadius:'15%',marginBottom:'4%'}}><b className="fas" style={{fontSize:26}}>{"\uf086"}</b></Button>&nbsp;&nbsp;
-  		  		<Button style={{paddingLeft:'16%',paddingRight:'16%',borderRadius:'15%',marginBottom:'4%',backgroundColor:'#5e09b8'}}><b className="fas" style={{fontSize:26}}>{"\uf879"}</b></Button>
+				<Button className='contact' style={{backgroundColor:'#07ab0a'}}><b className="fas" style={{fontSize:26}}>{"\uf086"}</b></Button>&nbsp;&nbsp;
+  		  		<Button className='contact' style={{backgroundColor:'#5e09b8'}} onClick={ () => document.location.href = "tel:XXXXXXXXX"}><b className="fas" style={{fontSize:26}}>{"\uf879"}</b></Button>
 			</div>
 			</center>
 
@@ -162,6 +163,7 @@ function Details(props) {
 							)).slice(-2).reverse()
 						}
 						<button className="btn btn-link" style={{margin:'-2% 0 0 -4%'}} onClick={() => setShowAdvanceOverlay(true)}><small>{less.filter(l => l.amount!==0).length} more..</small></button>
+						<Circle small icon={"\uf067"} style={{marginLeft:'64%'}}/>
 					</div>
 			</div>
 			<br />
