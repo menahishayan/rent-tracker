@@ -116,7 +116,9 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf2a0"}</b>&nbsp;&nbsp;Contact</h4>
 			<div className="container">
-				<Button className='contact' style={{backgroundColor:'#07ab0a'}}><b className="fas" style={{fontSize:26}}>{"\uf086"}</b></Button>&nbsp;&nbsp;
+					<a href={"https://api.whatsapp.com/send?phone=+91" + phoneNumber}>
+						<Button className='contact' style={{backgroundColor:'#07ab0a'}}><b className="fas" style={{fontSize:26}}>{"\uf086"}</b></Button>&nbsp;&nbsp;
+					</a>
   		  		<Button className='contact' style={{backgroundColor:'#5e09b8'}} onClick={ () =>  window.location.href = 'tel://' + phoneNumber}><b className="fas" style={{fontSize:26}}>{"\uf879"}</b></Button>
 			</div>
 			</center>
