@@ -24,6 +24,7 @@ function Details(props) {
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
+	const phoneNumber = person.profile.mobile
 
 	const getNextPayment = () => {
 		if(person.payment_history!==undefined) {
@@ -57,6 +58,7 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
+	console.log(phoneNumber);
 
 	return (
 		<div>
@@ -115,7 +117,7 @@ function Details(props) {
 				<h4><b className="fas">{"\uf2a0"}</b>&nbsp;&nbsp;Contact</h4>
 			<div className="container">
 				<Button className='contact' style={{backgroundColor:'#07ab0a'}}><b className="fas" style={{fontSize:26}}>{"\uf086"}</b></Button>&nbsp;&nbsp;
-  		  		<Button className='contact' style={{backgroundColor:'#5e09b8'}} onClick={ () => document.location.href = "tel:XXXXXXXXX"}><b className="fas" style={{fontSize:26}}>{"\uf879"}</b></Button>
+  		  		<Button className='contact' style={{backgroundColor:'#5e09b8'}} onClick={ () =>  window.location.href = 'tel://' + phoneNumber}><b className="fas" style={{fontSize:26}}>{"\uf879"}</b></Button>
 			</div>
 			</center>
 
