@@ -12,7 +12,7 @@ var db = new DB()
 
 function Details(props) {
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
-	const [showAddLessOverlay,setshowAddLessOverlay] = useState(false);
+	const [showAddLessOverlay,setShowAddLessOverlay] = useState(false);
 	const [showHistoryOverlay,setShowHistoryOverlay] = useState(false);
 	const [showAdvanceOverlay,setShowAdvanceOverlay] = useState(false);
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
@@ -184,6 +184,14 @@ function Details(props) {
 					content={ less.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
 				/>
 			</SlidingOverlay>
+			{
+				// Add less Overlay
+			}
+			<SlidingOverlay visible={showAddLessOverlay} bgClick={() => setShowAddLessOverlay(false)} height={48}>
+				<b className="fas" style={{ fontSize: 22,float:'right'}} onClick={() => setShowAddLessOverlay(false)}>{"\uf00d"}</b>
+				<br/>
+			</SlidingOverlay>
+
 			{
 				// Renewals Container
 			}
