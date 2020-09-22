@@ -12,6 +12,7 @@ var db = new DB()
 
 function Details(props) {
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
+	const [showAddLessOverlay,setshowAddLessOverlay] = useState(false);
 	const [showHistoryOverlay,setShowHistoryOverlay] = useState(false);
 	const [showAdvanceOverlay,setShowAdvanceOverlay] = useState(false);
 	const [editOtherAmount,setEditOtherAmount] = useState(false);
@@ -166,8 +167,10 @@ function Details(props) {
 								</Fragment>
 							)).slice(-2).reverse()
 						}
-						<button className="btn btn-link" style={{margin:'-2% 0 0 -4%'}} onClick={() => setShowAdvanceOverlay(true)}><small>{less.filter(l => l.amount!==0).length} more..</small></button>
-						<Circle small icon={"\uf067"} style={{marginLeft:'64%'}}/>
+						<div style={{display:'inline-flex',width:'120%'}}>
+							<button className="btn btn-link" style={{display:'inline-block',margin:'-2% 0 0 -4%'}} onClick={() => setShowAdvanceOverlay(true)}><small>{less.filter(l => l.amount!==0).length} more..</small></button>
+							<Circle small icon={"\uf067"} style={{display:'inline-block',marginLeft:'60%'}} onClick={() => setShowAddLessOverlay(true)}/>
+						</div>
 					</div>
 			</div>
 			<br />
