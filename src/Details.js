@@ -11,6 +11,8 @@ import './Details.css'
 var db = new DB()
 
 function Details(props) {
+	const [redirect, setRedirect] = useState();
+	const [redirectProps, setRedirectProps] = useState();
 	const [showAddPayOverlay,setShowAddPayOverlay] = useState(false);
 	const [showAddLessOverlay,setShowAddLessOverlay] = useState(false);
 	const [showHistoryOverlay,setShowHistoryOverlay] = useState(false);
@@ -185,18 +187,23 @@ function Details(props) {
 			{
 				// Add less Overlay
 			}
-			<SlidingOverlay visible={showAddLessOverlay} bgClick={() => setShowAddLessOverlay(false)} height={40}>
+			<SlidingOverlay visible={showAddLessOverlay} bgClick={() => setShowAddLessOverlay(false)} height={48}>
 				<b className="fas" style={{ fontSize: 22, float: 'right' }}  onClick={() => setShowAddLessOverlay(false)}>{"\uf00d"}</b>
-				<br />
 				<center>
+				<h3>
+					<b><span onClick={() => getAvailableMonths()}>{`${selectedMonth.month.format("MMMM")}`}</span></b>
+				</h3>
+				<br />
+				<form onSubmit={ () => db.addLess(person,) }>
 						<div style={{ display: 'inline-block', width: '100%' }}>
-							<h3 style={{marginBottom:'-1%'}}><b>Other Charges</b></h3>
-							<input name="other1-title" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense " ref={register} className="editable-label-input" />
+							<h3 style={{marginBottom:'-1%'}}><b>Less Charges</b></h3>
+							<input name="lessCharges" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense " ref={register} className="editable-label-input" />
 							<br/><br/><br/>
 							<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
-							<input name="other1-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
+							<input name="lessCharges-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
 						</div>
 					<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit">Save</button>
+				</form>
 				</center>
 			</SlidingOverlay>
 

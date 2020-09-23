@@ -251,6 +251,14 @@ class DB extends React.Component {
       return this.updateUser(person.id, "payment_history", paidRent)
    }
 
+   addLess = (person, month, item) => {
+         let less = person.less || []
+         if (month > less.length)
+            less.push(item)
+         else less[month - 1] = item
+         return this.updateUser(person.id, "less", less)
+      }
+
    getNextRenewal = (person) => {
       let r = person.renewals
 	  let date,increase
