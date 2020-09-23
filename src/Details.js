@@ -59,8 +59,6 @@ function Details(props) {
 
 	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
-	console.log(phoneNumber);
-
 	return (
 		<div>
 			<Header />
@@ -153,7 +151,7 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf3d1"}</b>&nbsp;&nbsp;Returnable Advance</h4>
 			</center>
-			<div className="container"  onClick={() => setShowAdvanceOverlay(true)}>
+			<div className="container" >
 				<br/>
 				<center>
 					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-lessTotal}</b></h2>
@@ -187,9 +185,19 @@ function Details(props) {
 			{
 				// Add less Overlay
 			}
-			<SlidingOverlay visible={showAddLessOverlay} bgClick={() => setShowAddLessOverlay(false)} height={48}>
-				<b className="fas" style={{ fontSize: 22,float:'right'}} onClick={() => setShowAddLessOverlay(false)}>{"\uf00d"}</b>
-				<br/>
+			<SlidingOverlay visible={showAddLessOverlay} bgClick={() => setShowAddLessOverlay(false)} height={40}>
+				<b className="fas" style={{ fontSize: 22, float: 'right' }}  onClick={() => setShowAddLessOverlay(false)}>{"\uf00d"}</b>
+				<br />
+				<center>
+						<div style={{ display: 'inline-block', width: '100%' }}>
+							<h3 style={{marginBottom:'-1%'}}><b>Other Charges</b></h3>
+							<input name="other1-title" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense " ref={register} className="editable-label-input" />
+							<br/><br/><br/>
+							<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
+							<input name="other1-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
+						</div>
+					<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit">Save</button>
+				</center>
 			</SlidingOverlay>
 
 			{
