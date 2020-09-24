@@ -49,6 +49,10 @@ function Details(props) {
 		setEditOtherAmount(false)
 	}
 
+	const resetAddLessOverlay = () => {
+		setShowAddLessOverlay(false)
+	}
+
 	var nextPayment = getNextPayment()
 	const [selectedMonth,setSelectedMonth] = useState(nextPayment);
 
@@ -156,7 +160,7 @@ function Details(props) {
 			<div className="container" >
 				<br/>
 				<center>
-					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-lessTotal}</b></h2>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-(lessTotal)}</b></h2>
 				</center>
 				<br/>
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
@@ -193,17 +197,15 @@ function Details(props) {
 				<h3>
 					<b><span onClick={() => getAvailableMonths()}>{`${selectedMonth.month.format("MMMM")}`}</span></b>
 				</h3>
-				<br />
-				<form onSubmit={ () => db.addLess(person,) }>
-						<div style={{ display: 'inline-block', width: '100%' }}>
-							<h3 style={{marginBottom:'-1%'}}><b>Less Charges</b></h3>
-							<input name="lessCharges" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense " ref={register} className="editable-label-input" />
-							<br/><br/><br/>
-							<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
-							<input name="lessCharges-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
-						</div>
-					<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit">Save</button>
-				</form>
+				<br/>
+				<div style={{ display: 'inline-block', width: '100%' }}>
+					<h3 style={{marginBottom:'-1%'}}><b>Less Charges</b></h3>
+					<input name="lessCharges" style={{ display: 'inline-block', fontSize:16, fontWeight:'normal' }} defaultValue="Other Expense " ref={register} className="editable-label-input" />
+					<br/><br/><br/>
+					<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
+					<input name="lessCharges-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
+				</div>
+				<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit" onClick={() => {db.addLess(person,selectedMonth.i+1,{reason:getValues("lessCharges"), month:selectedMonth.i+1, amount:parseInt(getValues("lessCharges-amount"))}) ; setShowAddLessOverlay(false)}}>Save</button>
 				</center>
 			</SlidingOverlay>
 
