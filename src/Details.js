@@ -24,6 +24,9 @@ function Details(props) {
 	const { register, getValues, setValue } = useForm();
 	const [invoiceProps, setInvoiceProps] = useState();
 	const [invoiceOverlay, setInvoiceOverlay] = useState(false);
+	const [less, setLess] = useState();
+
+	setLess = ({items:db.getLess(person),total:db.getLess(person,true)})
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
@@ -63,7 +66,6 @@ function Details(props) {
 
 	const paidRent = db.getPaidRent(person)
 
-	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
 	return (
 		<div>
@@ -160,19 +162,19 @@ function Details(props) {
 			<div className="container" >
 				<br/>
 				<center>
-					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-(lessTotal)}</b></h2>
+					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-(less.total)}</b></h2>
 				</center>
 				<br/>
 					<div style={{ color: 'darkgrey', fontSize: 14 }}>
 						{
-							less.filter(l => l.amount!==0).map((item, i) => (
+							less.items.filter(l => l.amount!==0).map((item, i) => (
 								<Fragment key={i}>
 									<b className="fas" style={{marginRight:'3%'}}>{"\uf06a"}</b>{item.reason}<br/>
 								</Fragment>
 							)).slice(-2).reverse()
 						}
 						<div style={{display:'inline-flex',width:'120%'}}>
-							<button className="btn btn-link" style={{display:'inline-block',margin:'-2% 0 0 -4%'}} onClick={() => setShowAdvanceOverlay(true)}><small>{less.filter(l => l.amount!==0).length} more..</small></button>
+							<button className="btn btn-link" style={{display:'inline-block',margin:'-2% 0 0 -4%'}} onClick={() => setShowAdvanceOverlay(true)}><small>{less.items.filter(l => l.amount!==0).length} more..</small></button>
 							<Circle small icon={"\uf067"} style={{display:'inline-block',marginLeft:'60%'}} onClick={() => setShowAddLessOverlay(true)}/>
 						</div>
 					</div>
@@ -185,7 +187,7 @@ function Details(props) {
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 				<VerticalTimeline
-					content={ less.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
+					content={ less.items.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
 				/>
 			</SlidingOverlay>
 			{
@@ -328,7 +330,7 @@ function Details(props) {
 						<Fragment key={ri}>
 								<button className="overlay-button-mx-light" key={ri}
 									onClick={() => {
-											setInvoiceProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri].date).format("MMMM YYYY")})
+											setInvoiceProps({person: person, type:'adjustment', less:less.items, lessTotal:less.total, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri].date).format("MMMM YYYY")})
 											setInvoiceOverlay(true)
 									}}>
 									{moment(r.date).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri].date).format("MMM YY")}
@@ -337,7 +339,7 @@ function Details(props) {
 						</Fragment>
 					)) : <button className="overlay-button-mx-light" style={{margin:'2% 1%'}}
 							onClick={() => {
-								setInvoiceProps({person: person, type:'adjustment', less:less, lessTotal:lessTotal, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
+								setInvoiceProps({person: person, type:'adjustment', less:less.items, lessTotal:less.total, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
 								setInvoiceOverlay(true)
 							}}>
 							{moment(person.startdate).format("MMM YY")} - {moment().format("MMM YY")}

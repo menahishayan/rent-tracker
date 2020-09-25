@@ -201,7 +201,12 @@ class DB extends React.Component {
    }
 
    getLess = (person, getSum) => {
-      var sum = 0, less = []
+      var sum = 0
+	  let less = person.less || []
+	  person.less.forEach((l, i) => {
+	  	sum+=l.amount
+	  });
+
       this.getExpectedRent(person).forEach((e, i) => {
          let dueForMonth = this.getDues(person, false, true, i + 1)
          less.push({
@@ -253,22 +258,10 @@ class DB extends React.Component {
 
    addLess = (person, month, item) => {
          let less = person.less || []
-		 console.log(less);
-		 var sum = 0
-		 this.getExpectedRent(person).forEach((e, i) => {
-			let dueForMonth = this.getDues(person, false, true, i + 1)
-			less.push({
-			   reason: item.reason,
-			   month: i + 1,
-			   amount: item.amount
-			})
-			sum += item.amount
-		 })
-		 return sum
-        // if (month > less.length)
-        //    less.push(item)
-        // else less[month - 1] = item
-         return this.updateUser(person.id, "less", less)
+         if (month > less.length)
+            less.push(item)
+         else less[month - 1] = item
+         this.updateUser(person.id, "less", less)
       }
 
    getNextRenewal = (person) => {
