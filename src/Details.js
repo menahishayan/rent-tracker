@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Redirect, useHistory } from 'react-router';
 import DB from './DB';
 import moment from 'moment';
 import { useForm } from 'react-hook-form'
@@ -24,9 +25,7 @@ function Details(props) {
 	const { register, getValues, setValue } = useForm();
 	const [invoiceProps, setInvoiceProps] = useState();
 	const [invoiceOverlay, setInvoiceOverlay] = useState(false);
-	const [less, setLess] = useState();
-
-	setLess = ({items:db.getLess(person),total:db.getLess(person,true)})
+	const [less,setLess] = useState()
 
 	const person = props.location.state
 	const idParts = db.parseId(person.id)
@@ -66,7 +65,16 @@ function Details(props) {
 
 	const paidRent = db.getPaidRent(person)
 
+//	const less = db.getLess(person), lessTotal =  db.getLess(person,true)
 
+	const history = useHistory()
+
+	useEffect(() => {
+		if(!less)
+			setLess({items:db.getLess(person),total:db.getLess(person,true)})
+
+	});
+	//if (redirect === 'refresh') return <Redirect push from="/" to={{ pathname: '/details', state: props.location.state }} />
 	return (
 		<div>
 			<Header />
@@ -159,7 +167,7 @@ function Details(props) {
 			<center>
 				<h4><b className="fas">{"\uf3d1"}</b>&nbsp;&nbsp;Returnable Advance</h4>
 			</center>
-			<div className="container" >
+			{less && <div className="container" >
 				<br/>
 				<center>
 					<h2><b className="fas" style={{ fontSize: 26 }}>{"\uf156"}</b><b>&nbsp;{person.advance-(less.total)}</b></h2>
@@ -179,17 +187,19 @@ function Details(props) {
 						</div>
 					</div>
 			</div>
+			}
 			<br />
 			{
 				// Less Advance Overlay
 			}
-			<SlidingOverlay visible={showAdvanceOverlay} height={85} bgClick={() =>setShowAdvanceOverlay(false)} >
+			{ less && <SlidingOverlay visible={showAdvanceOverlay} height={85} bgClick={() =>setShowAdvanceOverlay(false)} >
 				<b className="fas" style={{fontSize: 20,float:'right'}} onClick={() => setShowAdvanceOverlay(showAdvanceOverlay ? false : true)}>{"\uf00d"}</b>
 				<br/>
 				<VerticalTimeline
 					content={ less.items.filter(l => l.amount!==0).map((item) => {return {title:item.reason, subtitle:-item.amount}}) }
 				/>
 			</SlidingOverlay>
+			}
 			{
 				// Add less Overlay
 			}
@@ -207,7 +217,7 @@ function Details(props) {
 					<b className="fas" style={{ fontSize: 30, display: 'inline-block' }}>{"\uf156"}</b>
 					<input name="lessCharges-amount" style={{ display: 'inline-block' }} type='number' pattern="[0-9]*" defaultValue={0} ref={register} className="editable-label-input" />
 				</div>
-				<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit" onClick={() => {db.addLess(person,selectedMonth.i+1,{reason:getValues("lessCharges"), month:selectedMonth.i+1, amount:parseInt(getValues("lessCharges-amount"))}) ; setShowAddLessOverlay(false)}}>Save</button>
+				<button className="overlay-button" style={{ marginTop: '5%', color: '#006CFF' }} type="submit" onClick={() => {db.addLess(person,selectedMonth.i+1,{reason:getValues("lessCharges"), month:selectedMonth.i+1, amount:parseInt(getValues("lessCharges-amount"))}) ; setShowAddLessOverlay(false);history.go(-1)}}>Save</button>
 				</center>
 			</SlidingOverlay>
 
@@ -330,7 +340,7 @@ function Details(props) {
 						<Fragment key={ri}>
 								<button className="overlay-button-mx-light" key={ri}
 									onClick={() => {
-											setInvoiceProps({person: person, type:'adjustment', less:less.items, lessTotal:less.total, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri].date).format("MMMM YYYY")})
+											setInvoiceProps({person: person, type:'adjustment', less:less.item, lessTotal:less.total, start: moment(r).format("MMMM YYYY"), end: ri === person.renewals.length ? moment().format("MMMM YYYY") : moment(person.renewals[ri].date).format("MMMM YYYY")})
 											setInvoiceOverlay(true)
 									}}>
 									{moment(r.date).format("MMM YY")} - {ri === person.renewals.length ? moment().format("MMM YY") : moment(person.renewals[ri].date).format("MMM YY")}
@@ -339,7 +349,7 @@ function Details(props) {
 						</Fragment>
 					)) : <button className="overlay-button-mx-light" style={{margin:'2% 1%'}}
 							onClick={() => {
-								setInvoiceProps({person: person, type:'adjustment', less:less.items, lessTotal:less.total, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
+								setInvoiceProps({person: person, type:'adjustment', less:less.item, lessTotal:less.total, start: moment(person.startdate).format("MMMM YYYY"), end: moment().format("MMMM YYYY")})
 								setInvoiceOverlay(true)
 							}}>
 							{moment(person.startdate).format("MMM YY")} - {moment().format("MMM YY")}

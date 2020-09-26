@@ -202,8 +202,8 @@ class DB extends React.Component {
 
    getLess = (person, getSum) => {
       var sum = 0
-	  let less = person.less || []
-	  person.less.forEach((l, i) => {
+	  let less = [...person.less || []]
+	  less.forEach((l, i) => {
 	  	sum+=l.amount
 	  });
 
@@ -257,7 +257,8 @@ class DB extends React.Component {
    }
 
    addLess = (person, month, item) => {
-         let less = person.less || []
+		console.log(person.less);
+         let less = [...person.less || []]
          if (month > less.length)
             less.push(item)
          else less[month - 1] = item
