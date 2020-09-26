@@ -114,7 +114,7 @@ export function Invoice(props) {
 
 export function Adjustment(props) {
     if(!props.person) return null
-
+	console.log(props);
     let person = props.person
 
     let start = props.start
@@ -244,7 +244,7 @@ export function Adjustment(props) {
                         </View>
                         </View>
                     }
-                    
+
                     <View>
                     {type !== 'settlement' && <Text style={[styles.small,styles.footer]}>{'\n\n\n\n\n\n'}This is a computer generated invoice and does not require signature while being shared electronically.</Text>}
                     </View>
